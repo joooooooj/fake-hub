@@ -1,12 +1,14 @@
 # backend/urls.py
 
 from django.contrib import admin
-from django.urls import path, include                 # add this
-from rest_framework import routers                    # add this
-from fakehub_app import views                            # add this
+from django.urls import path, include
+from rest_framework import routers
+from fakehub_app import views
 
-router = routers.DefaultRouter()                      # add this
-router.register(r'repository', views.RepoView, 'repository')     # add this
+router = routers.DefaultRouter()
+router.register(r'repository', views.RepoView, 'repository')
+router.register(r'team', views.TeamView, 'team')
+router.register(r'project', views.ProjectView, 'project')
 
 urlpatterns = [
     path('', include(router.urls))
