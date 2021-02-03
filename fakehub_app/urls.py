@@ -3,13 +3,15 @@
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework import routers
-from fakehub_app import views
+from .views import *
 
 router = routers.DefaultRouter()
-router.register(r'repository', views.RepoView, 'repository')
-router.register(r'team', views.TeamView, 'team')
-router.register(r'project', views.ProjectView, 'project')
+router.register('team', TeamViewSet)
+router.register('user', UserViewSet)
+router.register('repository', RepositoryViewSet)
+router.register('project', ProjectViewSet)
 
 urlpatterns = [
-    path('', include(router.urls))
+    path('', include(router.urls)),
+    path('accounts/', include('django.contrib.auth.urls'))
 ]
