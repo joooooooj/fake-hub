@@ -81,7 +81,7 @@ class Label(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField(default=None, blank=True, null=True)
     color = models.CharField(max_length=7)  # hex code
-    project = models.ForeignKey(Project, on_delete=models.CASCADE)
+    repository = models.ForeignKey(Repository, on_delete=models.CASCADE, default=None, blank=True, null=True)
 
 
 class Status(models.TextChoices):
@@ -95,7 +95,8 @@ class Milestone(models.Model):
     dueDate = models.DateTimeField(default=None, blank=True, null=True)
     description = models.TextField(default=None, blank=True, null=True)
     status = models.CharField(choices=Status.choices, default=Status.OPEN, max_length=100)
-    labels = models.ManyToManyField(Label)
+    labels = models.ManyToManyField(Label, default=None, blank=True)
+    repository = models.ForeignKey(Repository, on_delete=models.CASCADE)
 
 
 class Task(models.Model):
@@ -113,6 +114,7 @@ class Task(models.Model):
     milestone = models.ForeignKey(Milestone, on_delete=models.CASCADE, default=None, blank=True, null=True)
     labels = models.ManyToManyField(Label)
     members = models.ManyToManyField(User)
+    repository = models.ForeignKey(Repository, on_delete=models.CASCADE)
 
 
 class Column(models.Model):
