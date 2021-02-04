@@ -1,8 +1,5 @@
 from django.contrib import admin
-from .models import Repository
+from django.contrib.auth.admin import UserAdmin
+from .models import *
 
-
-class RepoAdmin(admin.ModelAdmin):  # add this
-    list_display = ('name', 'author', 'date_created')
-
-admin.site.register(Repository, RepoAdmin)
+admin.site.register(User, UserAdmin)
