@@ -1,10 +1,42 @@
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.response import Response
+from rest_framework.decorators import action
 from rest_framework.mixins import (
     CreateModelMixin, ListModelMixin, RetrieveModelMixin, UpdateModelMixin, DestroyModelMixin
 )
 from rest_framework.viewsets import GenericViewSet
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
-from .models import Team
-from .serializers import *
+from .models import Team, User, Label, Repository, Project
+from .serializers import TeamSerializer, ProjectSerializer, LabelSerializer, RepositorySerializer, UserSerializer
+
+
+# curl -X POST -H "Authorization: Token e091a4bf389ba85e3252cc7afc38e70db7bb20b7" http://localhost:8000/label/
+
+class LabelViewSet(RetrieveModelMixin, UpdateModelMixin,
+                   CreateModelMixin, ListModelMixin,
+                   DestroyModelMixin, GenericViewSet):
+    """
+       Creates, Updates and Retrieves - Labels
+    """
+
+    queryset = Label.objects.all()
+
+    serializer_class = LabelSerializer
+    authentication_classes = (TokenAuthentication,)
+
+    def get_permissions(self):
+        print(self.request.user)
+        # allow full access to authenticated users, but allow read-only access to unauthenticated users
+        self.permission_classes = [IsAuthenticatedOrReadOnly]
+        return super(LabelViewSet, self).get_permissions()
+
+    @action(detail=True, methods=['get'])
+    def labels_by_project(self, request, pk):
+        '''
+            Returns users that partook a specific exam.
+        '''
+        return Response(LabelSerializer(Label.objects.filter(project__id=pk)).data)
 
 
 class TeamViewSet(GenericViewSet,  # generic view functionality

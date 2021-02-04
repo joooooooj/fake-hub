@@ -81,6 +81,7 @@ class Label(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField(default=None, blank=True, null=True)
     color = models.CharField(max_length=7)  # hex code
+    project = models.ForeignKey(Project, on_delete=models.CASCADE)
 
 
 class Status(models.TextChoices):
