@@ -2,16 +2,22 @@ from rest_framework import serializers
 from .models import *
 
 
-class RepoSerializer(serializers.ModelSerializer):
+class UserSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Repository
-        fields = ('name', 'date_created', 'owner', 'team')
+        model = User
+        fields = ['username', 'password', 'email', 'first_name', 'last_name']
 
 
 class TeamSerializer(serializers.ModelSerializer):
     class Meta:
         model = Team
-        fields = ['name']
+        fields = ['name', 'members']
+
+
+class RepositorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Repository
+        fields = ['name', 'date_created', 'members', 'team']
 
 
 class ProjectSerializer(serializers.ModelSerializer):

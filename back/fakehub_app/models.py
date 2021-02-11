@@ -3,10 +3,15 @@ from enum import Enum
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.utils import timezone
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
 
 
 # Repository data
+
+class User(AbstractUser):
+    name = models.CharField(max_length=100)
+    password = models.CharField(max_length=100)
+
 
 class Team(models.Model):
     name = models.CharField(max_length=100)
@@ -18,8 +23,8 @@ class Team(models.Model):
 
 class Repository(models.Model):
     name = models.CharField(max_length=100)
-    date_created = models.DateTimeField(default=timezone.now)
-    owner = models.ManyToManyField(User)
+    date_created = models.DateTimeField(default=timezone.now, blank=True)
+    members = models.ManyToManyField(User, default=None, blank=True, null=True)
     team = models.ForeignKey(Team, on_delete=models.CASCADE, default=None, blank=True, null=True)
 
     def __str__(self):
