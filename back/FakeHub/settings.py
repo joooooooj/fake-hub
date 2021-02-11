@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'fakehub_app',
     'corsheaders',
     'rest_framework',
+    'rest_framework.authtoken'
 ]
 
 MIDDLEWARE = [
@@ -127,3 +128,12 @@ STATIC_URL = '/static/'
 
 AUTH_USER_MODEL = 'fakehub_app.User'
 
+REST_FRAMEWORK = {
+
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+        # ...
+    ),
+
+    # ...
+}

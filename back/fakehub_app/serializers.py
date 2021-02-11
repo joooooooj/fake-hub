@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import *
+from .models import User, Team, Repository, Project, Label, Milestone
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -24,3 +24,15 @@ class ProjectSerializer(serializers.ModelSerializer):
     class Meta:
         model = Project
         fields = ('name', 'description', 'repository')
+
+
+class LabelSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Label
+        fields = ('name', 'description', 'color', 'repository')
+
+
+class MilestoneSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Milestone
+        fields = ('title', 'dueDate', 'description', 'status', 'labels', 'repository')
