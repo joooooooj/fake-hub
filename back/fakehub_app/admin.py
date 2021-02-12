@@ -27,6 +27,12 @@ class BranchAdmin(admin.ModelAdmin):
     list_display = ('name', 'repository', 'id')
 
 
+@admin.register(Commit)
+class BranchAdmin(admin.ModelAdmin):
+    search_fields = ('id', 'code', 'author')
+    list_display = ('id', 'code', 'author')
+
+
 @admin.register(Repository)
 class RepositoryAdmin(admin.ModelAdmin):
     search_fields = ('id', 'owner')

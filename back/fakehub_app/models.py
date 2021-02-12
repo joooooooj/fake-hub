@@ -1,9 +1,9 @@
-from enum import Enum
+import random
 
+from django.contrib.auth.models import AbstractUser
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.utils import timezone
-from django.contrib.auth.models import AbstractUser
 
 
 # Repository data
@@ -61,9 +61,13 @@ class Branch(models.Model):
         return self.name
 
 
+def hash_code():
+    return random.getrandbits(64)
+
+
 class Commit(models.Model):
-    description = models.TextField
-    code = models.CharField  # hash code of the commit
+    description = models.TextField(default=None, blank=True, null=True)
+    code = models.CharField(max_length=64, unique=True, default=hash_code(), blank=True)  # hash code of the commit
     committed_at = models.DateTimeField(default=timezone.now)
     tag = models.CharField(max_length=100, default=None, blank=True, null=True)
     # git leaves dangling commits which later get deleted by garbage collection
@@ -71,7 +75,7 @@ class Commit(models.Model):
     author = models.ForeignKey(User, on_delete=models.SET_NULL, default=None, blank=True, null=True)
 
     def __str__(self):
-        return self.code + ' ' + str(self.description)
+        return str(self.code) + ' ' + str(self.description)
 
 
 # Wiki
