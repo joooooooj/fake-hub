@@ -1,0 +1,27 @@
+version: '3.7'
+
+services:
+  db:
+    image: postgres
+    ports:
+      - "5432:5432"
+  django:
+    build: ./back
+    command: ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+    volumes:
+      - ./back:/app/back
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+  front:
+    build: ./front
+    command: ["npm", "start"]
+    volumes:
+      - ./front:/app/front
+      - node-modules:/app/front/node_modules
+    ports:
+      - "3000:3000"
+
+volumes:
+  node-modules:
