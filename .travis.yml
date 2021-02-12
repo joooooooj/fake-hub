@@ -6,15 +6,10 @@ python:
 services:
   - docker
 
-install:
-  - pip install -r requirements.txt
-
 script:
   - python tests.py
-
-script:
-    - docker-compose build
-
-after_success:
-  - docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD";
-  - docker push $DOCKER_USERNAME/fake-hub:latest
+  - docker-compose build
+  
+#after_success:
+#  - docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD";
+#  - docker push $DOCKER_USERNAME/fake-hub:latest
