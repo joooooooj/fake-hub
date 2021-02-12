@@ -24,11 +24,12 @@ class Team(models.Model):
 class Repository(models.Model):
     name = models.CharField(max_length=100)
     date_created = models.DateTimeField(default=timezone.now, blank=True)
-    members = models.ManyToManyField(User, default=None, blank=True, null=True)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='repo_owner')
     team = models.ForeignKey(Team, on_delete=models.CASCADE, default=None, blank=True, null=True)
+    collaborators = models.ManyToManyField(User)
 
     def __str__(self):
-        string = ' name:' + str(self.name) + ' author:' + str(self.owner) + ' '
+        string = ' name:' + str(self.name) + ' '
         return string
 
 
@@ -43,10 +44,18 @@ class Project(models.Model):
 
 # Version control
 
+
+class BranchPullStatus(models.TextChoices):
+    OPEN = 'Open'
+    CLOSED = 'Closed'
+    CHANGED = 'Changed'
+
+
 class Branch(models.Model):
     name = models.CharField(max_length=100)
     author = models.ForeignKey(User, on_delete=models.SET_NULL, default=None, blank=True, null=True)
-    repository = models.ForeignKey(Repository, on_delete=models.CASCADE, default=None, blank=True, null=True)
+    repository = models.ForeignKey(Repository, on_delete=models.CASCADE)
+    status = models.CharField(choices=BranchPullStatus.choices, default=BranchPullStatus.OPEN, max_length=100)
 
     def __str__(self):
         return self.name
@@ -55,7 +64,7 @@ class Branch(models.Model):
 class Commit(models.Model):
     description = models.TextField
     code = models.CharField  # hash code of the commit
-    commited_at = models.DateTimeField(default=timezone.now)
+    committed_at = models.DateTimeField(default=timezone.now)
     tag = models.CharField(max_length=100, default=None, blank=True, null=True)
     # git leaves dangling commits which later get deleted by garbage collection
     branch = models.ForeignKey(Branch, on_delete=models.SET_NULL, default=None, blank=True, null=True)

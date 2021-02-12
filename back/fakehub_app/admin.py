@@ -2,7 +2,11 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from .models import *
 
-admin.site.register(User, UserAdmin)
+
+@admin.register(User)
+class UserAdmin(admin.ModelAdmin):
+    search_fields = ('id', 'username')
+    list_display = ('id', 'username')
 
 
 @admin.register(Label)
@@ -15,3 +19,15 @@ class LabelAdmin(admin.ModelAdmin):
 class MilestoneAdmin(admin.ModelAdmin):
     search_fields = ('id', 'repository')
     list_display = ('title', 'repository', 'id')
+
+
+@admin.register(Branch)
+class BranchAdmin(admin.ModelAdmin):
+    search_fields = ('id', 'repository')
+    list_display = ('name', 'repository', 'id')
+
+
+@admin.register(Repository)
+class RepositoryAdmin(admin.ModelAdmin):
+    search_fields = ('id', 'owner')
+    list_display = ('owner', 'id')

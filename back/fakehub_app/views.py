@@ -7,9 +7,9 @@ from rest_framework.mixins import (
 from rest_framework.viewsets import GenericViewSet
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
-from .models import Team, User, Label, Repository, Project, Milestone, Task
+from .models import Team, User, Label, Repository, Project, Milestone, Task, Branch
 from .serializers import TeamSerializer, ProjectSerializer, LabelSerializer, RepositorySerializer, UserSerializer, \
-    MilestoneSerializer
+    MilestoneSerializer, BranchSerializer
 
 
 # U COMMAND PROMPTU: (nece da mi radi token u postmanu nzm sto)
@@ -19,6 +19,36 @@ from .serializers import TeamSerializer, ProjectSerializer, LabelSerializer, Rep
 
 # curl --header "Content-Type: Application/json"   --request GET -H "Authorization: Token
 # e091a4bf389ba85e3252cc7afc38e70db7bb20b7" http://localhost:8000/milestone/1/repo/
+
+class BranchViewSet(GenericViewSet,
+                       CreateModelMixin,
+                       RetrieveModelMixin,
+                       UpdateModelMixin,
+                       ListModelMixin,
+                       DestroyModelMixin
+                       ):
+    """
+          Creates, Updates and Retrieves - Branches
+       """
+    serializer_class = BranchSerializer
+    authentication_classes = (TokenAuthentication,)
+    queryset = Branch.objects.all()
+
+    def get_permissions(self):
+        print(self.request.user)
+        # allow full access to authenticated users, but allow read-only access to unauthenticated users
+        self.permission_classes = [IsAuthenticatedOrReadOnly]
+        return super(BranchViewSet, self).get_permissions()
+
+    #  http://localhost:8000/branch/1/repo/
+    @action(detail=True, methods=['get'], url_path='repo', url_name='re[p')
+    def branches_by_repository(self, request, pk):
+        '''
+            Returns branches for the specific repo
+        '''
+        # many == VISE OD JEDNOG IMA U REZULTATIMA FILTRIRANJA
+        return Response(BranchSerializer(Branch.objects.filter(repository__id=pk), many=True).data)
+
 
 class MilestoneViewSet(GenericViewSet,
                        CreateModelMixin,
@@ -40,7 +70,7 @@ class MilestoneViewSet(GenericViewSet,
         self.permission_classes = [IsAuthenticatedOrReadOnly]
         return super(MilestoneViewSet, self).get_permissions()
 
-    #  http://localhost:8000/milestone/1/repo/ ---> to je sada ruta za majlstounove sa repoa 1 SVE ME BOLI
+    #  http://localhost:8000/milestone/1/repo/
     @action(detail=True, methods=['get'], url_path='repo', url_name='repo')
     def milestones_by_repository(self, request, pk):
         '''
