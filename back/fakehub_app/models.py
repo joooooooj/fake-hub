@@ -3,10 +3,15 @@ from enum import Enum
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.utils import timezone
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
 
 
 # Repository data
+
+class User(AbstractUser):
+    name = models.CharField(max_length=100)
+    password = models.CharField(max_length=100)
+
 
 class Team(models.Model):
     name = models.CharField(max_length=100)
@@ -18,8 +23,8 @@ class Team(models.Model):
 
 class Repository(models.Model):
     name = models.CharField(max_length=100)
-    date_created = models.DateTimeField(default=timezone.now)
-    owner = models.ManyToManyField(User)
+    date_created = models.DateTimeField(default=timezone.now, blank=True)
+    members = models.ManyToManyField(User, default=None, blank=True, null=True)
     team = models.ForeignKey(Team, on_delete=models.CASCADE, default=None, blank=True, null=True)
 
     def __str__(self):
@@ -76,6 +81,7 @@ class Label(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField(default=None, blank=True, null=True)
     color = models.CharField(max_length=7)  # hex code
+    repository = models.ForeignKey(Repository, on_delete=models.CASCADE, default=None, blank=True, null=True)
 
 
 class Status(models.TextChoices):
@@ -89,7 +95,8 @@ class Milestone(models.Model):
     dueDate = models.DateTimeField(default=None, blank=True, null=True)
     description = models.TextField(default=None, blank=True, null=True)
     status = models.CharField(choices=Status.choices, default=Status.OPEN, max_length=100)
-    labels = models.ManyToManyField(Label)
+    labels = models.ManyToManyField(Label, default=None, blank=True)
+    repository = models.ForeignKey(Repository, on_delete=models.CASCADE)
 
 
 class Task(models.Model):
@@ -107,6 +114,7 @@ class Task(models.Model):
     milestone = models.ForeignKey(Milestone, on_delete=models.CASCADE, default=None, blank=True, null=True)
     labels = models.ManyToManyField(Label)
     members = models.ManyToManyField(User)
+    repository = models.ForeignKey(Repository, on_delete=models.CASCADE)
 
 
 class Column(models.Model):

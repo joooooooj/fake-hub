@@ -1,19 +1,17 @@
 from django.contrib import admin
+from django.contrib.auth.admin import UserAdmin
 from .models import *
 
+admin.site.register(User, UserAdmin)
 
-# class RepoAdmin(admin.ModelAdmin):
-#     list_display = ('name', 'owner', 'date_created')
-#
-#
-# class TeamAdmin(admin.ModelAdmin):
-#     list_display = ['name']
-#
-#
-# class ProjectAdmin(admin.ModelAdmin):
-#     list_display = ('name', 'description', 'repository')
-#
-#
-# admin.site.register(Repository, RepoAdmin)
-# admin.site.register(Team, TeamAdmin)
-# admin.site.register(Project, ProjectAdmin)
+
+@admin.register(Label)
+class LabelAdmin(admin.ModelAdmin):
+    search_fields = ('id', 'repository')
+    list_display = ('name', 'color', 'repository', 'id')
+
+
+@admin.register(Milestone)
+class MilestoneAdmin(admin.ModelAdmin):
+    search_fields = ('id', 'repository')
+    list_display = ('title', 'repository', 'id')
