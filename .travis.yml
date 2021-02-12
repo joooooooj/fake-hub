@@ -7,7 +7,6 @@ services:
   - docker
 
 script:
-  - python tests.py
   - docker-compose build
   
 #after_success:
