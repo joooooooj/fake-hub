@@ -9,9 +9,12 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class TeamSerializer(serializers.ModelSerializer):
+    members = UserSerializer
+
     class Meta:
         model = Team
-        fields = ['name', 'members']
+        fields = ['name', 'members', 'id']
+        depth = 1
 
 
 class RepositorySerializer(serializers.ModelSerializer):
