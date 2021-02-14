@@ -37,3 +37,15 @@ class BranchAdmin(admin.ModelAdmin):
 class RepositoryAdmin(admin.ModelAdmin):
     search_fields = ('id', 'owner')
     list_display = ('owner', 'id')
+
+
+@admin.register(Wiki)
+class WikiAdmin(admin.ModelAdmin):
+    search_fields = ('id', 'repository')
+    list_display = ('repository', 'id')
+
+
+@admin.register(Page)
+class PageAdmin(admin.ModelAdmin):
+    search_fields = ('id', 'title', 'content', 'wiki')
+    list_display = ('id', 'title', 'content', 'wiki')

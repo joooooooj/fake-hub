@@ -8,9 +8,9 @@ from rest_framework.mixins import (
 from rest_framework.viewsets import GenericViewSet
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
-from .models import Team, User, Label, Repository, Project, Milestone, Task, Branch, Commit
+from .models import Team, User, Label, Repository, Project, Milestone, Task, Branch, Commit, Wiki, Page
 from .serializers import TeamSerializer, ProjectSerializer, LabelSerializer, RepositorySerializer, UserSerializer, \
-    MilestoneSerializer, BranchSerializer, CommitSerializer
+    MilestoneSerializer, BranchSerializer, CommitSerializer, WikiSerializer, PageSerializer
 
 
 # U COMMAND PROMPTU: (nece da mi radi token u postmanu nzm sto)
@@ -262,3 +262,25 @@ class UserViewSet(GenericViewSet,
                   ):
     serializer_class = UserSerializer
     queryset = User.objects.all()
+
+
+class WikiViewSet(GenericViewSet,
+                  CreateModelMixin,
+                  RetrieveModelMixin,
+                  UpdateModelMixin,
+                  ListModelMixin,
+                  DestroyModelMixin
+                  ):
+    serializer_class = WikiSerializer
+    queryset = Wiki.objects.all()
+
+
+class PageViewSet(GenericViewSet,
+                  CreateModelMixin,
+                  RetrieveModelMixin,
+                  UpdateModelMixin,
+                  ListModelMixin,
+                  DestroyModelMixin
+                  ):
+    serializer_class = PageSerializer
+    queryset = Page.objects.all()

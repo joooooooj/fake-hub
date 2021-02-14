@@ -85,7 +85,9 @@ class Wiki(models.Model):
 
 
 class Page(models.Model):
-    wiki = models.ForeignKey(Wiki, on_delete=models.CASCADE)
+    title = models.CharField(default="New page", max_length=100)
+    content = models.TextField(default="My new awesome page")
+    wiki = models.ForeignKey(Wiki, on_delete=models.DO_NOTHING)
 
 
 # Planning

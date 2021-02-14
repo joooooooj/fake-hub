@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import User, Team, Repository, Project, Label, Milestone, Branch, Commit
+from .models import User, Team, Repository, Project, Label, Milestone, Branch, Commit, Wiki, Page
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -48,3 +48,15 @@ class CommitSerializer(serializers.ModelSerializer):
     class Meta:
         model = Commit
         fields = ('description', 'code', 'committed_at', 'tag', 'branch', 'author')
+
+
+class WikiSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Wiki
+        fields = 'repository'
+
+
+class PageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Page
+        fields = ('title', 'content', 'wiki')
