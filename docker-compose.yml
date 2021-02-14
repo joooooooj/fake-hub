@@ -5,6 +5,10 @@ services:
     image: postgres
     ports:
       - "5432:5432"
+    environment:
+      - POSTGRES_DB=fake-hub
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin
   django:
     build: ./back
     command: ["python", "manage.py", "runserver", "0.0.0.0:8000"]

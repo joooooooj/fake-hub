@@ -1,3 +1,4 @@
+from django.http import JsonResponse
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.response import Response
 from rest_framework.decorators import action
@@ -7,9 +8,9 @@ from rest_framework.mixins import (
 from rest_framework.viewsets import GenericViewSet
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
-from .models import Team, User, Label, Repository, Project, Milestone, Task
+from .models import Team, User, Label, Repository, Project, Milestone, Task, Branch, Commit
 from .serializers import TeamSerializer, ProjectSerializer, LabelSerializer, RepositorySerializer, UserSerializer, \
-    MilestoneSerializer
+    MilestoneSerializer, BranchSerializer, CommitSerializer
 
 
 # U COMMAND PROMPTU: (nece da mi radi token u postmanu nzm sto)
@@ -40,7 +41,7 @@ class MilestoneViewSet(GenericViewSet,
         self.permission_classes = [IsAuthenticatedOrReadOnly]
         return super(MilestoneViewSet, self).get_permissions()
 
-    #  http://localhost:8000/milestone/1/repo/ ---> to je sada ruta za majlstounove sa repoa 1 SVE ME BOLI
+    #  http://localhost:8000/milestone/1/repo/
     @action(detail=True, methods=['get'], url_path='repo', url_name='repo')
     def milestones_by_repository(self, request, pk):
         '''
@@ -91,7 +92,7 @@ class LabelViewSet(RetrieveModelMixin, UpdateModelMixin,
         '''
 
         label_ids = Task.objects.filter(id=pk).values_list('labels', flat=True)
-        return Response(LabelSerializer(Label.objects.filter(id__in = label_ids), many=True).data)
+        return Response(LabelSerializer(Label.objects.filter(id__in=label_ids), many=True).data)
 
     # C:\Users\Tash>curl --header "Content-Type: Application/json"   --request GET -H "Authorization: Token
     # e091a4bf389ba85e3252cc7afc38e70db7bb20b7" http://localhost:8000/label/1/milestone/
@@ -103,6 +104,84 @@ class LabelViewSet(RetrieveModelMixin, UpdateModelMixin,
 
         label_ids = Milestone.objects.filter(id=pk).values_list('labels', flat=True)
         return Response(LabelSerializer(Label.objects.filter(id__in=label_ids), many=True).data)
+
+
+class BranchViewSet(GenericViewSet,
+                    CreateModelMixin,
+                    RetrieveModelMixin,
+                    UpdateModelMixin,
+                    ListModelMixin,
+                    DestroyModelMixin
+                    ):
+    """
+          Creates, Updates and Retrieves - Branches
+       """
+    serializer_class = BranchSerializer
+    authentication_classes = (TokenAuthentication,)
+    queryset = Branch.objects.all()
+
+    def get_permissions(self):
+        print(self.request.user)
+        # allow full access to authenticated users, but allow read-only access to unauthenticated users
+        self.permission_classes = [IsAuthenticatedOrReadOnly]
+        return super(BranchViewSet, self).get_permissions()
+
+    #  http://localhost:8000/branch/1/repo/
+    @action(detail=True, methods=['get'], url_path='repo', url_name='repo')
+    def branches_by_repository(self, request, pk):
+        '''
+            Returns branches for the specific repo
+        '''
+        # many == VISE OD JEDNOG IMA U REZULTATIMA FILTRIRANJA
+        return Response(BranchSerializer(Branch.objects.filter(repository__id=pk), many=True).data)
+
+
+class CommitViewSet(GenericViewSet,
+                    CreateModelMixin,
+                    RetrieveModelMixin,
+                    UpdateModelMixin,
+                    ListModelMixin,
+                    DestroyModelMixin
+                    ):
+    """
+          Creates, Updates and Retrieves - Commits
+       """
+    serializer_class = CommitSerializer
+    authentication_classes = (TokenAuthentication,)
+    queryset = Commit.objects.all()
+
+    def get_permissions(self):
+        print(self.request.user)
+        # allow full access to authenticated users, but allow read-only access to unauthenticated users
+        self.permission_classes = [IsAuthenticatedOrReadOnly]
+        return super(CommitViewSet, self).get_permissions()
+
+    #  http://localhost:8000/commit/1/branch/
+    @action(detail=True, methods=['get'], url_path='branch', url_name='branch')
+    def commits_by_branch(self, request, pk):
+        '''
+            Returns branches for the specific branch
+        '''
+        # many == VISE OD JEDNOG IMA U REZULTATIMA FILTRIRANJA
+        return Response(CommitSerializer(Commit.objects.filter(branch__id=pk), many=True).data)
+
+    #  http://localhost:8000/commit/1/author/
+    @action(detail=True, methods=['get'], url_path='author', url_name='author')
+    def commits_by_author(self, request, pk):
+        '''
+            Returns branches for the specific user
+        '''
+        # many == VISE OD JEDNOG IMA U REZULTATIMA FILTRIRANJA
+        return Response(CommitSerializer(Commit.objects.filter(author__id=pk), many=True).data)
+
+    #  http://localhost:8000/commit/1/repo/
+    @action(detail=True, methods=['get'], url_path='repo', url_name='repo')
+    def commits_by_repository(self, request, pk):
+        '''
+            Returns branches for the specific repo
+        '''
+        # many == VISE OD JEDNOG IMA U REZULTATIMA FILTRIRANJA
+        return Response(CommitSerializer(Commit.objects.filter(branch__repository__id=pk), many=True).data)
 
 
 class TeamViewSet(GenericViewSet,  # generic view functionality
