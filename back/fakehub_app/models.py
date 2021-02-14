@@ -77,8 +77,8 @@ class Commit(models.Model):
     def __str__(self):
         return str(self.code) + ' ' + str(self.description)
 
+    # Wiki
 
-# Wiki
 
 class Wiki(models.Model):
     repository = models.ForeignKey(Repository, on_delete=models.CASCADE)
