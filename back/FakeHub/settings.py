@@ -87,7 +87,7 @@ DATABASES = {
         'NAME': 'fake-hub',
         'USER': 'admin',
         'PASSWORD': 'admin',
-        'HOST': 'localhost',
+        'HOST': 'postgres_db', #change to localhost when testing on localhost
         'PORT': 5432,
         'DISABLE_SERVER_SIDE_CURSORS': True
     }
