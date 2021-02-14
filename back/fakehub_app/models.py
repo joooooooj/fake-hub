@@ -140,6 +140,6 @@ class Column(models.Model):
 
 class File(models.Model):
     name = models.CharField
-    content = models.TextField
+    content = models.FileField(default=None)
     task = models.ForeignKey(Task, on_delete=models.CASCADE, default=None, blank=True, null=True)
     page = models.ForeignKey(Page, on_delete=models.CASCADE, default=None, blank=True, null=True)

@@ -49,3 +49,9 @@ class WikiAdmin(admin.ModelAdmin):
 class PageAdmin(admin.ModelAdmin):
     search_fields = ('id', 'title', 'content', 'wiki')
     list_display = ('id', 'title', 'content', 'wiki')
+
+
+@admin.register(File)
+class FileAdmin(admin.ModelAdmin):
+    search_fields = ('id', 'name', 'content', 'task', 'page')
+    list_display = ('id', 'name', 'content', 'task', 'page')
