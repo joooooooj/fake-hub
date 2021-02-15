@@ -17,10 +17,10 @@ function App() {
     })
         .then(response => response.json())
         .then(data => {
-          setTeams(data);
           console.log('Success:', data);
           alert("SERVER RETURNED SUCCESS")
           alert(data)
+          setTeams(data);
         })
         .catch((error) => {
           console.error('Error:', error);
