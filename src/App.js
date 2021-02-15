@@ -7,7 +7,7 @@ function App() {
   const [teams, setTeams] = useState([]);
 
   const getTeams = () => {
-    fetch('/api/team', {
+    fetch('/team', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
