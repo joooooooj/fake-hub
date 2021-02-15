@@ -24,7 +24,7 @@ class Team(models.Model):
 class Repository(models.Model):
     name = models.CharField(max_length=100)
     date_created = models.DateTimeField(default=timezone.now, blank=True)
-    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='repo_owner')
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='repo_owner', null=True)
     team = models.ForeignKey(Team, on_delete=models.CASCADE, default=None, blank=True, null=True)
     collaborators = models.ManyToManyField(User)
 
@@ -77,8 +77,8 @@ class Commit(models.Model):
     def __str__(self):
         return str(self.code) + ' ' + str(self.description)
 
+    # Wiki
 
-# Wiki
 
 class Wiki(models.Model):
     repository = models.ForeignKey(Repository, on_delete=models.CASCADE)
