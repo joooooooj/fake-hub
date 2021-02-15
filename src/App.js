@@ -8,7 +8,7 @@ function App() {
 
   const getTeams = () => {
     alert("CLICKED");
-    fetch('https://fake-hub.herokuapp.com/team', {
+    fetch('https://fake-hub.herokuapp.com/api/team', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
