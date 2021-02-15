@@ -26,18 +26,16 @@ services:
       - db
     container_name: django_back
     
-#  front:
-#    build: ./front
-#    restart: on-failure
-#    command: ["npm", "start"]
-#    volumes:
-#      - ./front:/app/front
-#      - node-modules:/app/front/node_modules
-#    ports:
-#      - "3000:3000"
-#    container_name: react_front  
-#    networks:
-#      - fake-hub-network
+  front:
+    build: ./front
+    restart: on-failure
+    command: ["npm", "start"]
+    volumes:
+      - ./front:/app/front
+      - node-modules:/app/front/node_modules
+    ports:
+      - "3000:3000"
+    container_name: react_front  
 
 volumes:
   node-modules:
