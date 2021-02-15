@@ -85,7 +85,9 @@ class Wiki(models.Model):
 
 
 class Page(models.Model):
-    wiki = models.ForeignKey(Wiki, on_delete=models.CASCADE)
+    title = models.CharField(default="New page", max_length=100)
+    content = models.TextField(default="My new awesome page")
+    wiki = models.ForeignKey(Wiki, on_delete=models.DO_NOTHING)
 
 
 # Planning
@@ -138,6 +140,6 @@ class Column(models.Model):
 
 class File(models.Model):
     name = models.CharField
-    content = models.TextField
+    content = models.FileField(default=None)
     task = models.ForeignKey(Task, on_delete=models.CASCADE, default=None, blank=True, null=True)
     page = models.ForeignKey(Page, on_delete=models.CASCADE, default=None, blank=True, null=True)
