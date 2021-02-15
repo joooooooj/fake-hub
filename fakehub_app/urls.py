@@ -17,12 +17,12 @@ from .views import TeamViewSet, UserViewSet, RepositoryViewSet, ProjectViewSet, 
 # router.register(r'commit', CommitViewSet)
 
 urlpatterns = [
-    path(r'team', TeamViewSet.as_view())
-    path(r'user', UserViewSet.as_view())
-    path(r'repository', RepositoryViewSet.as_view())
-    path(r'project', ProjectViewSet.as_view())
-    path(r'label', LabelViewSet.as_view())
-    path(r'milestone', MilestoneViewSet.as_view())
-    path(r'branch', BranchViewSet.as_view())
+    path(r'team', TeamViewSet.as_view()),
+    path(r'user', UserViewSet.as_view()),
+    path(r'repository', RepositoryViewSet.as_view()),
+    path(r'project', ProjectViewSet.as_view()),
+    path(r'label', LabelViewSet.as_view()),
+    path(r'milestone', MilestoneViewSet.as_view()),
+    path(r'branch', BranchViewSet.as_view()),
     path(r'commit', CommitViewSet.as_view())
 ]
