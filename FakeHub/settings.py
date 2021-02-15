@@ -82,10 +82,10 @@ WSGI_APPLICATION = 'FakeHub.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'fake-hub',
-        'USER': 'admin',
-        'PASSWORD': 'admin',
-        'HOST': 'heroku-postgresql', #change to localhost when testing on localhost
+        'NAME': 'd6mbqkfq3ffmfm', #fake-hub
+        'USER': 'ckonhstkfzyabt', #admin
+        'PASSWORD': 'a57a05fb5b600c7656929dc8aec94429b95374482cbe3fac368d2e6c95a8cfe2', #admin
+        'HOST': 'ec2-54-247-158-179.eu-west-1.compute.amazonaws.com', #change to localhost when testing on localhost, and postgres_db when dockerizing
         'PORT': 5432,
         'DISABLE_SERVER_SIDE_CURSORS': True
     }
