@@ -1,3 +1,13 @@
+FROM node
+
+WORKDIR /app/front
+COPY package.json /app/front
+
+RUN npm install
+
+EXPOSE 3000
+CMD ["npm", "start"]
+
 FROM python:3.9
 
 RUN apt-get update \
