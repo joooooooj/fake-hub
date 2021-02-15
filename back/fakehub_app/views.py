@@ -8,10 +8,11 @@ from rest_framework.mixins import (
 from rest_framework.viewsets import GenericViewSet
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
-from .models import Team, User, Label, Repository, Project, Milestone, Task, Branch, Commit, Wiki, Page, File, Status
+from .models import Team, User, Label, Repository, Project, Milestone, Task, Branch, Commit, Wiki, Page, File, Status, \
+    Column
 from .serializers import TeamSerializer, ProjectSerializer, LabelSerializer, RepositorySerializer, UserSerializer, \
     MilestoneSerializer, BranchSerializer, CommitSerializer, WikiSerializer, PageSerializer, FileSerializer, \
-    TaskSerializer
+    TaskSerializer, ColumnSerializer
 
 
 # U COMMAND PROMPTU: (nece da mi radi token u postmanu nzm sto)
@@ -297,6 +298,14 @@ class FileViewSet(GenericViewSet,
     serializer_class = FileSerializer
     queryset = File.objects.all()
 
+    @action(detail=True, methods=['get'], url_path='task', url_name='task')
+    def files_by_task(self, request, pk):
+        return Response(FileSerializer(File.objects.filter(task__id=pk), many=True).data)
+
+    @action(detail=True, methods=['get'], url_path='task', url_name='task')
+    def files_by_page(self, request, pk):
+        return Response(FileSerializer(File.objects.filter(page__id=pk), many=True).data)
+
 
 class TaskViewSet(GenericViewSet,
                   CreateModelMixin,
@@ -316,6 +325,33 @@ class TaskViewSet(GenericViewSet,
     def tasks_by_milestone(self, request, pk):
         return Response(TaskSerializer(Task.objects.filter(milestone__id=pk), many=True).data)
 
-    @action(detail=False, methods=['get'], url_path='status-opened', url_name='status-opened')
+    @action(detail=False, methods=['get'], url_path='status-open', url_name='status-open')
     def tasks_by_status_opened(self, request):
         return Response(TaskSerializer(Task.objects.filter(status=Status.OPEN), many=True).data)
+
+    @action(detail=False, methods=['get'], url_path='status-closed', url_name='status-closed')
+    def tasks_by_status_closed(self, request):
+        return Response(TaskSerializer(Task.objects.filter(status=Status.CLOSED), many=True).data)
+
+    @action(detail=False, methods=['get'], url_path='status-expired', url_name='status-expired')
+    def tasks_by_status_expired(self, request):
+        return Response(TaskSerializer(Task.objects.filter(status=Status.EXPIRED), many=True).data)
+
+    @action(detail=True, methods=['get'], url_path='column', url_name='column')
+    def tasks_by_column(self, request, pk):
+        return Response(TaskSerializer(Task.objects.filter(column__id=pk), many=True).data)
+
+
+class ColumnViewSet(GenericViewSet,
+                    CreateModelMixin,
+                    RetrieveModelMixin,
+                    UpdateModelMixin,
+                    ListModelMixin,
+                    DestroyModelMixin
+                    ):
+    serializer_class = ColumnSerializer
+    queryset = Column.objects.all()
+
+    @action(detail=True, methods=['get'], url_path='project', url_name='project')
+    def columns_by_project(self, request, pk):
+        return Response(ColumnSerializer(Column.objects.filter(project__id=pk), many=True).data)

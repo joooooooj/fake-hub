@@ -61,3 +61,8 @@ class FileAdmin(admin.ModelAdmin):
 class TaskAdmin(admin.ModelAdmin):
     search_fields = ('id', 'title', 'created_at', 'description', 'status', 'difficulty', 'closed_at',
                      'due_date', 'changes', 'milestone', 'labels', 'members', 'repository')
+
+
+@admin.register(Column)
+class ColumnAdmin(admin.ModelAdmin):
+    search_fields = ('id', 'name', 'project')
