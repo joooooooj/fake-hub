@@ -114,6 +114,11 @@ class Milestone(models.Model):
     repository = models.ForeignKey(Repository, on_delete=models.CASCADE)
 
 
+class Column(models.Model):
+    name = models.CharField
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, default=None, blank=True, null=True)
+
+
 class Task(models.Model):
     title = models.CharField(max_length=100)
     created_at = models.DateTimeField(default=timezone.now)
@@ -130,16 +135,10 @@ class Task(models.Model):
     labels = models.ManyToManyField(Label)
     members = models.ManyToManyField(User)
     repository = models.ForeignKey(Repository, on_delete=models.CASCADE)
-
-
-class Column(models.Model):
-    name = models.CharField
-    task = models.ForeignKey(Task, on_delete=models.CASCADE, default=None, blank=True, null=True)
-    project = models.ForeignKey(Project, on_delete=models.CASCADE, default=None, blank=True, null=True)
+    column = models.ForeignKey(Column, on_delete=models.CASCADE, default=None, blank=True, null=True)
 
 
 class File(models.Model):
-    name = models.CharField
-    content = models.FileField(default=None)
+    name = models.FileField(default=None)
     task = models.ForeignKey(Task, on_delete=models.CASCADE, default=None, blank=True, null=True)
     page = models.ForeignKey(Page, on_delete=models.CASCADE, default=None, blank=True, null=True)

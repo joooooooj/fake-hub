@@ -68,7 +68,7 @@ class PageSerializer(serializers.ModelSerializer):
 class FileSerializer(serializers.ModelSerializer):
     class Meta:
         model = File
-        fields = ('name', 'content', 'task', 'page')
+        fields = ('name', 'task', 'page')
 
 
 class TaskSerializer(serializers.ModelSerializer):
@@ -76,3 +76,4 @@ class TaskSerializer(serializers.ModelSerializer):
         model = Task
         fields = ('title', 'created_at', 'description', 'status', 'difficulty', 'closed_at',
                   'due_date', 'changes', 'milestone', 'labels', 'members', 'repository')
+        depth = 1

@@ -316,6 +316,6 @@ class TaskViewSet(GenericViewSet,
     def tasks_by_milestone(self, request, pk):
         return Response(TaskSerializer(Task.objects.filter(milestone__id=pk), many=True).data)
 
-    @action(detail=True, methods=['get'], url_path='status-opened', url_name='status-opened')
+    @action(detail=False, methods=['get'], url_path='status-opened', url_name='status-opened')
     def tasks_by_status_opened(self, request):
         return Response(TaskSerializer(Task.objects.filter(status=Status.OPEN), many=True).data)
