@@ -24,5 +24,5 @@ urlpatterns = [
     path(r'label', LabelViewSet.as_view())
     path(r'milestone', MilestoneViewSet.as_view())
     path(r'branch', BranchViewSet.as_view())
-    pathr(r'commit', CommitViewSet.as_view())
+    path(r'commit', CommitViewSet.as_view())
 ]
