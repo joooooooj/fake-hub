@@ -7,7 +7,6 @@ function App() {
   const [teams, setTeams] = useState([]);
 
   const getTeams = () => {
-    alert("CLICKED");
     fetch('https://fake-hub.herokuapp.com/api/team', {
       method: 'GET',
       headers: {
@@ -17,15 +16,11 @@ function App() {
     })
         .then(response => response.json())
         .then(data => {
-          console.log('Success:', data);
-          alert("SERVER RETURNED SUCCESS")
-          alert(data)
+          console.log(data)
           setTeams(data);
         })
         .catch((error) => {
           console.error('Error:', error);
-          alert("SERVER RETURNED ERROR")
-          alert(error)
         });
   }
 
