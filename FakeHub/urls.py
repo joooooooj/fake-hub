@@ -22,5 +22,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('login/', views.obtain_auth_token),
     path('api/',  include('fakehub_app.urls')),
-    re_path(r'^.*', TemplateView.as_view(template_name='index.html')),
+    re_path(r'^./', TemplateView.as_view(template_name='index.html')),
 ]
