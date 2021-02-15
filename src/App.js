@@ -7,7 +7,7 @@ function App() {
   const [teams, setTeams] = useState([]);
 
   const getTeams = () => {
-    fetch('/team', {
+    fetch('https://fake-hub.herokuapp.com/team', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
