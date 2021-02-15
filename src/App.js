@@ -15,7 +15,7 @@ function App() {
         'Accept': 'application/json'
       }
     })
-        .then(response => response.json())
+        .then(response => alert(response))
         .then(data => {
           setTeams(data);
           console.log('Success:', data);
