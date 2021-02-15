@@ -8,9 +8,10 @@ from rest_framework.mixins import (
 from rest_framework.viewsets import GenericViewSet
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
-from .models import Team, User, Label, Repository, Project, Milestone, Task, Branch, Commit, Wiki, Page, File
+from .models import Team, User, Label, Repository, Project, Milestone, Task, Branch, Commit, Wiki, Page, File, Status
 from .serializers import TeamSerializer, ProjectSerializer, LabelSerializer, RepositorySerializer, UserSerializer, \
-    MilestoneSerializer, BranchSerializer, CommitSerializer, WikiSerializer, PageSerializer, FileSerializer
+    MilestoneSerializer, BranchSerializer, CommitSerializer, WikiSerializer, PageSerializer, FileSerializer, \
+    TaskSerializer
 
 
 # U COMMAND PROMPTU: (nece da mi radi token u postmanu nzm sto)
@@ -295,3 +296,26 @@ class FileViewSet(GenericViewSet,
                   ):
     serializer_class = FileSerializer
     queryset = File.objects.all()
+
+
+class TaskViewSet(GenericViewSet,
+                  CreateModelMixin,
+                  RetrieveModelMixin,
+                  UpdateModelMixin,
+                  ListModelMixin,
+                  DestroyModelMixin
+                  ):
+    serializer_class = TaskSerializer
+    queryset = Task.objects.all()
+
+    @action(detail=True, methods=['get'], url_path='repository', url_name='repository')
+    def tasks_by_repository(self, request, pk):
+        return Response(TaskSerializer(Task.objects.filter(repository__id=pk), many=True).data)
+
+    @action(detail=True, methods=['get'], url_path='milestone', url_name='milestone')
+    def tasks_by_milestone(self, request, pk):
+        return Response(TaskSerializer(Task.objects.filter(milestone__id=pk), many=True).data)
+
+    @action(detail=True, methods=['get'], url_path='status-opened', url_name='status-opened')
+    def tasks_by_status_opened(self, request):
+        return Response(TaskSerializer(Task.objects.filter(status=Status.OPEN), many=True).data)

@@ -4,7 +4,7 @@ from django.contrib import admin
 from django.urls import path, include
 from rest_framework import routers
 from .views import TeamViewSet, UserViewSet, RepositoryViewSet, ProjectViewSet, LabelViewSet, MilestoneViewSet, \
-    BranchViewSet, CommitViewSet, WikiViewSet, PageViewSet, FileViewSet
+    BranchViewSet, CommitViewSet, WikiViewSet, PageViewSet, FileViewSet, TaskViewSet
 
 router = routers.SimpleRouter()
 router.register(r'team', TeamViewSet)
@@ -18,6 +18,7 @@ router.register(r'commit', CommitViewSet)
 router.register(r'wiki', WikiViewSet)
 router.register(r'page', PageViewSet)
 router.register(r'file', FileViewSet)
+router.register(r'task', TaskViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),

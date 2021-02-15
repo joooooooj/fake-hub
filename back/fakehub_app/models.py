@@ -120,8 +120,8 @@ class Task(models.Model):
     description = models.TextField(default=None, blank=True, null=True)
     status = models.CharField(choices=Status.choices, default=Status.OPEN, max_length=100)
     difficulty = models.IntegerField(validators=[
-        MaxValueValidator(1),
-        MinValueValidator(10)
+        MaxValueValidator(10),
+        MinValueValidator(1)
     ], default=None, blank=True, null=True)
     closed_at = models.DateTimeField(default=None, blank=True, null=True)
     due_date = models.DateTimeField(default=None, blank=True, null=True)
