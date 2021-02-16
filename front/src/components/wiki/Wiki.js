@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from "react";
 import {Button} from "react-bootstrap";
-import {Link} from "react-router-dom";
 import PageView from "./PageView";
 
 export default function Wiki(props) {
@@ -8,6 +7,10 @@ export default function Wiki(props) {
     const [pages, setPages] = useState();
 
     useEffect(() => {
+        handleGetPages();
+    }, []);
+
+    const handleGetPages = () => {
         fetch('http://localhost:8000/api/page/' + props.match.params.id + '/repository', {
             method: 'GET',
             headers: {
@@ -22,11 +25,30 @@ export default function Wiki(props) {
             .catch(error => {
                 console.error(error);
             });
-
-    }, []);
+    }
 
     const handleCreateNewPage = () => {
         props.history.push("/repository/" + props.match.params.id + "/new-wiki-page");
+    }
+
+    const handleDeletePage = (page) => {
+        fetch("http://localhost:8000/api/page/" + page.id, {
+            method: "DELETE",
+            headers: {
+                'Content-Type': 'application/json',
+                "Authorization": "Token " + JSON.parse(localStorage.getItem("user")).token
+            },
+        })
+            .then(response => response.json())
+            .then(data => {
+            })
+            .catch(error => {
+                console.error(error);
+            });
+        setTimeout(() => {
+            setPages(null);
+            handleGetPages();
+        }, 500)
     }
 
     return (
@@ -34,7 +56,8 @@ export default function Wiki(props) {
             {
                 pages && pages.length === 0 &&
                 <>
-                    <div className="w-100 text-center" style={{'marginTop': '100px'}}>S
+                    <div className="w-100 text-center"
+                         style={{'marginTop': '100px'}}>
                         <span className="w-100 mb-2 pt-2 material-icons mr-2">import_contacts</span>
                         <span style={{'fontSize': '26px'}}>Welcome to your wiki page. </span>
                         <br/>
@@ -43,17 +66,35 @@ export default function Wiki(props) {
                             status, and document software better, together
                         </span>
                     </div>
-                    <div className="w-100 pt-5 text-center">
+                    <div className="w-100 pt-5 text-center pb-5 border-bottom">
                         <Button variant="success" className="text-center" onClick={handleCreateNewPage}>
                             Create the first page</Button>
                     </div>
                 </>
             }
             {
-                pages && pages.length !== 0 &&
-                pages.map((page, index) => {
-                    return <PageView key={index} {...props} page={page}/>
-                })
+                <>
+                    {
+                        pages && pages.length !== 0 &&
+                        pages.map((page, index) => {
+                            return <PageView key={index} {...props} page={page} delete={handleDeletePage}/>
+                        })
+                    }
+                    {
+                        pages && pages.length !== 0 &&
+                        <div className="w-100">
+                            <div style={{
+                                margin: "0 auto",
+                                maxWidth: "1200px",
+                                display: "flex"
+                            }}>
+                                <p style={{'fontSize': '16px'}}>Welcome to your wiki page. </p>
+                                <Button variant="success" className="ml-auto btn-sm" onClick={handleCreateNewPage}>New
+                                    Page</Button>
+                            </div>
+                        </div>
+                    }
+                </>
             }
         </div>
     );

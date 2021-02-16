@@ -224,23 +224,26 @@ class RepositoryViewSet(GenericViewSet,
                         ListModelMixin,
                         DestroyModelMixin
                         ):
+    """
+          Creates, Updates and Retrieves - Repositories
+       """
     serializer_class = RepositorySerializer
-    queryset = Team.objects.all()
+    authentication_classes = (TokenAuthentication,)
+    queryset = Repository.objects.all()
 
-    # localhost:8000/repository?user_id=2
-    def get_queryset(self):
-        if self.request.method == 'GET':
-            user_id = self.request.GET.get('user_id', None)
-            if user_id is not None:
-                return Repository.objects.all().filter(members__id=user_id)
+    # def get_permissions(self):
+    #     print(self.request.data)
+    #     # allow full access to authenticated users, but allow read-only access to unauthenticated users
+    #     self.permission_classes = [IsAuthenticatedOrReadOnly]
+    #     return super(RepositoryViewSet, self).get_permissions()
 
-            team_id = self.request.GET.get('team_id', None)
-            if team_id is not None:
-                return Repository.objects.all().filter(team__id=team_id)
-            else:
-                return Repository.objects.all()
-        else:
-            return Project.objects.all()
+    @action(detail=True, methods=['get'], url_path='user', url_name='user')
+    def repos_for_user(self, request, pk):
+        '''
+            Returns repos for the specific user
+        '''
+
+        return Response(RepositorySerializer(Repository.objects.filter(owner__id=pk), many=True).data)
 
 
 class ProjectViewSet(GenericViewSet,

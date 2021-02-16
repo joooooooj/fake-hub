@@ -61,7 +61,7 @@ class CommitSerializer(serializers.ModelSerializer):
 class PageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Page
-        fields = ('title', 'content', 'repository')
+        fields = ('id', 'title', 'content', 'repository')
 
 
 class FileSerializer(serializers.ModelSerializer):

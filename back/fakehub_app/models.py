@@ -81,7 +81,7 @@ class Commit(models.Model):
 class Page(models.Model):
     title = models.CharField(default="New page", max_length=100)
     content = models.TextField(default="My new awesome page")
-    repository = models.ForeignKey(Repository, on_delete=models.DO_NOTHING)
+    repository = models.ForeignKey(Repository, on_delete=models.CASCADE)
 
 
 # Planning

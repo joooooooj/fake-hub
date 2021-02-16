@@ -15,7 +15,7 @@ export default function Repository(props) {
 
     useEffect(() => {
         if (props?.match?.params?.id) {
-            fetch('http://localhost:8000/repository/' + props.match.params.id, {
+            fetch('http://localhost:8000/api/repository/' + props.match.params.id, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',

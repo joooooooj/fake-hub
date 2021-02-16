@@ -39,6 +39,7 @@ export default function Routes(props) {
                     <Route exact path="/teams" component={() => <Teams user={props.user}/>}/>
                     {/* WIKI */}
                     <Route exact path="/repository/:id/new-wiki-page" component={(props) => <AddEditPage {...props} user={props.user}/>}/>
+                    <Route exact path="/repository/:id/edit-wiki-page/:pageId" component={(props) => <AddEditPage {...props} user={props.user}/>}/>
                 </>
             }
         </Switch>
