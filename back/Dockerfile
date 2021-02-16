@@ -9,8 +9,15 @@ WORKDIR /app/back
 COPY requirements.txt /app/back
 RUN pip install -r requirements.txt
 
-CMD ["python", "manage.py", "create_superuser", "--username=admin", "--email=admin@admin.com" "--password=admin"]
-CMD ["python", "manage.py", "migrate", "0.0.0.0:8000"]
-
+EXPOSE 5433
 EXPOSE 8000
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+
+# Add docker-compose-wait tool -------------------
+ADD https://github.com/ufoscout/docker-compose-wait/releases/download/2.7.3/wait /wait
+RUN chmod +x /wait
+
+CMD /wait && \
+cd /app/back && python manage.py migrate \
+&& python manage.py migrate sessions \
+&& python manage.py create_superuser --username=admin --email=admin@admin.com --password=admin \
+&& python manage.py runserver 0.0.0.0:8000
