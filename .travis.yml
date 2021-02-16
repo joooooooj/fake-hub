@@ -2,13 +2,15 @@ sudo: required
 
 script:
   - ls
+  - cp -f back/FakeHub/urls.py deploy/FakeHub/urls.py
+  - cp -f back/FakeHub/settings.py deploy/FakeHub/settings.py
   - cp -r front/. .
   - cp -r back/. .
   - rm -rf front
   - rm -rf back
   - rm -rf deploy
   - sed -i "s,PROXY,https://fake-hub.herokuapp.com,g" package.json
-  - cat package.json
+  - cat FakeHub/urls.py
   - ls
   - git add .
   - git commit -m "Prepred for deploy"
