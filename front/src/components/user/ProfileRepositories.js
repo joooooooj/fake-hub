@@ -9,7 +9,7 @@ export default function ProfileRepositories(props){
 
     useEffect(() => {
         console.log(props)
-        fetch('http://localhost:8000/repository/'+props.user.id+'/user', {
+        fetch('http://localhost:8000/api/repository/'+props.user.id+'/user', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',

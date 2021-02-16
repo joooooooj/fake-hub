@@ -13,7 +13,7 @@ export default function Settings (props) {
   }, [props?.match?.params?.id]);
 
   function deleteRepo () {
-    fetch ('http://localhost:8000/repository/' + repository, {
+    fetch ('http://localhost:8000/api/repository/' + repository, {
       method: 'DELETE',
       headers: new Headers({
         'Authorization': 'Token '+JSON.parse(localStorage.getItem("user")).token, 

@@ -14,7 +14,7 @@ from .models import Team, User, Label, Repository, Project, Milestone, Task, Bra
     Column
 from .serializers import TeamSerializer, ProjectSerializer, LabelSerializer, RepositorySerializer, UserSerializer, \
     MilestoneSerializer, BranchSerializer, CommitSerializer, WikiSerializer, PageSerializer, FileSerializer, \
-    TaskSerializer, ColumnSerializer
+    TaskSerializer, ColumnSerializer, RepoSaveSerializer
 
 
 class CustomObtainAuthToken(ObtainAuthToken):
@@ -39,7 +39,7 @@ class MilestoneViewSet(GenericViewSet,
     queryset = Milestone.objects.all()
 
     def get_permissions(self):
-        print(self.request.user)
+        print(self.request)
         # allow full access to authenticated users, but allow read-only access to unauthenticated users
         self.permission_classes = [IsAuthenticatedOrReadOnly]
         return super(MilestoneViewSet, self).get_permissions()
@@ -197,6 +197,18 @@ class TeamViewSet(GenericViewSet,  # generic view functionality
         return Response(TeamSerializer(Team.objects.filter(members__id=pk), many=True).data)
 
 
+# class RepositoryCreateViewSet(CreateModelMixin):
+#     serializer_class = RepoSaveSerializer
+#     authentication_classes = (TokenAuthentication,)
+#     queryset = Repository.objects.all()
+#
+#     # def get_permissions(self):
+#     #     print(self.request.data)
+#     #     # allow full access to authenticated users, but allow read-only access to unauthenticated users
+#     #     self.permission_classes = [IsAuthenticatedOrReadOnly]
+#     #     return super(RepositoryViewSet, self).get_permissions()
+#
+
 class RepositoryViewSet(GenericViewSet,
                         CreateModelMixin,
                         RetrieveModelMixin,
@@ -207,15 +219,22 @@ class RepositoryViewSet(GenericViewSet,
     """
           Creates, Updates and Retrieves - Repositories
        """
-    serializer_class = RepositorySerializer
+    serializers = {
+        'default': RepositorySerializer,
+        'create': RepoSaveSerializer
+    }
     authentication_classes = (TokenAuthentication,)
     queryset = Repository.objects.all()
 
-    def get_permissions(self):
-        print(self.request.user)
-        # allow full access to authenticated users, but allow read-only access to unauthenticated users
-        self.permission_classes = [IsAuthenticatedOrReadOnly]
-        return super(RepositoryViewSet, self).get_permissions()
+    # def get_permissions(self):
+    #     print(self.request.data)
+    #     # allow full access to authenticated users, but allow read-only access to unauthenticated users
+    #     self.permission_classes = [IsAuthenticatedOrReadOnly]
+    #     return super(RepositoryViewSet, self).get_permissions()
+    def get_serializer_class(self):
+        if self.action in ['create']:
+            return RepoSaveSerializer
+        return RepositorySerializer
 
     @action(detail=True, methods=['get'], url_path='user', url_name='user')
     def repos_for_user(self, request, pk):

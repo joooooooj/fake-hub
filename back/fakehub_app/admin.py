@@ -71,3 +71,4 @@ class ColumnAdmin(admin.ModelAdmin):
 @admin.register(Team)
 class ColumnAdmin(admin.ModelAdmin):
     search_fields = ('id', 'name')
+    list_display = ('id', 'name')

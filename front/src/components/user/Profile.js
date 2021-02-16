@@ -10,7 +10,7 @@ export default function Profile(props) {
 
     useEffect(() => {
 
-            fetch('http://localhost:8000/user/' + props.user.id, {
+            fetch('http://localhost:8000/api/user/' + props.user.id, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
