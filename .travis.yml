@@ -7,12 +7,13 @@ python:
 #   - docker
 
 script:
-  - mkdir deploy
-  - cp /front/. /deploy
-  - cp /back/. /deploy
+  - ls
+  - mkdir deploy_nice
+  - cp /front/. /deploy_nice
+  - cp /back/. /deploy_nice
   - rmdir front
   - rmdir back
-  - cd deploy
+  - cd deploy_nice
   - sed -i "s,PROXY,https://fake-hub.herokuapp.com,g" package.json
   - cat package.json
   - ls
