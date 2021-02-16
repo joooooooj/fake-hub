@@ -14,7 +14,7 @@ export default function Home(props) {
                     <Container>
                         < Row >
                             <Col>
-                                <img src="./25231.png" />
+                                <img src="./25231-tr.png" />
                             </Col>
                             <Col>
                                 <h1>Where the world leaves GitHub behind</h1>
