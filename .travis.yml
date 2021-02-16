@@ -1,10 +1,4 @@
 sudo: required
-language: python
-python:
-  - '3.9'
-
-# services:
-#   - docker
 
 script:
   - ls
@@ -16,6 +10,7 @@ script:
   - sed -i "s,PROXY,https://fake-hub.herokuapp.com,g" package.json
   - cat package.json
   - ls
+  - git status
 
 deploy:
   provider: heroku
