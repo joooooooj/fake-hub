@@ -1,7 +1,6 @@
 sudo: required
 
 script:
-  - ls
   - cp -r front/. .
   - cp -r back/. .
   - rm -rf front
@@ -12,17 +11,14 @@ script:
   - sed -i "s,DJANGO_DB_HOST=,DJANGO_DB_HOST=$DJANGO_DB_HOST,g" FakeHub/.env
   - sed -i "s,http://localhost:8000,https://fake-hub.herokuapp.com,g" package.json
   - sed -i "s,http://django:8000,https://fake-hub.herokuapp.com,g" package.json
-  - cat FakeHub/.env
-  - cat package.json
-  - ls
   - git add .
   - git commit -m "Sensei made one good commit for deploy"
 
 deploy:
   provider: heroku
   api_key: $API_KEY
-  app: fake-hub
-  on: dev
+  app: $APP_NAME
+  on: $APP_BRANCH
   
 #add tests
 #add push to docker hub
