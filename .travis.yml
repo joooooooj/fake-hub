@@ -8,12 +8,11 @@ python:
 
 script:
   - ls
-  - mkdir deploy_nice
-  - cp front/. /deploy_nice
-  - cp back/. /deploy_nice
-  - rmdir front
-  - rmdir back
-  - cd deploy_nice
+  - cp -r front/. .
+  - cp -r back/. .
+  - rm -rf front
+  - rm -rf back
+  - rm -rf deploy
   - sed -i "s,PROXY,https://fake-hub.herokuapp.com,g" package.json
   - cat package.json
   - ls
