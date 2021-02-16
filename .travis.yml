@@ -1,7 +1,6 @@
 sudo: required
 
 script:
-  - echo $API_KEY
   - ls
   - cp -r front/. .
   - cp -r back/. .
@@ -13,6 +12,7 @@ script:
   - sed -i "s,DJANGO_DB_HOST=,DJANGO_DB_NAME=$DJANGO_DB_HOST,g" FakeHub/.env
   - sed -i "s,http://localhost:8000,https://fake-hub.herokuapp.com,g" package.json
   - sed -i "s,http://django:8000,https://fake-hub.herokuapp.com,g" package.json
+  - cat FakeHub/.env
   - cat package.json
   - ls
   - git add .
