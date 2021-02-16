@@ -10,7 +10,8 @@ script:
   - sed -i "s,PROXY,https://fake-hub.herokuapp.com,g" package.json
   - cat package.json
   - ls
-  - git status
+  - git add .
+  - git commit -m "Prepred for deploy"
 
 deploy:
   provider: heroku
