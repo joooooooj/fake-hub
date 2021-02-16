@@ -1,7 +1,7 @@
 FROM node
 
 WORKDIR /app/front
-COPY package.json /app/front
+COPY . /app/front
 
 RUN npm install
 

@@ -7,7 +7,7 @@ export default function Teams(props) {
     const [teams, setTeams] = useState([]);
 
     useEffect(() => {
-        fetch('http://localhost:8000/api/team', {
+        fetch('/api/team', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -38,7 +38,7 @@ export default function Teams(props) {
                         teams?.map((team, index) => {
                             return (
                                 <li className="font-weight-bold" key={index}>
-                                    <Link to={"/team/" + team.id}>{team.name}</Link>
+                                    <Link to={"/template/team/" + team.id}>{team.name}</Link>
                                 </li>
                             );
                         })

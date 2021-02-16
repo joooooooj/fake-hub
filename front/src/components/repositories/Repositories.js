@@ -7,7 +7,7 @@ export default function Repositories(props) {
     const [repositories, setRepositories] = useState([]);
 
     useEffect(() => {
-        fetch('http://localhost:8000/api/repository', {
+        fetch('/api/repository', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -38,7 +38,7 @@ export default function Repositories(props) {
                         repositories?.map((repo, index) => {
                             return (
                                 <li className="font-weight-bold" key={index}>
-                                    <Link to={"/repository/" + repo.id}>{(repo.team ? repo.team.name : repo.owner?.username)} / {repo.name}</Link>
+                                    <Link to={"/template/repository/" + repo.id}>{(repo.team ? repo.team.name : repo.owner?.username)} / {repo.name}</Link>
                                 </li>
                             );
                         })
