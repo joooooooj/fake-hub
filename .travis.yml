@@ -2,8 +2,8 @@ sudo: required
 
 script:
   - ls
-  - cp -f back/FakeHub/urls.py deploy/FakeHub/urls.py
-  - cp -f back/FakeHub/settings.py deploy/FakeHub/settings.py
+  - cp -f deploy/FakeHub/urls.py back/FakeHub/urls.py
+  - cp -f deploy/FakeHub/settings.py back/FakeHub/settings.py
   - cp -r front/. .
   - cp -r back/. .
   - rm -rf front
