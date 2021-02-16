@@ -17,7 +17,7 @@ function App() {
 
   const login = (user) => {
     setUser(user);
-    history.push('/home');
+    history.push('/template/home');
   }
 
   const [bodyTheme, setBodyTheme] = useState("dark");

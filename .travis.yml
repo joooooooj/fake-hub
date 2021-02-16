@@ -1,13 +1,24 @@
 sudo: required
-language: python
-python:
-  - '3.9'
-
-services:
-  - docker
 
 script:
-  - docker-compose build
+  - cp -r front/. .
+  - cp -r back/. .
+  - rm -rf front
+  - rm -rf back
+  - sed -i "s,DJANGO_DB_NAME=,DJANGO_DB_NAME=$DJANGO_DB_NAME,g" FakeHub/.env
+  - sed -i "s,DJANGO_DB_PASSWORD=,DJANGO_DB_PASSWORD=$DJANGO_DB_PASSWORD,g" FakeHub/.env
+  - sed -i "s,DJANGO_DB_USER=,DJANGO_DB_USER=$DJANGO_DB_USER,g" FakeHub/.env
+  - sed -i "s,DJANGO_DB_HOST=,DJANGO_DB_HOST=$DJANGO_DB_HOST,g" FakeHub/.env
+  - sed -i "s,http://localhost:8000,https://fake-hub.herokuapp.com,g" package.json
+  - sed -i "s,http://django:8000,https://fake-hub.herokuapp.com,g" package.json
+  - git add .
+  - git commit -m "Sensei made one good commit for deploy"
+
+deploy:
+  provider: heroku
+  api_key: $API_KEY
+  app: $APP_NAME
+  on: $APP_BRANCH
   
 #add tests
 #add push to docker hub
