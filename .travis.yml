@@ -16,6 +16,12 @@ script:
   - sed -i "s,PROXY,https://fake-hub.herokuapp.com,g" package.json
   - cat package.json
   - ls
+
+deploy:
+  provider: heroku
+  api_key: $API_KEY
+  app: fake-hub
+  on: main  
   
 #add tests
 #add push to docker hub
