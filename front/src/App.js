@@ -1,23 +1,33 @@
-import logo from './logo.svg';
-import './App.css';
+import './styles/base.scss';
+import NavigationBar from "./components/core/NavigationBar";
+import { Container } from "react-bootstrap";
+import { useHistory } from "react-router-dom";
+import Routes from "./Routes";
+import UseLocalStorage from './UseLocalStorage';
+import { useState } from 'react';
 
 function App() {
+  const history = useHistory();
+
+  const [user, setUser] = UseLocalStorage("user", null);
+
+  const logout = () => {
+    setUser(null);
+  }
+
+  const login = (user) => {
+    setUser(user);
+    history.push('/template/home');
+  }
+
+  const [bodyTheme, setBodyTheme] = useState("dark");
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className={"app " +  (bodyTheme === "dark" ? "bg-dark text-light" : "bg-light text-dark")}>
+      <NavigationBar logout={logout} user={user} setBodyTheme={setBodyTheme}/>
+      <Container fluid>
+        <Routes login={login} user={user}/>
+      </Container>
     </div>
   );
 }

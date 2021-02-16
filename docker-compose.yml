@@ -1,0 +1,54 @@
+version: '3.7'
+
+services:
+  db:
+    image: postgres
+    hostname: postgres
+    restart: on-failure
+    networks:
+      fake-hub:
+          ipv4_address: 172.25.0.2
+    ports:
+      - "5433:5432"
+    environment:
+      - POSTGRES_DB=fake-hub
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin
+    container_name: postgres_db
+    
+  django:
+    build: ./back
+    restart: on-failure
+    networks:
+        fake-hub:
+            ipv4_address: 172.25.0.3
+    environment:
+      WAIT_HOSTS: postgres:5432
+    volumes:
+      - ./back:/app/back
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    container_name: django_back
+    
+  front:
+    build: ./front
+    command: ["npm", "start"]
+    networks:
+      fake-hub:
+        ipv4_address: 172.25.0.4
+    volumes:
+      - ./front:/app/front
+      - /app/front/node_modules
+    ports:
+      - "3000:3000"
+    container_name: react_front 
+
+networks:
+  fake-hub:
+    name: fake-hub
+    ipam:
+      config:
+        - subnet: "172.25.0.0/16"
+          gateway: 172.25.0.1

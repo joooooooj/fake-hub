@@ -11,6 +11,9 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
 from pathlib import Path
+import os
+from dotenv import load_dotenv
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -25,12 +28,14 @@ SECRET_KEY = 'e0yfl8_2g*(=x!mrp6(fryhp+nzusey+svob=7h(g@%ms08gd2'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+CORS_ORIGIN_ALLOW_ALL = True
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    'corsheaders',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -39,11 +44,12 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'sth.apps.SthConfig',
     'fakehub_app',
-    'corsheaders',
     'rest_framework',
+    'rest_framework.authtoken'
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -51,7 +57,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware'
 ]
 
 ROOT_URLCONF = 'FakeHub.urls'
@@ -59,8 +65,7 @@ ROOT_URLCONF = 'FakeHub.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates']
-        ,
+        'DIRS': [os.path.join(BASE_DIR, 'build')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -75,14 +80,18 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'FakeHub.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': os.getenv("DJANGO_DB_NAME"),
+        'USER': os.getenv("DJANGO_DB_USER"),
+        'PASSWORD': os.getenv("DJANGO_DB_PASSWORD"),
+        'HOST': os.getenv("DJANGO_DB_HOST"),
+        'PORT': 5432,
+        'DISABLE_SERVER_SIDE_CURSORS': True
     }
 }
 
@@ -124,4 +133,23 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'build/static')
+]
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
+AUTH_USER_MODEL = 'fakehub_app.User'
+
+REST_FRAMEWORK = {
+
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+        # ...
+    ),
+
+    # ...
+}
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
