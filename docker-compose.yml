@@ -3,29 +3,35 @@ version: '3.7'
 services:
   db:
     image: postgres
+    hostname: postgres
+    restart: on-failure
     ports:
-      - "5432:5432"
+      - "5433:5432"
     environment:
       - POSTGRES_DB=fake-hub
       - POSTGRES_USER=admin
       - POSTGRES_PASSWORD=admin
+    container_name: postgres_db
+    
   django:
     build: ./back
-    command: ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+    restart: on-failure
+    environment:
+      WAIT_HOSTS: postgres:5432
     volumes:
       - ./back:/app/back
     ports:
       - "8000:8000"
     depends_on:
       - db
+    container_name: django_back
+    
   front:
     build: ./front
     command: ["npm", "start"]
     volumes:
       - ./front:/app/front
-      - node-modules:/app/front/node_modules
+      - /app/front/node_modules
     ports:
       - "3000:3000"
-
-volumes:
-  node-modules:
+    container_name: react_front 
