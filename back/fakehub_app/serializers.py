@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import User, Team, Repository, Project, Label, Milestone, Branch, Commit, Wiki, Page, File
+from .models import User, Team, Repository, Project, Label, Milestone, Branch, Commit, Wiki, Page, File, Task, Column
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -73,4 +73,26 @@ class PageSerializer(serializers.ModelSerializer):
 class FileSerializer(serializers.ModelSerializer):
     class Meta:
         model = File
-        fields = ('name', 'content', 'task', 'page')
+        fields = ('name', 'task', 'page')
+
+
+class TaskSerializer(serializers.ModelSerializer):
+    members = UserSerializer
+    repository = RepositorySerializer
+    labels = LabelSerializer
+    milestone = MilestoneSerializer
+
+    class Meta:
+        model = Task
+        fields = ('title', 'created_at', 'description', 'status', 'difficulty', 'closed_at',
+                  'due_date', 'changes', 'milestone', 'labels', 'members', 'repository')
+        depth = 1
+
+
+class ColumnSerializer(serializers.ModelSerializer):
+    project = ProjectSerializer
+
+    class Meta:
+        model = Column
+        field = ('name', 'project')
+        depth = 1

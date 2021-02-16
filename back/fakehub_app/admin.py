@@ -1,5 +1,5 @@
 from django.contrib import admin
-from django.contrib.auth.admin import UserAdmin
+
 from .models import *
 
 
@@ -53,5 +53,16 @@ class PageAdmin(admin.ModelAdmin):
 
 @admin.register(File)
 class FileAdmin(admin.ModelAdmin):
-    search_fields = ('id', 'name', 'content', 'task', 'page')
-    list_display = ('id', 'name', 'content', 'task', 'page')
+    search_fields = ('id', 'name', 'task', 'page')
+    list_display = ('id', 'name', 'task', 'page')
+
+
+@admin.register(Task)
+class TaskAdmin(admin.ModelAdmin):
+    search_fields = ('id', 'title', 'created_at', 'description', 'status', 'difficulty', 'closed_at',
+                     'due_date', 'changes', 'milestone', 'labels', 'members', 'repository')
+
+
+@admin.register(Column)
+class ColumnAdmin(admin.ModelAdmin):
+    search_fields = ('id', 'name', 'project')
