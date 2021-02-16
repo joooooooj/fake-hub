@@ -4,7 +4,7 @@ from django.contrib import admin
 from django.urls import path, include
 from rest_framework import routers
 from .views import TeamViewSet, UserViewSet, RepositoryViewSet, ProjectViewSet, LabelViewSet, MilestoneViewSet, \
-    BranchViewSet, CommitViewSet, WikiViewSet, PageViewSet, FileViewSet
+    BranchViewSet, CommitViewSet, WikiViewSet, PageViewSet, FileViewSet, CustomObtainAuthToken
 
 router = routers.SimpleRouter()
 router.register(r'team', TeamViewSet)
@@ -21,5 +21,6 @@ router.register(r'file', FileViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
+    path('authenticate/', CustomObtainAuthToken.as_view()),    
     path('accounts/', include('django.contrib.auth.urls')),
 ]

@@ -9,7 +9,7 @@ export default function Login(props) {
     const [error, setError] = useState(false); // Set true when server return error
 
     const login = (data) => {
-        fetch('http://localhost:8000/login/', {
+        fetch('http://localhost:8000/authenticate/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -18,8 +18,8 @@ export default function Login(props) {
         })
             .then(response => response.json())
             .then(data => {
-                console.log('Success:', data.token);
-                props.login(data.token);
+                console.log('Success:', data);
+                props.login(data);
             })
             .catch((error) => {
                 console.error('Error:', error);

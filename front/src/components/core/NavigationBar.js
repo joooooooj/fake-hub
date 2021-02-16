@@ -14,17 +14,17 @@ export default function NavigationBar(props) {
             <Navbar.Collapse id="responsive-navbar-nav">
                 <Nav className="mr-auto">
                     <Link to="/home" className="nav-link">
-                        {!props.token ? "Why FakeHub?" : "Home"}
+                        {!props.user ? "Why FakeHub?" : "Home"}
                     </Link>
                 </Nav>
-                {!props.token &&
+                {!props.user &&
                     <Nav className="ml-auto">
                         <Link to="/login" className="nav-link">Sign in</Link>
                         <Link to="/register" className="nav-link">Sign up</Link>
                         <SwitchTheme setNavTheme={setNavTheme} setBodyTheme={props.setBodyTheme}/>
                     </Nav>
                 }
-                {props.token &&
+                {props.user &&
                     <Nav className="ml-auto">
                         <Link to="/repositories" className="nav-link">Repositories</Link>
                         <Link to="/teams" className="nav-link">Teams</Link>
