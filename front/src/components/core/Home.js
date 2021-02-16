@@ -9,7 +9,7 @@ export default function Home(props) {
 
     return (
         <>
-            {!props.token &&
+            {!props.user &&
                 <div className="home">
                     <Container>
                         < Row >
@@ -28,10 +28,10 @@ export default function Home(props) {
                     </Container>
                 </div >
             }
-            {props.token &&
+            {props.user &&
                 <>
-                    <Repositories token={props.token} />
-                    <Teams token={props.token} />
+                    <Repositories user={props.user} />
+                    <Teams user={props.user} />
                 </>
             }
         </>

@@ -7,13 +7,14 @@ from rest_framework.mixins import (
 )
 from rest_framework.viewsets import GenericViewSet
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework.authtoken.views import ObtainAuthToken
+from rest_framework.authtoken.models import Token
 
 from .models import Team, User, Label, Repository, Project, Milestone, Task, Branch, Commit, Wiki, Page, File, Status, \
     Column
 from .serializers import TeamSerializer, ProjectSerializer, LabelSerializer, RepositorySerializer, UserSerializer, \
     MilestoneSerializer, BranchSerializer, CommitSerializer, WikiSerializer, PageSerializer, FileSerializer, \
     TaskSerializer, ColumnSerializer
-
 
 # U COMMAND PROMPTU: (nece da mi radi token u postmanu nzm sto)
 # curl --header "Content-Type: Application/json"   --request POST   -H "Authorization: Token
@@ -22,6 +23,12 @@ from .serializers import TeamSerializer, ProjectSerializer, LabelSerializer, Rep
 
 # curl --header "Content-Type: Application/json"   --request GET -H "Authorization: Token
 # e091a4bf389ba85e3252cc7afc38e70db7bb20b7" http://localhost:8000/milestone/1/repo/
+
+class CustomObtainAuthToken(ObtainAuthToken):
+    def post(self, request, *args, **kwargs):
+        response = super(CustomObtainAuthToken, self).post(request, *args, **kwargs)
+        token = Token.objects.get(key=response.data['token'])
+        return Response({'token': token.key, 'id': token.user_id})
 
 class MilestoneViewSet(GenericViewSet,
                        CreateModelMixin,

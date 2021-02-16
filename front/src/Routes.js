@@ -14,28 +14,28 @@ export default function Routes(props) {
     return (
         <Switch>
             <Route exact path="/">
-                <Home token={props.token} />
+                <Home user={props.user} />
             </Route>
             <Route exact path="/home">
-                <Home token={props.token} />
+                <Home user={props.user} />
             </Route>
-            {   !props.token &&
+            {   !props.user &&
                 <>
                     <Route exact path="/login" component={() => <Login login={props.login} />}/>
                     <Route exact path="/register" component={Register}/>
                 </>
             }
-            {   props.token &&
+            {   props.user &&
                 <>
                     {/* PROFILE */}
-                    <Route exact path="/profile" component={(props) => <Profile {...props} token={props.token}/>}/>
+                    <Route exact path="/profile" component={(props) => <Profile {...props} user={props.user}/>}/>
                     {/* REPOSITORY */}
-                    <Route exact path="/repositories" component={(props) => <Repositories {...props} token={props.token}/>}/>
-                    <Route exact path="/repository/:id" component={(props) => <Repository {...props} token={props.token}/>}/>
-                    <Route exact path="/add/repository" component={(props) => <AddEditRepository {...props} token={props.token}/>}/>
-                    <Route exact path="/edit/repository/:id" component={(props) => <AddEditRepository {...props} token={props.token}/>}/>
+                    <Route exact path="/repositories" component={(props) => <Repositories {...props} user={props.user}/>}/>
+                    <Route exact path="/repository/:id" component={(props) => <Repository {...props} user={props.user}/>}/>
+                    <Route exact path="/add/repository" component={(props) => <AddEditRepository {...props} user={props.user}/>}/>
+                    <Route exact path="/edit/repository/:id" component={(props) => <AddEditRepository {...props} user={props.user}/>}/>
                     {/* TEAMS */}
-                    <Route exact path="/teams" component={() => <Teams token={props.token}/>}/>
+                    <Route exact path="/teams" component={() => <Teams user={props.user}/>}/>
                 </>
             }
         </Switch>
