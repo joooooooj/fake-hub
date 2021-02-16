@@ -88,7 +88,7 @@ DATABASES = {
         'NAME': 'fake-hub',
         'USER': 'admin',
         'PASSWORD': 'admin',
-        'HOST': 'postgres_db', #localhost if not docker
+        'HOST': 'localhost', #localhost if not docker
         'PORT': 5432,
         'DISABLE_SERVER_SIDE_CURSORS': True
     }

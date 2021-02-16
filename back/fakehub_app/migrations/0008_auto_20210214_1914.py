@@ -6,11 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-<<<<<<< HEAD
         ('fakehub_app', '0008_auto_20210214_1836'),
-=======
-        ('fakehub_app', '0007_auto_20210214_1734'),
->>>>>>> 042565ebddfe863b341fae4a6b1cbf35cde5b325
     ]
 
     operations = [
