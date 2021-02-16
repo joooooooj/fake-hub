@@ -9,8 +9,8 @@ python:
 script:
   - ls
   - mkdir deploy_nice
-  - cp /front/. /deploy_nice
-  - cp /back/. /deploy_nice
+  - cp front/. /deploy_nice
+  - cp back/. /deploy_nice
   - rmdir front
   - rmdir back
   - cd deploy_nice
