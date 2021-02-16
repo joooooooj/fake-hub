@@ -3,11 +3,19 @@ language: python
 python:
   - '3.9'
 
-services:
-  - docker
+# services:
+#   - docker
 
 script:
-  - docker-compose build
+  - mkdir deploy
+  - cp /front/. /deploy
+  - cp /back/. /deploy
+  - rmdir front
+  - rmdir back
+  - cd deploy
+  - sed -i "s,PROXY,https://fake-hub.herokuapp.com,g" package.json
+  - cat package.json
+  - ls
   
 #add tests
 #add push to docker hub
