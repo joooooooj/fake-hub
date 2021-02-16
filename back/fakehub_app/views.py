@@ -10,11 +10,12 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 
-from .models import Team, User, Label, Repository, Project, Milestone, Task, Branch, Commit, Wiki, Page, File, Status, \
+from .models import Team, User, Label, Repository, Project, Milestone, Task, Branch, Commit, Page, File, Status, \
     Column
 from .serializers import TeamSerializer, ProjectSerializer, LabelSerializer, RepositorySerializer, UserSerializer, \
-    MilestoneSerializer, BranchSerializer, CommitSerializer, WikiSerializer, PageSerializer, FileSerializer, \
+    MilestoneSerializer, BranchSerializer, CommitSerializer, PageSerializer, FileSerializer, \
     TaskSerializer, ColumnSerializer
+
 
 # U COMMAND PROMPTU: (nece da mi radi token u postmanu nzm sto)
 # curl --header "Content-Type: Application/json"   --request POST   -H "Authorization: Token
@@ -29,6 +30,7 @@ class CustomObtainAuthToken(ObtainAuthToken):
         response = super(CustomObtainAuthToken, self).post(request, *args, **kwargs)
         token = Token.objects.get(key=response.data['token'])
         return Response({'token': token.key, 'id': token.user_id})
+
 
 class MilestoneViewSet(GenericViewSet,
                        CreateModelMixin,
@@ -222,23 +224,26 @@ class RepositoryViewSet(GenericViewSet,
                         ListModelMixin,
                         DestroyModelMixin
                         ):
+    """
+          Creates, Updates and Retrieves - Repositories
+       """
     serializer_class = RepositorySerializer
-    queryset = Team.objects.all()
+    authentication_classes = (TokenAuthentication,)
+    queryset = Repository.objects.all()
 
-    # localhost:8000/repository?user_id=2
-    def get_queryset(self):
-        if self.request.method == 'GET':
-            user_id = self.request.GET.get('user_id', None)
-            if user_id is not None:
-                return Repository.objects.all().filter(members__id=user_id)
+    # def get_permissions(self):
+    #     print(self.request.data)
+    #     # allow full access to authenticated users, but allow read-only access to unauthenticated users
+    #     self.permission_classes = [IsAuthenticatedOrReadOnly]
+    #     return super(RepositoryViewSet, self).get_permissions()
 
-            team_id = self.request.GET.get('team_id', None)
-            if team_id is not None:
-                return Repository.objects.all().filter(team__id=team_id)
-            else:
-                return Repository.objects.all()
-        else:
-            return Project.objects.all()
+    @action(detail=True, methods=['get'], url_path='user', url_name='user')
+    def repos_for_user(self, request, pk):
+        '''
+            Returns repos for the specific user
+        '''
+
+        return Response(RepositorySerializer(Repository.objects.filter(owner__id=pk), many=True).data)
 
 
 class ProjectViewSet(GenericViewSet,
@@ -273,17 +278,6 @@ class UserViewSet(GenericViewSet,
     queryset = User.objects.all()
 
 
-class WikiViewSet(GenericViewSet,
-                  CreateModelMixin,
-                  RetrieveModelMixin,
-                  UpdateModelMixin,
-                  ListModelMixin,
-                  DestroyModelMixin
-                  ):
-    serializer_class = WikiSerializer
-    queryset = Wiki.objects.all()
-
-
 class PageViewSet(GenericViewSet,
                   CreateModelMixin,
                   RetrieveModelMixin,
@@ -293,6 +287,10 @@ class PageViewSet(GenericViewSet,
                   ):
     serializer_class = PageSerializer
     queryset = Page.objects.all()
+
+    @action(detail=True, methods=['get'], url_path='repository', url_name='repository')
+    def page_by_repository(self, request, pk):
+        return Response(PageSerializer(Page.objects.filter(repository__id=pk), many=True).data)
 
 
 class FileViewSet(GenericViewSet,

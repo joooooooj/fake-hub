@@ -77,17 +77,11 @@ class Commit(models.Model):
     def __str__(self):
         return str(self.code) + ' ' + str(self.description)
 
-    # Wiki
-
-
-class Wiki(models.Model):
-    repository = models.ForeignKey(Repository, on_delete=models.CASCADE)
-
 
 class Page(models.Model):
     title = models.CharField(default="New page", max_length=100)
     content = models.TextField(default="My new awesome page")
-    wiki = models.ForeignKey(Wiki, on_delete=models.DO_NOTHING)
+    repository = models.ForeignKey(Repository, on_delete=models.CASCADE)
 
 
 # Planning
