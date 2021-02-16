@@ -2,8 +2,8 @@ sudo: required
 
 script:
   - ls
-  - cp -f deploy/FakeHub/urls.py back/FakeHub/urls.py
-  - cp -f deploy/FakeHub/settings.py back/FakeHub/settings.py
+  - cp -f deploy/urls.py back/FakeHub/urls.py
+  - cp -f deploy/settings.py back/FakeHub/settings.py
   - cp -r front/. .
   - cp -r back/. .
   - rm -rf front
@@ -13,7 +13,7 @@ script:
   - cat FakeHub/urls.py
   - ls
   - git add .
-  - git commit -m "Prepred for deploy"
+  - git commit -m "Sensei made one good deploy repository"
 
 deploy:
   provider: heroku
