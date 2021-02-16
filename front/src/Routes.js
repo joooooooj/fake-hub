@@ -8,6 +8,7 @@ import Repository from "./components/repositories/Repository";
 import AddEditRepository from "./components/repositories/AddEditRepository";
 import Teams from "./components/teams/Teams";
 import Profile from "./components/user/Profile";
+import AddEditPage from "./components/wiki/AddEditPage";
 
 export default function Routes(props) {
 
@@ -36,6 +37,8 @@ export default function Routes(props) {
                     <Route exact path="/edit/repository/:id" component={(props) => <AddEditRepository {...props} user={props.user}/>}/>
                     {/* TEAMS */}
                     <Route exact path="/teams" component={() => <Teams user={props.user}/>}/>
+                    {/* WIKI */}
+                    <Route exact path="/repository/:id/new-wiki-page" component={(props) => <AddEditPage {...props} user={props.user}/>}/>
                 </>
             }
         </Switch>

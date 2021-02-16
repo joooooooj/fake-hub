@@ -65,8 +65,7 @@ export default function Repository(props) {
                     <Projects/>
                 </TabPanel>
                 <TabPanel>
-                    <h2>Wiki</h2>
-                    <Wiki/>
+                    <Wiki {...props}/>
                 </TabPanel>
             </Tabs>
         </Container>
