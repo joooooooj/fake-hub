@@ -73,7 +73,7 @@ export default function Register() {
                     }
                 </Form.Group>
                 <Form.Text className="text-muted text-left">
-                    <Link to="/login">Already have an account? Sign up.</Link>
+                    <Link to="/template/login">Already have an account? Sign up.</Link>
                 </Form.Text>
                 <Button variant="warning" type="submit" className="w-100 mt-3">
                     Register

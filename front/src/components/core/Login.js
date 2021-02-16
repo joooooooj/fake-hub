@@ -60,10 +60,10 @@ export default function Login(props) {
                     }
                 </Form.Group>
                 <Form.Text className="text-muted text-left">
-                    <Link to="/reset-password">Forgot your password?</Link>
+                    <Link to="/template/reset-password">Forgot your password?</Link>
                 </Form.Text>
                 <Form.Text className="text-muted text-left">
-                    <Link to="/register">Don't have an account? Sign up.</Link>
+                    <Link to="/template/register">Don't have an account? Sign up.</Link>
                 </Form.Text>
                 <Button variant="warning" type="submit" className="w-100 mt-3">
                     Login

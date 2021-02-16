@@ -38,7 +38,7 @@ export default function Repositories(props) {
                         repositories?.map((repo, index) => {
                             return (
                                 <li className="font-weight-bold" key={index}>
-                                    <Link to={"/repository/" + repo.id}>{(repo.team ? repo.team.name : repo.owner?.username)} / {repo.name}</Link>
+                                    <Link to={"/template/repository/" + repo.id}>{(repo.team ? repo.team.name : repo.owner?.username)} / {repo.name}</Link>
                                 </li>
                             );
                         })
