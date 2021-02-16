@@ -21,7 +21,8 @@ deploy:
   provider: heroku
   api_key: $API_KEY
   app: fake-hub
-  on: main  
+  on:
+    all_branches: true
   
 #add tests
 #add push to docker hub
