@@ -21,8 +21,7 @@ deploy:
   provider: heroku
   api_key: $API_KEY
   app: fake-hub
-  on:
-    all_branches: true
+  on: feature/docker-travis-heroku
   
 #add tests
 #add push to docker hub
