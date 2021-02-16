@@ -8,7 +8,7 @@ export default function Repositories(props) {
 
     useEffect(() => {
         console.log(props)
-        fetch('http://localhost:8000/repository', {
+        fetch('http://localhost:8000/repository/'+props.user.id+'/user', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',

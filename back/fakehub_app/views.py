@@ -16,19 +16,13 @@ from .serializers import TeamSerializer, ProjectSerializer, LabelSerializer, Rep
     MilestoneSerializer, BranchSerializer, CommitSerializer, WikiSerializer, PageSerializer, FileSerializer, \
     TaskSerializer, ColumnSerializer
 
-# U COMMAND PROMPTU: (nece da mi radi token u postmanu nzm sto)
-# curl --header "Content-Type: Application/json"   --request POST   -H "Authorization: Token
-# e091a4bf389ba85e3252cc7afc38e70db7bb20b7" --data "{"""title""":"""milestone1""","""labels""":[],
-# """repository""":"""1"""}"   http://localhost:8000/milestone/
-
-# curl --header "Content-Type: Application/json"   --request GET -H "Authorization: Token
-# e091a4bf389ba85e3252cc7afc38e70db7bb20b7" http://localhost:8000/milestone/1/repo/
 
 class CustomObtainAuthToken(ObtainAuthToken):
     def post(self, request, *args, **kwargs):
         response = super(CustomObtainAuthToken, self).post(request, *args, **kwargs)
         token = Token.objects.get(key=response.data['token'])
         return Response({'token': token.key, 'id': token.user_id})
+
 
 class MilestoneViewSet(GenericViewSet,
                        CreateModelMixin,
@@ -58,16 +52,6 @@ class MilestoneViewSet(GenericViewSet,
         '''
         # many == VISE OD JEDNOG IMA U REZULTATIMA FILTRIRANJA
         return Response(MilestoneSerializer(Milestone.objects.filter(repository__id=pk), many=True).data)
-
-
-# to get token post : {
-#     "username": "tamara",
-#     "password": "adminadmin"
-# } to localhost:8000/login/
-
-# curl --header "Content-Type: Application/json"   --request POST   -H "Authorization: Token
-# e091a4bf389ba85e3252cc7afc38e70db7bb20b7" --data "{"""name""":"""label1""","""color""":"""#FFFFFF""",
-# """task""":"""1"""}"   http://localhost:8000/label/ u command promptu
 
 
 class LabelViewSet(RetrieveModelMixin, UpdateModelMixin,
@@ -202,17 +186,15 @@ class TeamViewSet(GenericViewSet,  # generic view functionality
                   ):
     serializer_class = TeamSerializer
     queryset = Team.objects.all()
+    authentication_classes = (TokenAuthentication,)
 
-    # localhost:8000/team?user_id=2
-    def get_queryset(self):
-        if self.request.method == 'GET':
-            user_id = self.request.GET.get('user_id', None)
-            if user_id is not None:
-                return Team.objects.all().filter(members__id=user_id)
-            else:
-                return Team.objects.all()
-        else:
-            return Project.objects.all()
+    @action(detail=True, methods=['get'], url_path='user', url_name='user')
+    def commits_by_branch(self, request, pk):
+        '''
+            Returns teams for the specific user
+        '''
+
+        return Response(TeamSerializer(Team.objects.filter(members__id=pk), many=True).data)
 
 
 class RepositoryViewSet(GenericViewSet,
@@ -222,23 +204,26 @@ class RepositoryViewSet(GenericViewSet,
                         ListModelMixin,
                         DestroyModelMixin
                         ):
+    """
+          Creates, Updates and Retrieves - Repositories
+       """
     serializer_class = RepositorySerializer
-    queryset = Team.objects.all()
+    authentication_classes = (TokenAuthentication,)
+    queryset = Repository.objects.all()
 
-    # localhost:8000/repository?user_id=2
-    def get_queryset(self):
-        if self.request.method == 'GET':
-            user_id = self.request.GET.get('user_id', None)
-            if user_id is not None:
-                return Repository.objects.all().filter(members__id=user_id)
+    def get_permissions(self):
+        print(self.request.user)
+        # allow full access to authenticated users, but allow read-only access to unauthenticated users
+        self.permission_classes = [IsAuthenticatedOrReadOnly]
+        return super(RepositoryViewSet, self).get_permissions()
 
-            team_id = self.request.GET.get('team_id', None)
-            if team_id is not None:
-                return Repository.objects.all().filter(team__id=team_id)
-            else:
-                return Repository.objects.all()
-        else:
-            return Project.objects.all()
+    @action(detail=True, methods=['get'], url_path='user', url_name='user')
+    def repos_for_user(self, request, pk):
+        '''
+            Returns repos for the specific user
+        '''
+
+        return Response(RepositorySerializer(Repository.objects.filter(owner__id=pk), many=True).data)
 
 
 class ProjectViewSet(GenericViewSet,

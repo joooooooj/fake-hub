@@ -7,6 +7,7 @@ import Milestones from "../milestones/Milestones";
 import Issues from "../issues/Issues";
 import Projects from "../projects/Projects";
 import Wiki from "../wiki/Wiki";
+import Settings from "../repositories/Settings"
 import 'react-tabs/style/react-tabs.css';
 
 export default function Repository(props) {
@@ -42,6 +43,8 @@ export default function Repository(props) {
                     <Tab>Issues</Tab>
                     <Tab>Projects</Tab>
                     <Tab>Wiki</Tab>
+                    <Tab>Insights</Tab>
+                    <Tab>Settings</Tab>
                 </TabList>
 
                 <TabPanel>
@@ -67,6 +70,13 @@ export default function Repository(props) {
                 <TabPanel>
                     <h2>Wiki</h2>
                     <Wiki/>
+                </TabPanel>
+                <TabPanel>
+                    <h2>Insights</h2>
+                </TabPanel>
+                <TabPanel>
+                    <h2>Settings</h2>
+                    <Settings {...props} user={props.user}></Settings>
                 </TabPanel>
             </Tabs>
         </Container>

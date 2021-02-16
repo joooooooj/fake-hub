@@ -8,6 +8,9 @@ import Repository from "./components/repositories/Repository";
 import AddEditRepository from "./components/repositories/AddEditRepository";
 import Teams from "./components/teams/Teams";
 import Profile from "./components/user/Profile";
+import ProfileRepositories from "./components/user/ProfileRepositories";
+import Settings from "./components/repositories/Settings";
+import NewRepo from "./components/repositories/NewRepo";
 
 export default function Routes(props) {
 
@@ -29,11 +32,14 @@ export default function Routes(props) {
                 <>
                     {/* PROFILE */}
                     <Route exact path="/profile/" component={() => <Profile {...props} user={props.user}/>}/>
+                    <Route exact path="/profileRepos/" component={() => <ProfileRepositories {...props} user={props.user}/>}/>
+                    <Route exact path="/settings/" component={() => <Settings {...props} user={props.user}/>}/>
                     {/* REPOSITORY */}
                     <Route exact path="/repositories" component={(props) => <Repositories {...props} user={props.user}/>}/>
                     <Route exact path="/repository/:id" component={(props) => <Repository {...props} user={props.user}/>}/>
                     <Route exact path="/add/repository" component={(props) => <AddEditRepository {...props} user={props.user}/>}/>
                     <Route exact path="/edit/repository/:id" component={(props) => <AddEditRepository {...props} user={props.user}/>}/>
+                    <Route exact path="/newRepository" component={() => <NewRepo/>}/>
                     {/* TEAMS */}
                     <Route exact path="/teams" component={() => <Teams user={props.user}/>}/>
                 </>

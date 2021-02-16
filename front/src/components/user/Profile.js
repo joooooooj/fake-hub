@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import { Container } from "react-bootstrap";
 import Projects from "../projects/Projects";
+import ProfileRepositories from "../user/ProfileRepositories"
 
 export default function Profile(props) {
 
@@ -45,13 +46,13 @@ export default function Profile(props) {
                         </TabList>
         
                         <TabPanel>
-                            <h2>Popular repositories</h2>
-                            <h2>xXx contributions in the last year</h2>
+                            <h4>Popular repositories</h4>
+                            <h4>xXx contributions in the last year</h4>
                         
                         </TabPanel>
                         <TabPanel>
                             <h2>Repositories</h2>
-                    
+                            <ProfileRepositories {...props} user={props.user}/>
                         </TabPanel>
                         <TabPanel>
                             <h2>Project</h2>
@@ -60,7 +61,6 @@ export default function Profile(props) {
                     </Tabs>
                 </Container>
             </div>
-            <a href="https://www.vecteezy.com/free-vector/vector">Vector Vectors by Vecteezy</a>
         </div>
         );
 }
