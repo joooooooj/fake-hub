@@ -3,6 +3,7 @@ import { Container, Row, Col, Button } from "react-bootstrap";
 import { useHistory } from "react-router-dom";
 import Repositories from "../repositories/Repositories";
 import Teams from "../teams/Teams";
+import logo from "../../assets/25231-tr.png";
 
 export default function Home(props) {
     const history = useHistory();
@@ -14,7 +15,7 @@ export default function Home(props) {
                     <Container>
                         < Row >
                             <Col>
-                                <img src="./25231-tr.png" />
+                                <img src={logo} />
                             </Col>
                             <Col>
                                 <h1>Where the world leaves GitHub behind</h1>

@@ -7,7 +7,7 @@ export default function Repositories(props) {
     const [repositories, setRepositories] = useState([]);
 
     useEffect(() => {
-        fetch('/repository', {
+        fetch('/api/repository', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',

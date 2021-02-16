@@ -7,7 +7,7 @@ export default function Teams(props) {
     const [teams, setTeams] = useState([]);
 
     useEffect(() => {
-        fetch('/team', {
+        fetch('/api/team', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',

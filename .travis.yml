@@ -1,19 +1,18 @@
 sudo: required
 
 script:
+  - echo $API_KEY
   - ls
-  - cp -f deploy/urls.py back/FakeHub/urls.py
-  - cp -f deploy/settings.py back/FakeHub/settings.py
   - cp -r front/. .
   - cp -r back/. .
   - rm -rf front
   - rm -rf back
-  - rm -rf deploy
-  - sed -i "s,PROXY,https://fake-hub.herokuapp.com,g" package.json
-  - cat FakeHub/urls.py
+  - sed -i "s,http://localhost:8000,https://fake-hub.herokuapp.com,g" package.json
+  - sed -i "s,http://django:8000,https://fake-hub.herokuapp.com,g" package.json
+  - cat package.json
   - ls
   - git add .
-  - git commit -m "Sensei made one good deploy repository"
+  - git commit -m "Sensei made one good commit for deploy"
 
 deploy:
   provider: heroku

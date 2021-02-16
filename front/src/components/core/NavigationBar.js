@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Navbar, Nav } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import SwitchTheme from "./SwitchTheme";
+import logo from "../../assets/25231-tr.png";
 
 export default function NavigationBar(props) {
 
@@ -9,7 +10,7 @@ export default function NavigationBar(props) {
 
     return (
         <Navbar collapseOnSelect expand="lg" bg={navTheme} variant={navTheme} className="mb-5">
-            <Navbar.Brand><Link to="/home"><img src="./25231-tr.png" /></Link></Navbar.Brand>
+            <Navbar.Brand><Link to="/home"><img src={logo} /></Link></Navbar.Brand>
             <Navbar.Toggle aria-controls="responsive-navbar-nav" />
             <Navbar.Collapse id="responsive-navbar-nav">
                 <Nav className="mr-auto">
