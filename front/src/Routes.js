@@ -13,7 +13,7 @@ export default function Routes(props) {
 
     return (
         <Switch>
-            <Route exact path="/template">
+            <Route exact path="/">
                 <Home user={props.user} />
             </Route>
             <Route exact path="/template/home">
