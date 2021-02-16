@@ -9,12 +9,12 @@ export default function Home(props) {
 
     return (
         <>
-            {!props.token &&
+            {!props.user &&
                 <div className="home">
                     <Container>
                         < Row >
                             <Col>
-                                <img src="./25231.png" />
+                                <img src="./25231-tr.png" />
                             </Col>
                             <Col>
                                 <h1>Where the world leaves GitHub behind</h1>
@@ -28,10 +28,10 @@ export default function Home(props) {
                     </Container>
                 </div >
             }
-            {props.token &&
+            {props.user &&
                 <>
-                    <Repositories token={props.token} />
-                    <Teams token={props.token} />
+                    <Repositories user={props.user} />
+                    <Teams user={props.user} />
                 </>
             }
         </>

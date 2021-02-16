@@ -3,14 +3,13 @@ import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import { Container } from "react-bootstrap";
 import Projects from "../projects/Projects";
 
-
 export default function Profile(props) {
 
     const [user, setUser] = useState(null);
 
     useEffect(() => {
-        if (props?.match?.params?.id) {
-            fetch('http://localhost:8000/user/' + props.match.params.id, {
+
+            fetch('http://localhost:8000/user/' + props.user.id, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -24,13 +23,16 @@ export default function Profile(props) {
                 .catch((error) => {
                     console.error('Error:', error);
                 });
-        }
-    }, [props?.match?.params.id])
+       
+    }, [])
 
     return (  
         <div className="profile">
             <div className="left">
-                <img class="avatar" src="./25231.png" />
+                <img className="avatar" src="./empty-avatar.jpg" alt='' />
+                <h2>{user?.first_name} {user?.last_name}</h2>
+                <h3>{user?.username}</h3>
+                <h5>{user?.email}</h5>
             </div>
             <div className="right">
                 <Container fluid className="ml-3">
@@ -58,6 +60,7 @@ export default function Profile(props) {
                     </Tabs>
                 </Container>
             </div>
+            <a href="https://www.vecteezy.com/free-vector/vector">Vector Vectors by Vecteezy</a>
         </div>
         );
 }

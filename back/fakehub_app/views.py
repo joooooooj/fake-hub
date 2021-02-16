@@ -7,11 +7,14 @@ from rest_framework.mixins import (
 )
 from rest_framework.viewsets import GenericViewSet
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework.authtoken.views import ObtainAuthToken
+from rest_framework.authtoken.models import Token
 
-from .models import Team, User, Label, Repository, Project, Milestone, Task, Branch, Commit, Wiki, Page, File
+from .models import Team, User, Label, Repository, Project, Milestone, Task, Branch, Commit, Wiki, Page, File, Status, \
+    Column
 from .serializers import TeamSerializer, ProjectSerializer, LabelSerializer, RepositorySerializer, UserSerializer, \
-    MilestoneSerializer, BranchSerializer, CommitSerializer, WikiSerializer, PageSerializer, FileSerializer
-
+    MilestoneSerializer, BranchSerializer, CommitSerializer, WikiSerializer, PageSerializer, FileSerializer, \
+    TaskSerializer, ColumnSerializer
 
 # U COMMAND PROMPTU: (nece da mi radi token u postmanu nzm sto)
 # curl --header "Content-Type: Application/json"   --request POST   -H "Authorization: Token
@@ -20,6 +23,12 @@ from .serializers import TeamSerializer, ProjectSerializer, LabelSerializer, Rep
 
 # curl --header "Content-Type: Application/json"   --request GET -H "Authorization: Token
 # e091a4bf389ba85e3252cc7afc38e70db7bb20b7" http://localhost:8000/milestone/1/repo/
+
+class CustomObtainAuthToken(ObtainAuthToken):
+    def post(self, request, *args, **kwargs):
+        response = super(CustomObtainAuthToken, self).post(request, *args, **kwargs)
+        token = Token.objects.get(key=response.data['token'])
+        return Response({'token': token.key, 'id': token.user_id})
 
 class MilestoneViewSet(GenericViewSet,
                        CreateModelMixin,
@@ -295,3 +304,61 @@ class FileViewSet(GenericViewSet,
                   ):
     serializer_class = FileSerializer
     queryset = File.objects.all()
+
+    @action(detail=True, methods=['get'], url_path='task', url_name='task')
+    def files_by_task(self, request, pk):
+        return Response(FileSerializer(File.objects.filter(task__id=pk), many=True).data)
+
+    @action(detail=True, methods=['get'], url_path='task', url_name='task')
+    def files_by_page(self, request, pk):
+        return Response(FileSerializer(File.objects.filter(page__id=pk), many=True).data)
+
+
+class TaskViewSet(GenericViewSet,
+                  CreateModelMixin,
+                  RetrieveModelMixin,
+                  UpdateModelMixin,
+                  ListModelMixin,
+                  DestroyModelMixin
+                  ):
+    serializer_class = TaskSerializer
+    queryset = Task.objects.all()
+
+    @action(detail=True, methods=['get'], url_path='repository', url_name='repository')
+    def tasks_by_repository(self, request, pk):
+        return Response(TaskSerializer(Task.objects.filter(repository__id=pk), many=True).data)
+
+    @action(detail=True, methods=['get'], url_path='milestone', url_name='milestone')
+    def tasks_by_milestone(self, request, pk):
+        return Response(TaskSerializer(Task.objects.filter(milestone__id=pk), many=True).data)
+
+    @action(detail=False, methods=['get'], url_path='status-open', url_name='status-open')
+    def tasks_by_status_opened(self, request):
+        return Response(TaskSerializer(Task.objects.filter(status=Status.OPEN), many=True).data)
+
+    @action(detail=False, methods=['get'], url_path='status-closed', url_name='status-closed')
+    def tasks_by_status_closed(self, request):
+        return Response(TaskSerializer(Task.objects.filter(status=Status.CLOSED), many=True).data)
+
+    @action(detail=False, methods=['get'], url_path='status-expired', url_name='status-expired')
+    def tasks_by_status_expired(self, request):
+        return Response(TaskSerializer(Task.objects.filter(status=Status.EXPIRED), many=True).data)
+
+    @action(detail=True, methods=['get'], url_path='column', url_name='column')
+    def tasks_by_column(self, request, pk):
+        return Response(TaskSerializer(Task.objects.filter(column__id=pk), many=True).data)
+
+
+class ColumnViewSet(GenericViewSet,
+                    CreateModelMixin,
+                    RetrieveModelMixin,
+                    UpdateModelMixin,
+                    ListModelMixin,
+                    DestroyModelMixin
+                    ):
+    serializer_class = ColumnSerializer
+    queryset = Column.objects.all()
+
+    @action(detail=True, methods=['get'], url_path='project', url_name='project')
+    def columns_by_project(self, request, pk):
+        return Response(ColumnSerializer(Column.objects.filter(project__id=pk), many=True).data)

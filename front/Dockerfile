@@ -1,4 +1,4 @@
-FROM node:12.18.0
+FROM node
 
 WORKDIR /app/front
 COPY package.json /app/front

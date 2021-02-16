@@ -1,25 +1,29 @@
-.app {
-    img {
-        width: 40px;
-    }
+html, body, #root {
+    height: 100%;
 
-    button {
-        font-weight: bold;
-        padding-top: 10px;
-        padding-bottom: 10px;
-        border-radius: 10px;
-        height: fit-content;
-    }
-
-    .form-control {
-        border-width: 2px !important;
-    }
-
-    .material-icons {
-        vertical-align: top;
-    }
-
-    .react-tabs__tab-panel {
-        margin-top: 30px;
+    .app {
+        height: inherit;
+        
+      
+    
+        button {
+            font-weight: bold;
+            padding-top: 10px;
+            padding-bottom: 10px;
+            border-radius: 10px;
+            height: fit-content;
+        }
+    
+        .form-control {
+            border-width: 2px !important;
+        }
+    
+        .material-icons {
+            vertical-align: top;
+        }
+    
+        .react-tabs__tab-panel {
+            margin-top: 30px;
+        }
     }
 }
