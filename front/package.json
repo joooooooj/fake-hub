@@ -2,7 +2,6 @@
   "name": "fake-hub-front",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://localhost:8000",
   "dependencies": {
     "@testing-library/jest-dom": "^5.11.9",
     "@testing-library/react": "^11.2.5",
@@ -10,7 +9,6 @@
     "bootstrap": "^4.6.0",
     "react": "^17.0.1",
     "react-bootstrap": "^1.4.3",
-    "react-data-table-component": "^7.0.0-alpha-5",
     "react-dom": "^17.0.1",
     "react-hook-form": "^6.15.1",
     "react-router-dom": "^5.2.0",
@@ -18,7 +16,6 @@
     "react-select": "^4.1.0",
     "react-tabs": "^3.2.0",
     "sass": "^1.32.7",
-    "styled-components": "^5.2.1",
     "web-vitals": "^0.2.4"
   },
   "scripts": {

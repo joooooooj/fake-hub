@@ -18,9 +18,14 @@ class TeamSerializer(serializers.ModelSerializer):
 
 
 class RepositorySerializer(serializers.ModelSerializer):
+    collaborators = UserSerializer
+    team = TeamSerializer
+    owner = UserSerializer
+
     class Meta:
         model = Repository
-        fields = ['name', 'date_created', 'collaborators', 'team', 'owner']
+        fields = ['id', 'name', 'date_created', 'collaborators', 'team', 'owner']
+        depth = 1
 
 
 class ProjectSerializer(serializers.ModelSerializer):
