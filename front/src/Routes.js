@@ -12,6 +12,7 @@ import Settings from "./components/repositories/Settings";
 import NewRepo from "./components/repositories/NewRepo";
 import AddEditPage from "./components/wiki/AddEditPage";
 import AddEditProject from "./components/projects/AddEditProject";
+import Project from "./components/projects/Project";
 
 export default function Routes(props) {
 
@@ -48,7 +49,8 @@ export default function Routes(props) {
                     <Route exact path="/template/repository/:id/new-wiki-page" component={(props) => <AddEditPage {...props} user={props.user}/>}/>
                     <Route exact path="/template/repository/:id/edit-wiki-page/:pageId" component={(props) => <AddEditPage {...props} user={props.user}/>}/>
                     {/* PROJECT */}
-                    <Route exact path="/template/project/:id/new-project" component={(props) => <AddEditProject {...props} user={props.user}/>}/>
+                    <Route exact path="/template/repository/:id/new-project" component={(props) => <AddEditProject {...props} user={props.user}/>}/>
+                    <Route exact path="/template/repository/:id/project/:id2" component={(props) => <Project {...props} user={props.user}/>}/>
                 </>
             }
         </Switch>

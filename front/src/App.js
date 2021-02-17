@@ -5,6 +5,7 @@ import { useHistory } from "react-router-dom";
 import Routes from "./Routes";
 import UseLocalStorage from './UseLocalStorage';
 import { useState } from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
   const history = useHistory();

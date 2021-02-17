@@ -3,6 +3,7 @@ import {Button, Container, Row} from "react-bootstrap";
 import {Link} from "react-router-dom";
 import ListGroup from "react-bootstrap/ListGroup";
 
+
 export default function Projects(props) {
 
     const [projects, setProjects] = useState([]);
@@ -31,7 +32,7 @@ export default function Projects(props) {
     return (
         <>
             <div className="w-100" style={{height: '50px'}}>
-                     <Link to={"/template/project/" + props?.repo?.id+'/new-project'}>
+                     <Link to={"/template/repository/" + props?.repo?.id+'/new-project'}>
                     <Button variant="success" className="float-right" >
                         <span className="material-icons mr-2"/>
                         New
@@ -44,7 +45,7 @@ export default function Projects(props) {
                     projects?.map((project, index) => {
                         return (
                             < ListGroup.Item className="font-weight-bold" key={index}>
-                                <Link to={"/template/project/" + project?.id} {...props}>({project.status}) {(project.name)} </Link>
+                                <Link to={"/template/repository/"+props?.repo?.id+"/project/" + project.id} {...props}>({project.status}) {(project.name)} </Link>
                             </ListGroup.Item>
                         )
 
