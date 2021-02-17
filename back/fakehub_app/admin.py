@@ -66,3 +66,9 @@ class ColumnAdmin(admin.ModelAdmin):
 class ColumnAdmin(admin.ModelAdmin):
     search_fields = ('id', 'name')
     list_display = ('id', 'name')
+
+
+@admin.register(Project)
+class ColumnAdmin(admin.ModelAdmin):
+    search_fields = ('id', 'name')
+    list_display = ('id', 'name', 'repository', 'status')

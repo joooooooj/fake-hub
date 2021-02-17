@@ -38,7 +38,7 @@ class RepoSaveSerializer(serializers.ModelSerializer):
 class ProjectSerializer(serializers.ModelSerializer):
     class Meta:
         model = Project
-        fields = ('name', 'description', 'repository')
+        fields = ('name', 'description', 'repository', 'status')
 
 
 class LabelSerializer(serializers.ModelSerializer):

@@ -34,11 +34,16 @@ class Repository(models.Model):
         return string
 
 
+class ProjectStatus(models.TextChoices):
+    OPEN = 'Open'
+    CLOSED = 'Closed'
+
 
 class Project(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField(default=None, blank=True, null=True)
     repository = models.ForeignKey(Repository, on_delete=models.CASCADE)
+    status = models.CharField(choices=ProjectStatus.choices, default=ProjectStatus.OPEN, max_length=100)
 
     def __str__(self):
         return self.name
