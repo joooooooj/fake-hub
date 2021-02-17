@@ -236,11 +236,11 @@ class RepositoryViewSet(GenericViewSet,
     authentication_classes = (TokenAuthentication,)
     queryset = Repository.objects.all()
 
-    # def get_permissions(self):
-    #     print(self.request.data)
-    #     # allow full access to authenticated users, but allow read-only access to unauthenticated users
-    #     self.permission_classes = [IsAuthenticatedOrReadOnly]
-    #     return super(RepositoryViewSet, self).get_permissions()
+    def get_permissions(self):
+        print(self.request.data)
+        # allow full access to authenticated users, but allow read-only access to unauthenticated users
+        self.permission_classes = [IsAuthenticatedOrReadOnly]
+        return super(RepositoryViewSet, self).get_permissions()
 
     def get_serializer_class(self):
         if self.action in ['create']:
@@ -265,16 +265,21 @@ class ProjectViewSet(GenericViewSet,
                      ):
     serializer_class = ProjectSerializer
     queryset = Project.objects.all()
+    authentication_classes = (TokenAuthentication,)
 
-    def get_queryset(self):
-        if self.request.method == 'GET':
-            repo_id = self.request.GET.get('repo_id', None)
-            if repo_id is not None:
-                return Project.objects.all().filter(repository_id=repo_id)
-            else:
-                return Project.objects.all()
-        else:
-            return Project.objects.all()
+    def get_permissions(self):
+        print(self.request.data)
+        # allow full access to authenticated users, but allow read-only access to unauthenticated users
+        self.permission_classes = [IsAuthenticatedOrReadOnly]
+        return super(ProjectViewSet, self).get_permissions()
+
+    @action(detail=True, methods=['get'], url_path='repo', url_name='repo')
+    def projects_for_repo(self, request, pk):
+        '''
+            Returns project for the specific repo
+        '''
+
+        return Response(ProjectSerializer(Project.objects.filter(repository__id=pk), many=True).data)
 
 
 class UserViewSet(GenericViewSet,

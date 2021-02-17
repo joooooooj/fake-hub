@@ -15,8 +15,6 @@ export default function NavigationBar(props) {
 
             <Navbar.Brand><Link to="/template/home"><img src={logo} /></Link></Navbar.Brand>
             <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-            <Navbar.Brand><Link to="/home"><img src="./25231-tr.png"/></Link></Navbar.Brand>
-            <Navbar.Toggle aria-controls="responsive-navbar-nav"/>
             <Navbar.Collapse id="responsive-navbar-nav">
                 <Nav className="mr-auto">
                     <Link to="/template/home" className="nav-link">

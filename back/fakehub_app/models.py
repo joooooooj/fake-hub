@@ -34,11 +34,16 @@ class Repository(models.Model):
         return string
 
 
+class ProjectStatus(models.TextChoices):
+    OPEN = 'Open'
+    CLOSED = 'Closed'
+
 
 class Project(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField(default=None, blank=True, null=True)
     repository = models.ForeignKey(Repository, on_delete=models.CASCADE)
+    status = models.CharField(choices=ProjectStatus.choices, default=ProjectStatus.OPEN, max_length=100)
 
     def __str__(self):
         return self.name
@@ -111,7 +116,7 @@ class Milestone(models.Model):
 
 
 class Column(models.Model):
-    name = models.CharField
+    name = models.CharField(max_length=100)
     project = models.ForeignKey(Project, on_delete=models.CASCADE, default=None, blank=True, null=True)
 
 
@@ -128,8 +133,8 @@ class Task(models.Model):
     due_date = models.DateTimeField(default=None, blank=True, null=True)
     changes = models.TextField(default=None, blank=True, null=True)  # I dont remember what this was
     milestone = models.ForeignKey(Milestone, on_delete=models.CASCADE, default=None, blank=True, null=True)
-    labels = models.ManyToManyField(Label)
-    members = models.ManyToManyField(User)
+    labels = models.ManyToManyField(Label,default=None, blank=True, null=True)
+    members = models.ManyToManyField(User,default=None, blank=True, null=True)
     repository = models.ForeignKey(Repository, on_delete=models.CASCADE)
     column = models.ForeignKey(Column, on_delete=models.CASCADE, default=None, blank=True, null=True)
 

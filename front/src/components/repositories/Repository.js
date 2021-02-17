@@ -38,6 +38,8 @@ export default function Repository(props) {
     }, [props?.match?.params.id])
 
     return (
+        <>
+        <h2 className={"p-3"}>{repository?.name}</h2>
         <Container fluid className="ml-3">
             <Tabs>
                 <TabList>
@@ -68,8 +70,8 @@ export default function Repository(props) {
                     <Issues/>
                 </TabPanel>
                 <TabPanel>
-                    <h2>Projects</h2>
-                    <Projects/>
+                    <h2>Projects </h2>
+                    <Projects  {...props} repo={repository} />
                 </TabPanel>
                 <TabPanel>
                     <Wiki {...props}/>
@@ -83,5 +85,6 @@ export default function Repository(props) {
                 </TabPanel>
             </Tabs>
         </Container>
+        </>
     );
 }

@@ -38,7 +38,7 @@ class RepoSaveSerializer(serializers.ModelSerializer):
 class ProjectSerializer(serializers.ModelSerializer):
     class Meta:
         model = Project
-        fields = ('name', 'description', 'repository')
+        fields = ('name', 'description', 'repository', 'status', 'id')
 
 
 class LabelSerializer(serializers.ModelSerializer):
@@ -86,7 +86,7 @@ class TaskSerializer(serializers.ModelSerializer):
     class Meta:
         model = Task
         fields = ('title', 'created_at', 'description', 'status', 'difficulty', 'closed_at',
-                  'due_date', 'changes', 'milestone', 'labels', 'members', 'repository')
+                  'due_date', 'changes', 'milestone', 'labels', 'members', 'repository', 'column','id')
         depth = 1
 
 
@@ -95,5 +95,5 @@ class ColumnSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Column
-        field = ('name', 'project')
+        fields = ('name', 'project','id')
         depth = 1

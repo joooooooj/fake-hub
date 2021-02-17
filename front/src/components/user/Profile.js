@@ -32,10 +32,10 @@ export default function Profile(props) {
     return (  
         <div className="profile">
             <div className="left">
-                <img className="avatar" src={emptyavatar}  alt='' />
-                <h2>{user?.first_name} {user?.last_name}</h2>
-                <h3>{user?.username}</h3>
-                <h5>{user?.email}</h5>
+                <img className="avatar " src={emptyavatar} alt='' />
+                <h2 className="ml-2 mt-4">{user?.first_name} {user?.last_name}</h2>
+                <h3 className="ml-2">{user?.username}</h3>
+                <h5 className="ml-2">{user?.email}</h5>
             </div>
             <div className="right">
                 <Container fluid className="ml-3">

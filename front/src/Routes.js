@@ -5,13 +5,14 @@ import Login from "./components/core/Login";
 import Register from "./components/core/Register";
 import Repositories from "./components/repositories/Repositories";
 import Repository from "./components/repositories/Repository";
-import AddEditRepository from "./components/repositories/AddEditRepository";
 import Teams from "./components/teams/Teams";
 import Profile from "./components/user/Profile";
 import ProfileRepositories from "./components/user/ProfileRepositories";
 import Settings from "./components/repositories/Settings";
 import NewRepo from "./components/repositories/NewRepo";
 import AddEditPage from "./components/wiki/AddEditPage";
+import AddEditProject from "./components/projects/AddEditProject";
+import Project from "./components/projects/Project";
 
 export default function Routes(props) {
 
@@ -34,15 +35,12 @@ export default function Routes(props) {
             {   props.user &&
                 <>
                     {/* PROFILE */}
-
                     <Route exact path="/template/profile" component={(props) => <Profile {...props} user={props.user}/>}/>
                     <Route exact path="/template/profileRepos/" component={() => <ProfileRepositories {...props} user={props.user}/>}/>
                     <Route exact path="/template/settings/" component={() => <Settings {...props} user={props.user}/>}/>
                     {/* REPOSITORY */}
                     <Route exact path="/template/repositories" component={(props) => <Repositories {...props} user={props.user}/>}/>
                     <Route exact path="/template/repository/:id" component={(props) => <Repository {...props} user={props.user}/>}/>
-                    <Route exact path="/template/add/repository" component={(props) => <AddEditRepository {...props} user={props.user}/>}/>
-                    <Route exact path="/template/edit/repository/:id" component={(props) => <AddEditRepository {...props} user={props.user}/>}/>
                     <Route exact path="/template/newRepository" component={() => <NewRepo/>}/>
                     {/* TEAMS */}
                     <Route exact path="/template/teams" component={() => <Teams user={props.user}/>}/>
@@ -50,7 +48,10 @@ export default function Routes(props) {
                     {/* WIKI */}
                     <Route exact path="/template/repository/:id/new-wiki-page" component={(props) => <AddEditPage {...props} user={props.user}/>}/>
                     <Route exact path="/template/repository/:id/edit-wiki-page/:pageId" component={(props) => <AddEditPage {...props} user={props.user}/>}/>
-
+                    {/* PROJECT */}
+                    <Route exact path="/template/repository/:id/new-project" component={(props) => <AddEditProject {...props} user={props.user}/>}/>
+                    <Route exact path="/template/repository/:id/project/:id2" component={(props) => <Project {...props} user={props.user}/>}/>
+                    <Route exact path="/template/repository/:id/edit-project/:id2" component={(props) => <AddEditProject {...props} user={props.user}/>}/>
                 </>
             }
         </Switch>

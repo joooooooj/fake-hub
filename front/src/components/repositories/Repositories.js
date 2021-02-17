@@ -8,7 +8,7 @@ export default function Repositories(props) {
 
     useEffect(() => {
 
-        fetch('/api/repository'+props.user.id+'/user', {
+        fetch('/api/repository/'+props.user.id+'/user', {
 
             method: 'GET',
             headers: {
@@ -40,7 +40,7 @@ export default function Repositories(props) {
                         repositories?.map((repo, index) => {
                             return (
                                 <li className="font-weight-bold" key={index}>
-                                    <Link to={"/template/repository/" + repo.id}>{(repo.team ? repo.team.name : repo.owner?.username)} / {repo.name}</Link>
+                                    <Link to={"/template/repository/" + repo.id} {...props}>{(repo.team ? repo.team.name : repo.owner?.username)} / {repo.name}</Link>
                                 </li>
                             );
                         })

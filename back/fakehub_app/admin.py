@@ -60,9 +60,16 @@ class TaskAdmin(admin.ModelAdmin):
 @admin.register(Column)
 class ColumnAdmin(admin.ModelAdmin):
     search_fields = ('id', 'name', 'project')
+    list_display = ('id', 'name', 'project')
 
 
 @admin.register(Team)
 class ColumnAdmin(admin.ModelAdmin):
     search_fields = ('id', 'name')
     list_display = ('id', 'name')
+
+
+@admin.register(Project)
+class ColumnAdmin(admin.ModelAdmin):
+    search_fields = ('id', 'name')
+    list_display = ('id', 'name', 'repository', 'status')
