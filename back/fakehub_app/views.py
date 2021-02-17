@@ -14,8 +14,7 @@ from .models import Team, User, Label, Repository, Project, Milestone, Task, Bra
     Column
 from .serializers import TeamSerializer, ProjectSerializer, LabelSerializer, RepositorySerializer, UserSerializer, \
     MilestoneSerializer, BranchSerializer, CommitSerializer, PageSerializer, FileSerializer, \
-    TaskSerializer, ColumnSerializer, RepoSaveSerializer
-
+    TaskSerializer, ColumnSerializer, RepoSaveSerializer, MilestoneSaveSerializer
 
 
 class CustomObtainAuthToken(ObtainAuthToken):
@@ -42,7 +41,10 @@ class MilestoneViewSet(GenericViewSet,
     """
        Creates, Updates and Retrieves - Milestones
     """
-    serializer_class = MilestoneSerializer
+    serializers = {
+        'default': MilestoneSerializer,
+        'create': MilestoneSaveSerializer
+    }
     authentication_classes = (TokenAuthentication,)
     queryset = Milestone.objects.all()
 
@@ -51,6 +53,11 @@ class MilestoneViewSet(GenericViewSet,
         # allow full access to authenticated users, but allow read-only access to unauthenticated users
         self.permission_classes = [IsAuthenticatedOrReadOnly]
         return super(MilestoneViewSet, self).get_permissions()
+
+    def get_serializer_class(self):
+        if self.action in ['create']:
+            return MilestoneSaveSerializer
+        return MilestoneSerializer
 
     #  http://localhost:8000/milestone/1/repo/
     @action(detail=True, methods=['get'], url_path='repo', url_name='repo')

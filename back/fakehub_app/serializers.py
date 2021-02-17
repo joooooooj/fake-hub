@@ -24,12 +24,11 @@ class RepositorySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Repository
-        fields = ['id', 'name', 'date_created', 'collaborators', 'team', 'owner','description']
+        fields = ['id', 'name', 'date_created', 'collaborators', 'team', 'owner', 'description']
         depth = 1
 
 
 class RepoSaveSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Repository
         fields = ['id', 'name', 'date_created', 'collaborators', 'team', 'owner', 'description']
@@ -48,9 +47,18 @@ class LabelSerializer(serializers.ModelSerializer):
 
 
 class MilestoneSerializer(serializers.ModelSerializer):
+    labels = LabelSerializer
+
     class Meta:
         model = Milestone
-        fields = ('title', 'dueDate', 'description', 'status', 'labels', 'repository')
+        fields = ('id', 'title', 'dueDate', 'description', 'status', 'labels')
+        depth = 1
+
+
+class MilestoneSaveSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Milestone
+        fields = ('id', 'title', 'dueDate', 'description', 'status', 'labels', 'repository')
 
 
 class BranchSerializer(serializers.ModelSerializer):
@@ -86,7 +94,7 @@ class TaskSerializer(serializers.ModelSerializer):
     class Meta:
         model = Task
         fields = ('title', 'created_at', 'description', 'status', 'difficulty', 'closed_at',
-                  'due_date', 'changes', 'milestone', 'labels', 'members', 'repository', 'column','id')
+                  'due_date', 'changes', 'milestone', 'labels', 'members', 'repository', 'column', 'id')
         depth = 1
 
 
@@ -95,5 +103,5 @@ class ColumnSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Column
-        fields = ('name', 'project','id')
+        fields = ('name', 'project', 'id')
         depth = 1

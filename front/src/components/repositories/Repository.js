@@ -61,8 +61,7 @@ export default function Repository(props) {
                         <Labels {...props} />
                     </TabPanel>
                     <TabPanel>
-                        <h2>Milestones</h2>
-                        <Milestones/>
+                        <Milestones {...props} />
                     </TabPanel>
                     <TabPanel>
                         <h2>Issues</h2>

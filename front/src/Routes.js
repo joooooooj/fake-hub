@@ -14,6 +14,7 @@ import AddEditPage from "./components/wiki/AddEditPage";
 import AddEditProject from "./components/projects/AddEditProject";
 import Project from "./components/projects/Project";
 import AddEditLabel from "./components/labels/AddEditLabel";
+import AddEditMilestone from "./components/milestones/AddEditMilestone";
 
 export default function Routes(props) {
 
@@ -56,6 +57,9 @@ export default function Routes(props) {
                     {/* LABEL */}
                     <Route exact path="/template/repository/:id/new-label" component={(props) => <AddEditLabel {...props} />} />
                     <Route exact path="/template/repository/:id/edit-label/:labelId" component={(props) => <AddEditLabel {...props} />} />
+                    {/* MILESTONE */}
+                    <Route exact path="/template/repository/:id/new-milestone" component={(props) => <AddEditMilestone {...props} /> } />
+                    <Route exact path="/template/repository/:id/edit-milestone/:milestoneId" component={(props) => <AddEditMilestone {...props} /> } />
                 </>
             }
         </Switch>
