@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {Container, Row, Col} from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import {Droppable, Draggable} from 'react-beautiful-dnd';
+import {Droppable, Draggable, DragDropContext} from 'react-beautiful-dnd';
 
 export default function Project(props) {
 
@@ -94,6 +94,44 @@ export default function Project(props) {
         ...draggableStyle
     });
 
+    const getListStyle = isDraggingOver => ({
+        background: isDraggingOver ? 'lightblue' : 'lightgrey',
+        padding: 2,
+        width: 250
+    });
+
+    // a little function to help us with reordering the result
+    const reorder = (list, startIndex, endIndex) => {
+        const result = Array.from(list);
+        const [removed] = result.splice(startIndex, 1);
+        result.splice(endIndex, 0, removed);
+
+        return result;
+    };
+
+
+    const onDragEnd = result => {
+        const {source, destination} = result;
+
+        // dropped outside the list
+        if (!destination) {
+            return;
+        }
+
+        console.log(source)
+        console.log(destination)
+
+        console.log(tasks)
+
+        for (let task of tasks) {
+            if (task.id === Number(result.draggableId))
+                task.column.id = Number(destination.droppableId)
+        }
+
+        console.log(tasks)
+
+    };
+
 
     return (
 
@@ -105,35 +143,53 @@ export default function Project(props) {
 
             <Container>
                 <Row>
+                    <DragDropContext onDragEnd={onDragEnd}>
+                        {columns.map((column, index) => (
+                            <div key={column.id}>
+                                <div>{column.name}</div>
+                            <Droppable droppableId={String(column.id)} >
+                                {(provided, snapshot) => (
+                                    <div
+                                        ref={provided.innerRef}
+                                        style={getListStyle(snapshot.isDraggingOver)}>
 
-                    {
-                        columns?.map((column, index) => {
-                            return (<Col xs={3} md={5} key={index}>
-                                {column.name}
-                                {
+                                        {tasks.map((task, index) => (
 
-                                    tasks?.map((task, index) => {
-                                        return (
-                                            
-
-                                            <div>
-                                                {task.column.id === column.id &&
-
-                                                <div>{task.title}</div>
-
-
-                                                }
-                                            </div>
-                                        )
-                                    })
+                                                task.column.id === column.id &&
+                                                    <Draggable
+                                                        key={task.id}
+                                                        draggableId={String(task.id)}
+                                                        index={index}>
+                                                        {(provided, snapshot) => (
+                                                            <div
+                                                                ref={provided.innerRef}
+                                                                {...provided.draggableProps}
+                                                                {...provided.dragHandleProps}
+                                                                style={getItemStyle(
+                                                                    snapshot.isDragging,
+                                                                    provided.draggableProps.style
+                                                                )}>
 
 
+                                                                <Col xs={3} md={5} key={index}>
+                                                                    <div key={task.id + column.id}>{task.title}</div>
+                                                                </Col>
 
-                                }
 
-                            </Col>)
-                        })
-                    }
+                                                            </div>
+                                                        )}
+                                                    </Draggable>
+
+                                        ))}
+                                        {provided.placeholder}
+                                    </div>
+                                )}
+                            </Droppable>
+
+                            </div>
+                        ))}
+
+                    </DragDropContext>
                 </Row>
 
             </Container>
