@@ -7,12 +7,9 @@ export default function Repositories(props) {
     const [repositories, setRepositories] = useState([]);
 
     useEffect(() => {
-<<<<<<< HEAD
-        console.log(props)
-        fetch('http://localhost:8000/api/repository/'+props.user.id+'/user', {
-=======
-        fetch('/api/repository', {
->>>>>>> a1a6fb8c51528c400e04dfc640f8d82a4c29813f
+
+        fetch('/api/repository'+props.user.id+'/user', {
+
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',

@@ -14,7 +14,7 @@ export default function NewRepo(props) {
 
     useEffect(() => {
         fetch(
-            'http://localhost:8000/api/user/' +
+            '/api/user/' +
             JSON.parse(localStorage.getItem('user')).id,
             {
                 method: 'GET',
@@ -28,7 +28,7 @@ export default function NewRepo(props) {
                 setUser(data);
                 console.log('Success:', data);
                 fetch(
-                    'http://localhost:8000/api/team/' +
+                    '/api/team/' +
                     JSON.parse(localStorage.getItem('user')).id +
                     '/user',
                     {
@@ -71,7 +71,7 @@ export default function NewRepo(props) {
         }
         data.collaborators = [JSON.parse(localStorage.getItem('user')).id]
         console.log(data)
-        fetch('http://localhost:8000/api/repository/', {
+        fetch('/api/repository/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

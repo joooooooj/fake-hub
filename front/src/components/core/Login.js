@@ -9,11 +9,9 @@ export default function Login(props) {
     const [error, setError] = useState(false); // Set true when server return error
 
     const login = (data) => {
-<<<<<<< HEAD
-        fetch('http://localhost:8000/api/authenticate/', {
-=======
+
         fetch('/api/authenticate/', {
->>>>>>> a1a6fb8c51528c400e04dfc640f8d82a4c29813f
+
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

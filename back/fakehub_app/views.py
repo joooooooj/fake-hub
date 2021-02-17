@@ -10,13 +10,14 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 
-from .models import Team, User, Label, Repository, Project, Milestone, Task, Branch, Commit, Wiki, Page, File, Status, \
+from .models import Team, User, Label, Repository, Project, Milestone, Task, Branch, Commit, Page, File, Status, \
     Column
 from .serializers import TeamSerializer, ProjectSerializer, LabelSerializer, RepositorySerializer, UserSerializer, \
-    MilestoneSerializer, BranchSerializer, CommitSerializer, WikiSerializer, PageSerializer, FileSerializer, \
+    MilestoneSerializer, BranchSerializer, CommitSerializer, PageSerializer, FileSerializer, \
     TaskSerializer, ColumnSerializer, RepoSaveSerializer
 
 
+
 class CustomObtainAuthToken(ObtainAuthToken):
     def post(self, request, *args, **kwargs):
         response = super(CustomObtainAuthToken, self).post(request, *args, **kwargs)
@@ -29,6 +30,7 @@ class CustomObtainAuthToken(ObtainAuthToken):
         response = super(CustomObtainAuthToken, self).post(request, *args, **kwargs)
         token = Token.objects.get(key=response.data['token'])
         return Response({'token': token.key, 'id': token.user_id})
+
 
 class MilestoneViewSet(GenericViewSet,
                        CreateModelMixin,
@@ -225,10 +227,12 @@ class RepositoryViewSet(GenericViewSet,
     """
           Creates, Updates and Retrieves - Repositories
        """
+
     serializers = {
         'default': RepositorySerializer,
         'create': RepoSaveSerializer
     }
+
     authentication_classes = (TokenAuthentication,)
     queryset = Repository.objects.all()
 
@@ -237,6 +241,7 @@ class RepositoryViewSet(GenericViewSet,
     #     # allow full access to authenticated users, but allow read-only access to unauthenticated users
     #     self.permission_classes = [IsAuthenticatedOrReadOnly]
     #     return super(RepositoryViewSet, self).get_permissions()
+
     def get_serializer_class(self):
         if self.action in ['create']:
             return RepoSaveSerializer
@@ -283,17 +288,6 @@ class UserViewSet(GenericViewSet,
     queryset = User.objects.all()
 
 
-class WikiViewSet(GenericViewSet,
-                  CreateModelMixin,
-                  RetrieveModelMixin,
-                  UpdateModelMixin,
-                  ListModelMixin,
-                  DestroyModelMixin
-                  ):
-    serializer_class = WikiSerializer
-    queryset = Wiki.objects.all()
-
-
 class PageViewSet(GenericViewSet,
                   CreateModelMixin,
                   RetrieveModelMixin,
@@ -303,6 +297,10 @@ class PageViewSet(GenericViewSet,
                   ):
     serializer_class = PageSerializer
     queryset = Page.objects.all()
+
+    @action(detail=True, methods=['get'], url_path='repository', url_name='repository')
+    def page_by_repository(self, request, pk):
+        return Response(PageSerializer(Page.objects.filter(repository__id=pk), many=True).data)
 
 
 class FileViewSet(GenericViewSet,

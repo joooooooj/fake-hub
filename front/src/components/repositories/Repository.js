@@ -16,11 +16,9 @@ export default function Repository(props) {
 
     useEffect(() => {
         if (props?.match?.params?.id) {
-<<<<<<< HEAD
-            fetch('http://localhost:8000/api/repository/' + props.match.params.id, {
-=======
+
             fetch('/api/repository/' + props.match.params.id, {
->>>>>>> a1a6fb8c51528c400e04dfc640f8d82a4c29813f
+
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -72,8 +70,7 @@ export default function Repository(props) {
                     <Projects/>
                 </TabPanel>
                 <TabPanel>
-                    <h2>Wiki</h2>
-                    <Wiki/>
+                    <Wiki {...props}/>
                 </TabPanel>
                 <TabPanel>
                     <h2>Insights</h2>

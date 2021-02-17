@@ -10,7 +10,7 @@ export default function Settings(props) {
 
     useEffect(() => {
         if (props?.match?.params?.id) {
-            fetch('http://localhost:8000/api/repository/' + props.match.params.id, {
+            fetch('/api/repository/' + props.match.params.id, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -29,7 +29,7 @@ export default function Settings(props) {
 
     function deleteRepo() {
         console.log(repository)
-        fetch('http://localhost:8000/api/repository/' + repository.id + '/', {
+        fetch('/api/repository/' + repository.id + '/', {
             method: 'DELETE',
         })
             .then(response => response.json())
@@ -47,7 +47,7 @@ export default function Settings(props) {
     const updateRepo = (data) =>{
         repository.name = data.name
         console.log(repository)
-        fetch('http://localhost:8000/api/repository/' + repository.id+'/', {
+        fetch('/api/repository/' + repository.id+'/', {
             method: 'PUT',
             headers: new Headers({
                 'Content-Type': 'application/json',
