@@ -12,7 +12,7 @@ export default function Projects(props) {
 
         console.log(props)
 
-        fetch('/api/project/'+props?.repo?.id+'/repo', {
+        fetch('/api/project/' + props?.repo?.id + '/repo', {
 
             method: 'GET',
             headers: {
@@ -29,23 +29,49 @@ export default function Projects(props) {
             });
     }, [])
 
+    function deleteProject(id) {
+        fetch('/api/project/' + id, {
+
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Token ' + JSON.parse(localStorage.getItem("user")).token,
+            }
+        })
+
+
+            .then(data => {
+                window.location.reload(false);
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+    }
+
     return (
         <>
             <div className="w-100" style={{height: '50px'}}>
-                     <Link to={"/template/repository/" + props?.repo?.id+'/new-project'}>
-                    <Button variant="success" className="float-right" >
+                <Link to={"/template/repository/" + props?.repo?.id + '/new-project'}>
+                    <Button variant="success" className="float-right">
                         <span className="material-icons mr-2"/>
                         New
                     </Button>
-                     </Link>
+                </Link>
 
             </div>
-            <ListGroup  >
+            <ListGroup>
                 {
                     projects?.map((project, index) => {
                         return (
                             < ListGroup.Item className="font-weight-bold" key={index}>
-                                <Link to={"/template/repository/"+props?.repo?.id+"/project/" + project.id} {...props}>({project.status}) {(project.name)} </Link>
+                                <Link
+                                    to={"/template/repository/" + props?.repo?.id + "/project/" + project.id} {...props}>({project.status}) {(project.name)} </Link>
+                                <div className="text-right">
+                                    <button className="ml-2 btn-warning">edit</button>
+                                    <button className="ml-2 btn-danger" onClick={() =>deleteProject(project.id)}>delete
+                                    </button>
+                                </div>
+
                             </ListGroup.Item>
                         )
 
