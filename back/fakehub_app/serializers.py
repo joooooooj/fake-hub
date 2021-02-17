@@ -24,8 +24,15 @@ class RepositorySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Repository
-        fields = ['id', 'name', 'date_created', 'collaborators', 'team', 'owner']
+        fields = ['id', 'name', 'date_created', 'collaborators', 'team', 'owner','description']
         depth = 1
+
+
+class RepoSaveSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Repository
+        fields = ['id', 'name', 'date_created', 'collaborators', 'team', 'owner', 'description']
 
 
 class ProjectSerializer(serializers.ModelSerializer):

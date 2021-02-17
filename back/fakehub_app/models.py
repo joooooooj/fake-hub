@@ -27,10 +27,12 @@ class Repository(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='repo_owner', null=True)
     team = models.ForeignKey(Team, on_delete=models.CASCADE, default=None, blank=True, null=True)
     collaborators = models.ManyToManyField(User)
+    description = models.TextField(default=None, blank=True, null=True)
 
     def __str__(self):
         string = ' name:' + str(self.name) + ' '
         return string
+
 
 
 class Project(models.Model):

@@ -15,7 +15,9 @@ export default function Home(props) {
                     <Container>
                         < Row >
                             <Col>
+
                                 <img src={logo} />
+
                             </Col>
                             <Col>
                                 <h1>Where the world leaves GitHub behind</h1>

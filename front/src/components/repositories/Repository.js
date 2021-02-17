@@ -7,6 +7,7 @@ import Milestones from "../milestones/Milestones";
 import Issues from "../issues/Issues";
 import Projects from "../projects/Projects";
 import Wiki from "../wiki/Wiki";
+import Settings from "../repositories/Settings"
 import 'react-tabs/style/react-tabs.css';
 
 export default function Repository(props) {
@@ -15,7 +16,11 @@ export default function Repository(props) {
 
     useEffect(() => {
         if (props?.match?.params?.id) {
+
+            console.log(props?.match?.params?.id)
+
             fetch('/api/repository/' + props.match.params.id, {
+
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -42,6 +47,8 @@ export default function Repository(props) {
                     <Tab>Issues</Tab>
                     <Tab>Projects</Tab>
                     <Tab>Wiki</Tab>
+                    <Tab>Insights</Tab>
+                    <Tab>Settings</Tab>
                 </TabList>
 
                 <TabPanel>
@@ -66,6 +73,13 @@ export default function Repository(props) {
                 </TabPanel>
                 <TabPanel>
                     <Wiki {...props}/>
+                </TabPanel>
+                <TabPanel>
+                    <h2>Insights</h2>
+                </TabPanel>
+                <TabPanel>
+                    <h2>Settings</h2>
+                    <Settings {...props} user={props.user}/>
                 </TabPanel>
             </Tabs>
         </Container>

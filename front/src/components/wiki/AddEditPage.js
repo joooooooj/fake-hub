@@ -8,7 +8,7 @@ export default function AddEditPage(props) {
     const [page, setPage] = useState();
 
     if (props.location.pathname.includes("edit-wiki-page") && !page) {
-        fetch("http://localhost:8000/api/page/" + props.match.params.pageId, {
+        fetch("/api/page/" + props.match.params.pageId, {
             method: "GET",
             headers: {
                 'Content-Type': 'application/json',
@@ -32,7 +32,7 @@ export default function AddEditPage(props) {
             props.history.push("/repository/" + props.match.params.id);
             return;
         }
-        fetch("http://localhost:8000/api/page/", {
+        fetch("/api/page/", {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
@@ -51,7 +51,7 @@ export default function AddEditPage(props) {
     }
 
     const handleEditPage = (data) => {
-        fetch("http://localhost:8000/api/page/" + page.id + "/", {
+        fetch("/api/page/" + page.id + "/", {
             method: "PUT",
             headers: {
                 'Content-Type': 'application/json',

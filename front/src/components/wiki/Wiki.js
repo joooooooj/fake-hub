@@ -11,7 +11,7 @@ export default function Wiki(props) {
     }, []);
 
     const handleGetPages = () => {
-        fetch('http://localhost:8000/api/page/' + props.match.params.id + '/repository', {
+        fetch('/api/page/' + props.match.params.id + '/repository', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -32,7 +32,7 @@ export default function Wiki(props) {
     }
 
     const handleDeletePage = (page) => {
-        fetch("http://localhost:8000/api/page/" + page.id, {
+        fetch("/api/page/" + page.id, {
             method: "DELETE",
             headers: {
                 'Content-Type': 'application/json',
