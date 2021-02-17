@@ -84,7 +84,7 @@ class LabelViewSet(RetrieveModelMixin, UpdateModelMixin,
         '''
            Returns Labels for a specific repo
         '''
-        return Response(LabelSerializer(Label.objects.filter(repository__id=pk)).data)
+        return Response(LabelSerializer(Label.objects.filter(repository__id=pk), many=True).data)
 
     @action(detail=True, methods=['get'], url_path='task', url_name='task')
     def labels_by_task(self, request, pk):

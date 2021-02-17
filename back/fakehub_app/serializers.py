@@ -44,7 +44,7 @@ class ProjectSerializer(serializers.ModelSerializer):
 class LabelSerializer(serializers.ModelSerializer):
     class Meta:
         model = Label
-        fields = ('name', 'description', 'color', 'repository')
+        fields = ('id', 'name', 'description', 'color', 'repository')
 
 
 class MilestoneSerializer(serializers.ModelSerializer):

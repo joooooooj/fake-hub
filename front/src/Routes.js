@@ -13,6 +13,7 @@ import NewRepo from "./components/repositories/NewRepo";
 import AddEditPage from "./components/wiki/AddEditPage";
 import AddEditProject from "./components/projects/AddEditProject";
 import Project from "./components/projects/Project";
+import AddEditLabel from "./components/labels/AddEditLabel";
 
 export default function Routes(props) {
 
@@ -52,6 +53,9 @@ export default function Routes(props) {
                     <Route exact path="/template/repository/:id/new-project" component={(props) => <AddEditProject {...props} user={props.user}/>}/>
                     <Route exact path="/template/repository/:id/project/:id2" component={(props) => <Project {...props} user={props.user}/>}/>
                     <Route exact path="/template/repository/:id/edit-project/:id2" component={(props) => <AddEditProject {...props} user={props.user}/>}/>
+                    {/* LABEL */}
+                    <Route exact path="/template/repository/:id/new-label" component={(props) => <AddEditLabel {...props} />} />
+                    <Route exact path="/template/repository/:id/edit-label/:labelId" component={(props) => <AddEditLabel {...props} />} />
                 </>
             }
         </Switch>

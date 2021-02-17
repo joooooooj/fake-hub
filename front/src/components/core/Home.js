@@ -24,7 +24,7 @@ export default function Home(props) {
                                 <p>Millions of developers and companies build, ship, and maintain their software on GitHub—the largest and most advanced development platform in the world.</p>
                                 <p className="text-danger font-weight-bold">But when GitHub fails, they come to us!</p>
                                 <Button variant="warning" className="w-100" onClick={() => history.push('/template/register')}>
-                                    SIGN UP
+                                 t   SIGN UP
                         </Button>
                             </Col>
                         </Row>

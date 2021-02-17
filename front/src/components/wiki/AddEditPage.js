@@ -29,7 +29,7 @@ export default function AddEditPage(props) {
         data.repository = props.match.params.id;
         if (page) {
             handleEditPage(data);
-            props.history.push("/repository/" + props.match.params.id);
+            props.history.push("/template/repository/" + props.match.params.id);
             return;
         }
         fetch("/api/page/", {

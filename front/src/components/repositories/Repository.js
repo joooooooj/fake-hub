@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
-import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
-import { Container } from "react-bootstrap";
+import React, {useEffect, useState} from "react";
+import {Tab, Tabs, TabList, TabPanel} from 'react-tabs';
+import {Container} from "react-bootstrap";
 import Branches from "../branches/Branches";
 import Labels from "../labels/Labels";
 import Milestones from "../milestones/Milestones";
@@ -39,52 +39,51 @@ export default function Repository(props) {
 
     return (
         <>
-        <h2 className={"p-3"}>{repository?.name}</h2>
-        <Container fluid className="ml-3">
-            <Tabs>
-                <TabList>
-                    <Tab>Branches</Tab>
-                    <Tab>Labels</Tab>
-                    <Tab>Milestones</Tab>
-                    <Tab>Issues</Tab>
-                    <Tab>Projects</Tab>
-                    <Tab>Wiki</Tab>
-                    <Tab>Insights</Tab>
-                    <Tab>Settings</Tab>
-                </TabList>
+            <h2 className={"p-3"}>{repository?.name}</h2>
+            <Container fluid className="ml-3">
+                <Tabs>
+                    <TabList>
+                        <Tab>Branches</Tab>
+                        <Tab>Labels</Tab>
+                        <Tab>Milestones</Tab>
+                        <Tab>Issues</Tab>
+                        <Tab>Projects</Tab>
+                        <Tab>Wiki</Tab>
+                        <Tab>Insights</Tab>
+                        <Tab>Settings</Tab>
+                    </TabList>
 
-                <TabPanel>
-                    <h2>Branches</h2>
-                    <Branches/>
-                </TabPanel>
-                <TabPanel>
-                    <h2>Labels</h2>
-                    <Labels/>
-                </TabPanel>
-                <TabPanel>
-                    <h2>Milestones</h2>
-                    <Milestones/>
-                </TabPanel>
-                <TabPanel>
-                    <h2>Issues</h2>
-                    <Issues/>
-                </TabPanel>
-                <TabPanel>
-                    <h2>Projects </h2>
-                    <Projects  {...props} repo={repository} />
-                </TabPanel>
-                <TabPanel>
-                    <Wiki {...props}/>
-                </TabPanel>
-                <TabPanel>
-                    <h2>Insights</h2>
-                </TabPanel>
-                <TabPanel>
-                    <h2>Settings</h2>
-                    <Settings {...props} user={props.user}/>
-                </TabPanel>
-            </Tabs>
-        </Container>
+                    <TabPanel>
+                        <h2>Branches</h2>
+                        <Branches/>
+                    </TabPanel>
+                    <TabPanel>
+                        <Labels {...props} />
+                    </TabPanel>
+                    <TabPanel>
+                        <h2>Milestones</h2>
+                        <Milestones/>
+                    </TabPanel>
+                    <TabPanel>
+                        <h2>Issues</h2>
+                        <Issues/>
+                    </TabPanel>
+                    <TabPanel>
+                        <h2>Projects </h2>
+                        <Projects  {...props} repo={repository}/>
+                    </TabPanel>
+                    <TabPanel>
+                        <Wiki {...props}/>
+                    </TabPanel>
+                    <TabPanel>
+                        <h2>Insights</h2>
+                    </TabPanel>
+                    <TabPanel>
+                        <h2>Settings</h2>
+                        <Settings {...props} user={props.user}/>
+                    </TabPanel>
+                </Tabs>
+            </Container>
         </>
     );
 }
