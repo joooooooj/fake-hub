@@ -140,7 +140,7 @@ export default function Project(props) {
 
             <h2>{project?.name}</h2>
             <h4>repository : {repository?.name}</h4>
-
+            <span>{project?.description}</span>
             <Container>
                 <Row>
                     <DragDropContext onDragEnd={onDragEnd}>
