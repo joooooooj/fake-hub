@@ -3,6 +3,8 @@ import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import { Container } from "react-bootstrap";
 import Projects from "../projects/Projects";
 import ProfileRepositories from "../user/ProfileRepositories"
+import emptyavatar from "../../assets/empty-avatar.jpg";
+
 
 export default function Profile(props) {
 
@@ -10,7 +12,7 @@ export default function Profile(props) {
 
     useEffect(() => {
 
-            fetch('/api/user/' + props.user.id, {
+            fetch('/api/user/' +JSON.parse(localStorage.getItem("user")).id, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -30,7 +32,7 @@ export default function Profile(props) {
     return (  
         <div className="profile">
             <div className="left">
-                <img className="avatar" src="./empty-avatar.jpg" alt='' />
+                <img className="avatar" src={emptyavatar}  alt='' />
                 <h2>{user?.first_name} {user?.last_name}</h2>
                 <h3>{user?.username}</h3>
                 <h5>{user?.email}</h5>

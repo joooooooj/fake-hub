@@ -17,6 +17,8 @@ export default function Repository(props) {
     useEffect(() => {
         if (props?.match?.params?.id) {
 
+            console.log(props?.match?.params?.id)
+
             fetch('/api/repository/' + props.match.params.id, {
 
                 method: 'GET',
@@ -77,7 +79,7 @@ export default function Repository(props) {
                 </TabPanel>
                 <TabPanel>
                     <h2>Settings</h2>
-                    <Settings {...props} user={props.user}></Settings>
+                    <Settings {...props} user={props.user}/>
                 </TabPanel>
             </Tabs>
         </Container>

@@ -15,11 +15,9 @@ export default function Home(props) {
                     <Container>
                         < Row >
                             <Col>
-<<<<<<< HEAD
-                                <img src="./25231-tr.png" />
-=======
+
                                 <img src={logo} />
->>>>>>> a1a6fb8c51528c400e04dfc640f8d82a4c29813f
+
                             </Col>
                             <Col>
                                 <h1>Where the world leaves GitHub behind</h1>

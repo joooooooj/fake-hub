@@ -9,7 +9,7 @@ export default function ProfileRepositories(props){
 
     useEffect(() => {
         console.log(props)
-        fetch('/api/repository/'+props.user.id+'/user', {
+        fetch('/api/repository/'+JSON.parse(localStorage.getItem("user")).id+'/user', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -40,7 +40,7 @@ export default function ProfileRepositories(props){
                             repositories?.map((repo, index) => {
                                 return (
                                     < ListGroup.Item className="font-weight-bold" key={index}>
-                                        <Link to={"/repository/" + repo.id}>{(repo.team ? repo.team.name : repo.owner?.username)} / {repo.name}</Link>
+                                        <Link to={"/template/repository/" + repo.id}>{(repo.team ? repo.team.name : repo.owner?.username)} / {repo.name}</Link>
                                     </ListGroup.Item>
                                 )
                                 
