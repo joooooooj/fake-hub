@@ -48,6 +48,7 @@ export default function Projects(props) {
             });
     }
 
+
     return (
         <>
             <div className="w-100" style={{height: '50px'}}>
@@ -67,8 +68,10 @@ export default function Projects(props) {
                                 <Link
                                     to={"/template/repository/" + props?.repo?.id + "/project/" + project.id} {...props}>({project.status}) {(project.name)} </Link>
                                 <div className="text-right">
-                                    <button className="ml-2 btn-warning">edit</button>
-                                    <button className="ml-2 btn-danger" onClick={() =>deleteProject(project.id)}>delete
+                                    <Link to={"/template/repository/" + props?.repo?.id + '/edit-project/'+ project.id}  {...props}>
+                                        <button className="ml-2 btn-warning">edit</button>
+                                    </Link>
+                                    <button className="ml-2 btn-danger" onClick={() => deleteProject(project.id)}>delete
                                     </button>
                                 </div>
 
@@ -76,8 +79,8 @@ export default function Projects(props) {
                         )
 
                     })
+                    }
+                    </ListGroup>
+                    </>
+                    );
                 }
-            </ListGroup>
-        </>
-    );
-}

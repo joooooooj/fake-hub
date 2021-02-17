@@ -51,6 +51,7 @@ export default function Routes(props) {
                     {/* PROJECT */}
                     <Route exact path="/template/repository/:id/new-project" component={(props) => <AddEditProject {...props} user={props.user}/>}/>
                     <Route exact path="/template/repository/:id/project/:id2" component={(props) => <Project {...props} user={props.user}/>}/>
+                    <Route exact path="/template/repository/:id/edit-project/:id2" component={(props) => <AddEditProject {...props} user={props.user}/>}/>
                 </>
             }
         </Switch>

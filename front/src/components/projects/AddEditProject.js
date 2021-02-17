@@ -11,8 +11,22 @@ export default function AddEditProject(props) {
 
     useEffect(() => {
         console.log(props)
-        if (props?.location?.pathname?.includes("new-project") && !project)
+        if ( props?.location?.route?.contains("new-project"))
             setProjectPresent(false)
+        fetch("/api/project/" + props?.match?.params?.id2 , {
+            method: "GET",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                setProject(data)
+            })
+            .catch(error => {
+                console.error(error);
+            });
     }, [])
 
 
@@ -115,7 +129,7 @@ export default function AddEditProject(props) {
             <Button variant="success"
                     type="submit"
                     className="mt-3 float-right">
-                Create a new project
+                Submit
             </Button>
         </Form>
         </>
