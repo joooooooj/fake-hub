@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {Container, Row, Col} from 'react-bootstrap';
+import {Container, Row, Col, Button, Modal} from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {Droppable, Draggable, DragDropContext} from 'react-beautiful-dnd';
 
@@ -9,6 +9,37 @@ export default function Project(props) {
     const [repository, setRepository] = useState(null);
     const [columns, setColumns] = useState([])
     const [tasks, setTasks] = useState([])
+
+    const [show, setShow] = useState(false);
+    const [selected, setSelected] = useState(null)
+
+    const handleClose = () => setShow(false);
+    const handleShow = (name) => {
+        setSelected(name)
+        setShow(true);
+    }
+    const handleSave = (name) => {
+        setShow(false);
+        selected.name = document.getElementById("newName").value;
+        console.log(selected)
+        fetch('/api/column/' + selected?.id + '/', {
+
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Token ' + JSON.parse(localStorage.getItem("user")).token,
+            },
+            body: JSON.stringify(selected)
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Success:', data);
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+    }
+
 
     useEffect(() => {
         console.log(props)
@@ -38,22 +69,28 @@ export default function Project(props) {
                         .then(response => response.json())
                         .then(data => {
                             setColumns(data);
+                            const temp = tasks
                             console.log('Success:', data);
-                            fetch('/api/task/' + data[0].id + '/column', {
+                                fetch('/api/task/' + props.match.params.id + '/repository', {
 
-                                method: 'GET',
-                                headers: {
-                                    'Content-Type': 'application/json',
-                                }
-                            })
-                                .then(response => response.json())
-                                .then(data => {
-                                    console.log('Success:', data);
-                                    setTasks(data)
+                                    method: 'GET',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                    }
                                 })
-                                .catch((error) => {
-                                    console.error('Error:', error);
-                                });
+                                    .then(response => response.json())
+                                    .then(data => {
+                                        console.log('Success:', data);
+
+                                        setTasks(data)
+                                        console.log(tasks)
+
+                                    })
+                                    .catch((error) => {
+                                        console.error('Error:', error);
+                                    });
+
+
                         })
                         .catch((error) => {
                             console.error('Error:', error);
@@ -90,6 +127,8 @@ export default function Project(props) {
         // change background colour if dragging
         background: isDragging ? 'lightgreen' : 'grey',
 
+        borderRadius: 5,
+
         // styles we need to apply on draggables
         ...draggableStyle
     });
@@ -97,18 +136,11 @@ export default function Project(props) {
     const getListStyle = isDraggingOver => ({
         background: isDraggingOver ? 'lightblue' : 'lightgrey',
         padding: 2,
-        width: 250
+        width: 250,
+        borderBottomLeftRadius: 5,
+        borderBottomRightRadius: 5
+
     });
-
-    // a little function to help us with reordering the result
-    const reorder = (list, startIndex, endIndex) => {
-        const result = Array.from(list);
-        const [removed] = result.splice(startIndex, 1);
-        result.splice(endIndex, 0, removed);
-
-        return result;
-    };
-
 
     const onDragEnd = result => {
         const {source, destination} = result;
@@ -124,19 +156,94 @@ export default function Project(props) {
         console.log(tasks)
 
         for (let task of tasks) {
-            if (task.id === Number(result.draggableId))
-                task.column.id = Number(destination.droppableId)
+            if (task.id === Number(result.draggableId)) {
+                task.column = Number(destination.droppableId)
+                const obj={"id":task.id, "column":task.column}
+                fetch('/api/task/' + task.id+'/', {
+
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Token ' + JSON.parse(localStorage.getItem("user")).token,
+                    },
+                    body: JSON.stringify(obj)
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        fetch('/api/task/' + props.match.params.id + '/repository', {
+
+                            method: 'GET',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            }
+                        })
+                            .then(response => response.json())
+                            .then(data => {
+                                console.log('Success:', data);
+
+                                setTasks(data)
+                                console.log(tasks)
+
+                            })
+                            .catch((error) => {
+                                console.error('Error:', error);
+                            });
+
+                        console.log('Success:', data);
+                    })
+                    .catch((error) => {
+                        console.error('Error:', error);
+                    });
+            }
+
         }
 
         console.log(tasks)
 
+
     };
+
+    function deleteColumn(id) {
+        fetch('/api/column/' + id, {
+
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Token ' + JSON.parse(localStorage.getItem("user")).token,
+            }
+        })
+
+
+            .then(data => {
+                window.location.reload(false);
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+    }
 
 
     return (
+        <div className="project">
 
+            <Modal show={show} onHide={handleClose}
 
-        <div>
+            >
+                <Modal.Header closeButton>
+                    <Modal.Title>Edit column name</Modal.Title>
+
+                </Modal.Header>
+                <Modal.Body><input type="text" id="newName" placeholder={selected?.name}/></Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={() => handleClose()}>
+                        Close
+                    </Button>
+                    <Button variant="primary" onClick={() => handleSave()}>
+                        Save Changes
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+
 
             <h2>{project?.name}</h2>
             <h4>repository : {repository?.name}</h4>
@@ -144,47 +251,59 @@ export default function Project(props) {
             <Container>
                 <Row>
                     <DragDropContext onDragEnd={onDragEnd}>
-                        {columns.map((column, index) => (
-                            <div key={column.id}>
-                                <div>{column.name}</div>
-                            <Droppable droppableId={String(column.id)} >
-                                {(provided, snapshot) => (
-                                    <div
-                                        ref={provided.innerRef}
-                                        style={getListStyle(snapshot.isDraggingOver)}>
+                        {columns?.map((column, index) => (
+                            <div key={column?.id} className="myColumn">
 
-                                        {tasks.map((task, index) => (
-
-                                                task.column.id === column.id &&
-                                                    <Draggable
-                                                        key={task.id}
-                                                        draggableId={String(task.id)}
-                                                        index={index}>
-                                                        {(provided, snapshot) => (
-                                                            <div
-                                                                ref={provided.innerRef}
-                                                                {...provided.draggableProps}
-                                                                {...provided.dragHandleProps}
-                                                                style={getItemStyle(
-                                                                    snapshot.isDragging,
-                                                                    provided.draggableProps.style
-                                                                )}>
-
-
-                                                                <Col xs={3} md={5} key={index}>
-                                                                    <div key={task.id + column.id}>{task.title}</div>
-                                                                </Col>
-
-
-                                                            </div>
-                                                        )}
-                                                    </Draggable>
-
-                                        ))}
-                                        {provided.placeholder}
+                                <div className="titleDiv">
+                                    <span className="mr-3"> {column?.name}</span>
+                                    <div className="x"
+                                         onClick={() => deleteColumn(column?.id)}>
+                                        x
                                     </div>
-                                )}
-                            </Droppable>
+                                    <span className="edit"
+                                          onClick={() => handleShow(column)}>
+                                         <span className="material-icons mr-1">edit</span>
+                                    </span>
+
+                                </div>
+                                <Droppable droppableId={String(column.id)}>
+                                    {(provided, snapshot) => (
+                                        <div
+                                            ref={provided.innerRef}
+                                            style={getListStyle(snapshot.isDraggingOver)}>
+
+                                            {tasks?.map((task, index) => (
+
+                                                task?.column?.id === column?.id &&
+                                                <Draggable
+                                                    key={task?.id}
+                                                    draggableId={String(task?.id)}
+                                                    index={index}>
+                                                    {(provided, snapshot) => (
+                                                        <div
+                                                            ref={provided.innerRef}
+                                                            {...provided.draggableProps}
+                                                            {...provided.dragHandleProps}
+                                                            style={getItemStyle(
+                                                                snapshot.isDragging,
+                                                                provided.draggableProps.style
+                                                            )}>
+
+
+                                                            <Col xs={3} md={5} key={index}>
+                                                                <div key={task?.id + column?.id}>{task?.title}</div>
+                                                            </Col>
+
+
+                                                        </div>
+                                                    )}
+                                                </Draggable>
+
+                                            ))}
+                                            {provided.placeholder}
+                                        </div>
+                                    )}
+                                </Droppable>
 
                             </div>
                         ))}

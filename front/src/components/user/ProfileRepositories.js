@@ -28,7 +28,7 @@ export default function ProfileRepositories(props){
     return (
         <>
             <div className="w-100" style={{height: '50px'}}>
-                <Link to="/newRepository">
+                <Link to="/template/newRepository">
                     <Button variant="success" className="float-right" >
                             <span className="material-icons mr-2"></span>
                             New
