@@ -4,6 +4,9 @@ import { Container } from "react-bootstrap";
 import Projects from "../projects/Projects";
 import ProfileRepositories from "../user/ProfileRepositories"
 import emptyavatar from "../../assets/empty-avatar.jpg";
+import Repositories from "../repositories/Repositories";
+import Teams from "../teams/Teams";
+import ProfileTeams from "./ProfileTeams";
 
 
 export default function Profile(props) {
@@ -44,7 +47,7 @@ export default function Profile(props) {
                         <TabList>
                             <Tab>Overview</Tab>
                             <Tab>Repositories</Tab>
-                            <Tab>Projects</Tab>
+                            <Tab>Teams</Tab>
                         </TabList>
         
                         <TabPanel>
@@ -57,8 +60,7 @@ export default function Profile(props) {
                             <ProfileRepositories {...props} user={props.user}/>
                         </TabPanel>
                         <TabPanel>
-                            <h2>Project</h2>
-                            <Projects/>
+                                <ProfileTeams {...props} user={props.user}/>
                         </TabPanel>
                     </Tabs>
                 </Container>

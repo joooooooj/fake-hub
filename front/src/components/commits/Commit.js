@@ -1,7 +1,7 @@
 import React from "react";
 import {Button} from "react-bootstrap";
 
-export default function Branch(props) {
+export default function Commit(props) {
 
     // const handleDeleteTeam = () => {
     //     props.delete(props.team);
@@ -16,19 +16,21 @@ export default function Branch(props) {
         <div style={{border: '1px solid gray', borderTopLeftRadius: '10px', borderTopRightRadius: '10px'}}
              className="d-flex w-100 mt-1">
             <div className="d-block w-50 text-left p-1">
-                <p style={{fontSize: '18px', fontWeight: '400'}}>
-                    name: <span style={{color: "white"}}>{props.branch.name}</span>
+                <p style={{fontSize: '18px', fontWeight: '250'}}>
+                    hash: <span style={{color: "green"}}>{props.commit.code}</span>
                 </p>
                 <p style={{fontSize: '18px', fontWeight: '250'}}>
-                    author: <span  style={{fontWeight: '500'}}> {props.branch.author?.username} </span>
+                    author: <span  style={{fontWeight: '500'}}> {props.commit.author?.username} </span>
                 </p>
                 <p style={{fontSize: '18px', fontWeight: '250'}}>
-                    status: {props.branch.status}
+                    description: {props.commit.description}
                 </p>
                 {/*<p style={{fontSize: '18px', fontWeight: '250'}}>*/}
                 {/*    tag: {props.commit.tag}*/}
                 {/*</p>*/}
-
+                <p style={{fontSize: '18px', fontWeight: '250'}}>
+                    branch: {props.commit.branch?.name}
+                </p>
 
             </div>
             {/*<div className="d-block w-50 p-3 position-relative">*/}

@@ -9,10 +9,13 @@ import Projects from "../projects/Projects";
 import Wiki from "../wiki/Wiki";
 import Settings from "../repositories/Settings"
 import 'react-tabs/style/react-tabs.css';
+import Commits from "../commits/Commits";
+import Insights from "../insights/Insights";
 
 export default function Repository(props) {
 
     const [repository, setRepository] = useState(null);
+    const [insights, setInsights] = useState(null);
 
     useEffect(() => {
         if (props?.match?.params?.id) {
@@ -35,6 +38,8 @@ export default function Repository(props) {
                     console.error('Error:', error);
                 });
         }
+
+
     }, [props?.match?.params.id])
 
     return (
@@ -43,6 +48,7 @@ export default function Repository(props) {
             <Container fluid className="ml-3">
                 <Tabs>
                     <TabList>
+                        <Tab>Commits</Tab>
                         <Tab>Branches</Tab>
                         <Tab>Labels</Tab>
                         <Tab>Milestones</Tab>
@@ -53,6 +59,10 @@ export default function Repository(props) {
                         <Tab>Settings</Tab>
                     </TabList>
 
+                    <TabPanel>
+                        <h2>Commits </h2>
+                        <Commits {...props} repo={repository}/>
+                    </TabPanel>
                     <TabPanel>
                         <h2>Branches</h2>
                         <Branches/>
@@ -76,6 +86,7 @@ export default function Repository(props) {
                     </TabPanel>
                     <TabPanel>
                         <h2>Insights</h2>
+                        <Insights {...props} repo={repository} insights={insights}/>
                     </TabPanel>
                     <TabPanel>
                         <h2>Settings</h2>

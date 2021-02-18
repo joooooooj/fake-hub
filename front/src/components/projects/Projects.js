@@ -68,7 +68,8 @@ export default function Projects(props) {
                                 <Link
                                     to={"/template/repository/" + props?.repo?.id + "/project/" + project.id} {...props}>({project.status}) {(project.name)} </Link>
                                 <div className="text-right">
-                                    <Link to={"/template/repository/" + props?.repo?.id + '/edit-project/'+ project.id}  {...props}>
+                                    <Link
+                                        to={"/template/repository/" + props?.repo?.id + '/edit-project/' + project.id}  {...props}>
                                         <button className="ml-2 btn-warning">edit</button>
                                     </Link>
                                     <button className="ml-2 btn-danger" onClick={() => deleteProject(project.id)}>delete
@@ -79,8 +80,10 @@ export default function Projects(props) {
                         )
 
                     })
-                    }
-                    </ListGroup>
-                    </>
-                    );
                 }
+
+            </ListGroup>
+
+        </>
+    );
+}

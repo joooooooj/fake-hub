@@ -1,4 +1,7 @@
+from collections import Counter
+
 from django.http import JsonResponse
+from rest_framework import status
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.response import Response
 from rest_framework.decorators import action
@@ -14,14 +17,8 @@ from .models import Team, User, Label, Repository, Project, Milestone, Task, Bra
     Column
 from .serializers import TeamSerializer, ProjectSerializer, LabelSerializer, RepositorySerializer, UserSerializer, \
     MilestoneSerializer, BranchSerializer, CommitSerializer, PageSerializer, FileSerializer, \
-    TaskSerializer, ColumnSerializer, RepoSaveSerializer, MilestoneSaveSerializer
-
-
-class CustomObtainAuthToken(ObtainAuthToken):
-    def post(self, request, *args, **kwargs):
-        response = super(CustomObtainAuthToken, self).post(request, *args, **kwargs)
-        token = Token.objects.get(key=response.data['token'])
-        return Response({'token': token.key, 'id': token.user_id})
+    TaskSerializer, ColumnSerializer, RepoSaveSerializer, TaskSaveSerializer, TeamSaveSerializer, \
+    MilestoneSaveSerializer
 
 
 class CustomObtainAuthToken(ObtainAuthToken):
@@ -179,7 +176,7 @@ class CommitViewSet(GenericViewSet,
         '''
             Returns branches for the specific user
         '''
-        # many == VISE OD JEDNOG IMA U REZULTATIMA FILTRIRANJA
+        # many == VISE OD JEDNpostOG IMA U REZULTATIMA FILTRIRANJA
         return Response(CommitSerializer(Commit.objects.filter(author__id=pk), many=True).data)
 
     #  http://localhost:8000/commit/1/repo/
@@ -189,11 +186,46 @@ class CommitViewSet(GenericViewSet,
             Returns branches for the specific repo
         '''
         # many == VISE OD JEDNOG IMA U REZULTATIMA FILTRIRANJA
-        return Response(CommitSerializer(Commit.objects.filter(branch__repository__id=pk), many=True).data)
+        return Response(CommitSerializer(Commit.objects.all(), many=True).data)
+
+    @action(detail=True, methods=['get'], url_path='insights', url_name='insights')
+    def get_insights(self, request, pk):
+        '''
+            Returns insights for repo
+        '''
+
+        data = {"colab": [], "info": []}
+        for item in Commit.objects.all().values('author'):
+            username = User.objects.filter(id=item['author'])[0].username
+
+            if username not in data['colab']:
+                data['colab'].append(username)
+
+        data['info'] = CommitSerializer(Commit.objects.all(), many=True).data
+
+        return Response(data)
+
+    @action(detail=True, methods=['get'], url_path='counts', url_name='counts')
+    def get_counts(self, request, pk):
+
+        '''
+            Returns insights for repo
+        '''
+
+        counts = []
+        objs = []
+        for item in Commit.objects.all().values('author'):
+            username = User.objects.filter(id=item['author'])[0].username
+
+            objs.append(username)
+
+        for k, v in Counter(objs).items():
+            counts.append((k, v))
+        return Response(counts)
 
 
 class TeamViewSet(GenericViewSet,  # generic view functionality
-                  CreateModelMixin,  # handles POSTs
+
                   RetrieveModelMixin,  # handles GETs for 1 Team
                   UpdateModelMixin,  # handles PUTs and PATCHes
                   ListModelMixin,  # handles GETs for many Teams
@@ -203,12 +235,61 @@ class TeamViewSet(GenericViewSet,  # generic view functionality
     queryset = Team.objects.all()
     authentication_classes = (TokenAuthentication,)
 
+    def create(self, request, *args, **kwargs):
+        if request.method != 'PUT':
+            team = Team()
+            team.name = request.data['name']
+            team.owner = User.objects.filter(id=request.data['owner'])[0]
+
+            # serializer = TeamSaveSerializer(data=team)
+            # serializer.is_valid(raise_exception=True)
+
+            print(request.data['members'])
+            users = User.objects.filter(username__in=request.data['members'])
+            instance = Team.objects.create(name=request.data['name'], owner_id=request.data['owner'])
+
+            instance.members.set(users)
+
+        return Response({}, status=status.HTTP_201_CREATED)
+
+    def update(self, request, *args, **kwargs):
+        print('PUT')
+        print(request.data['members'])
+        users = User.objects.filter(username__in=request.data['members'])
+        team = Team.objects.filter(id=request.data['id'])[0]
+        team.members.set(users)
+        print(team.members)
+        Team.save(team)
+        print(Team.objects.filter(id=request.data['id']))
+        return Response({}, status=status.HTTP_201_CREATED)
+
+    def get_permissions(self):
+        print(self.request.data)
+        # allow full access to authenticated users, but allow read-only access to unauthenticated users
+        self.permission_classes = [IsAuthenticatedOrReadOnly]
+        return super(TeamViewSet, self).get_permissions()
+
     @action(detail=True, methods=['get'], url_path='user', url_name='user')
-    def commits_by_branch(self, request, pk):
+    def teams_by_user(self, request, pk):
         '''
             Returns teams for the specific user
         '''
 
+        return Response(TeamSerializer(Team.objects.filter(members__id=pk), many=True).data)
+
+    @action(detail=True, methods=['post'], url_path='leave', url_name='leave')
+    def leave_team(self, request, pk):
+        '''
+            Leave team
+        '''
+
+        team = Team.objects.filter(id=pk)[0]
+        print(team)
+        ids = []
+        for m in request.data['members']:
+            ids.append(m['id'])
+        team.members.set(ids)
+        Team.save(team)
         return Response(TeamSerializer(Team.objects.filter(members__id=pk), many=True).data)
 
 
@@ -341,8 +422,22 @@ class TaskViewSet(GenericViewSet,
                   ListModelMixin,
                   DestroyModelMixin
                   ):
-    serializer_class = TaskSerializer
+    serializers = {
+        'default': TaskSerializer,
+        'create': TaskSaveSerializer
+    }
     queryset = Task.objects.all()
+
+    def get_permissions(self):
+        print(self.request.body)
+        # allow full access to authenticated users, but allow read-only access to unauthenticated users
+        self.permission_classes = [IsAuthenticatedOrReadOnly]
+        return super(TaskViewSet, self).get_permissions()
+
+    def get_serializer_class(self):
+        if self.action in ['update']:
+            return TaskSaveSerializer
+        return TaskSerializer
 
     @action(detail=True, methods=['get'], url_path='repository', url_name='repository')
     def tasks_by_repository(self, request, pk):
@@ -378,6 +473,12 @@ class ColumnViewSet(GenericViewSet,
                     ):
     serializer_class = ColumnSerializer
     queryset = Column.objects.all()
+
+    def get_permissions(self):
+        print(self.request.data)
+        # allow full access to authenticated users, but allow read-only access to unauthenticated users
+        self.permission_classes = [IsAuthenticatedOrReadOnly]
+        return super(ColumnViewSet, self).get_permissions()
 
     @action(detail=True, methods=['get'], url_path='project', url_name='project')
     def columns_by_project(self, request, pk):

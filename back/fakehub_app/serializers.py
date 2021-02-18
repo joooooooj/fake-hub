@@ -13,8 +13,14 @@ class TeamSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Team
-        fields = ['name', 'members', 'id']
+        fields = ['name', 'members', 'id', 'owner']
         depth = 1
+
+
+class TeamSaveSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Team
+        fields = ['name', 'members', 'owner']
 
 
 class RepositorySerializer(serializers.ModelSerializer):
@@ -65,12 +71,14 @@ class BranchSerializer(serializers.ModelSerializer):
     class Meta:
         model = Branch
         fields = ('name', 'author', 'repository', 'status')
+        depth = 1
 
 
 class CommitSerializer(serializers.ModelSerializer):
     class Meta:
         model = Commit
         fields = ('description', 'code', 'committed_at', 'tag', 'branch', 'author')
+        depth = 1
 
 
 class PageSerializer(serializers.ModelSerializer):
@@ -96,6 +104,12 @@ class TaskSerializer(serializers.ModelSerializer):
         fields = ('title', 'created_at', 'description', 'status', 'difficulty', 'closed_at',
                   'due_date', 'changes', 'milestone', 'labels', 'members', 'repository', 'column', 'id')
         depth = 1
+
+
+class TaskSaveSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Task
+        fields = ('column', 'id')
 
 
 class ColumnSerializer(serializers.ModelSerializer):
