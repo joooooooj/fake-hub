@@ -1,3 +1,5 @@
+from collections import Counter
+
 from django.http import JsonResponse
 from rest_framework import status
 from rest_framework.authentication import TokenAuthentication
@@ -176,6 +178,41 @@ class CommitViewSet(GenericViewSet,
         '''
         # many == VISE OD JEDNOG IMA U REZULTATIMA FILTRIRANJA
         return Response(CommitSerializer(Commit.objects.all(), many=True).data)
+
+    @action(detail=True, methods=['get'], url_path='insights', url_name='insights')
+    def get_insights(self, request, pk):
+        '''
+            Returns insights for repo
+        '''
+
+        data = {"colab": [], "info": []}
+        for item in Commit.objects.all().values('author'):
+            username = User.objects.filter(id=item['author'])[0].username
+
+            if username not in data['colab']:
+                data['colab'].append(username)
+
+        data['info'] = CommitSerializer(Commit.objects.all(), many=True).data
+
+        return Response(data)
+
+    @action(detail=True, methods=['get'], url_path='counts', url_name='counts')
+    def get_counts(self, request, pk):
+
+        '''
+            Returns insights for repo
+        '''
+
+        counts = []
+        objs = []
+        for item in Commit.objects.all().values('author'):
+            username = User.objects.filter(id=item['author'])[0].username
+
+            objs.append(username)
+
+        for k,v in Counter(objs).items():
+            counts.append((k,v))
+        return Response(counts)
 
 
 class TeamViewSet(GenericViewSet,  # generic view functionality
