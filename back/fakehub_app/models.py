@@ -15,7 +15,7 @@ class User(AbstractUser):
 
 class Team(models.Model):
     name = models.CharField(max_length=100)
-    members = models.ManyToManyField(User)
+    members = models.ManyToManyField(User,default=None, blank=True, null=True)
     owner = models.ForeignKey(User, on_delete=models.CASCADE,related_name='team_owner')
 
     def __str__(self):

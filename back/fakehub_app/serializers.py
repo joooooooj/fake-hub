@@ -13,8 +13,14 @@ class TeamSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Team
-        fields = ['name', 'members', 'id','owner']
+        fields = ['name', 'members', 'id', 'owner']
         depth = 1
+
+
+class TeamSaveSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Team
+        fields = ['name', 'members', 'owner']
 
 
 class RepositorySerializer(serializers.ModelSerializer):
@@ -63,7 +69,7 @@ class CommitSerializer(serializers.ModelSerializer):
     class Meta:
         model = Commit
         fields = ('description', 'code', 'committed_at', 'tag', 'branch', 'author')
-        depth=1
+        depth = 1
 
 
 class PageSerializer(serializers.ModelSerializer):
