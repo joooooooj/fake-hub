@@ -24,13 +24,6 @@ class CustomObtainAuthToken(ObtainAuthToken):
         return Response({'token': token.key, 'id': token.user_id})
 
 
-class CustomObtainAuthToken(ObtainAuthToken):
-    def post(self, request, *args, **kwargs):
-        response = super(CustomObtainAuthToken, self).post(request, *args, **kwargs)
-        token = Token.objects.get(key=response.data['token'])
-        return Response({'token': token.key, 'id': token.user_id})
-
-
 class MilestoneViewSet(GenericViewSet,
                        CreateModelMixin,
                        RetrieveModelMixin,
@@ -181,7 +174,7 @@ class CommitViewSet(GenericViewSet,
             Returns branches for the specific repo
         '''
         # many == VISE OD JEDNOG IMA U REZULTATIMA FILTRIRANJA
-        return Response(CommitSerializer(Commit.objects.filter(branch__repository__id=pk), many=True).data)
+        return Response(CommitSerializer(Commit.objects.all(), many=True).data)
 
 
 class TeamViewSet(GenericViewSet,  # generic view functionality
@@ -195,12 +188,33 @@ class TeamViewSet(GenericViewSet,  # generic view functionality
     queryset = Team.objects.all()
     authentication_classes = (TokenAuthentication,)
 
+    def get_permissions(self):
+        print(self.request.data)
+        # allow full access to authenticated users, but allow read-only access to unauthenticated users
+        self.permission_classes = [IsAuthenticatedOrReadOnly]
+        return super(TeamViewSet, self).get_permissions()
+
     @action(detail=True, methods=['get'], url_path='user', url_name='user')
-    def commits_by_branch(self, request, pk):
+    def teams_by_user(self, request, pk):
         '''
             Returns teams for the specific user
         '''
 
+        return Response(TeamSerializer(Team.objects.filter(members__id=pk), many=True).data)
+
+    @action(detail=True, methods=['post'], url_path='leave', url_name='leave')
+    def leave_team(self, request, pk):
+        '''
+            Leave team
+        '''
+
+        team = Team.objects.filter(id=pk)[0]
+        print(team)
+        ids = []
+        for m in request.data['members']:
+            ids.append(m['id'])
+        team.members.set(ids)
+        Team.save(team)
         return Response(TeamSerializer(Team.objects.filter(members__id=pk), many=True).data)
 
 
@@ -333,7 +347,6 @@ class TaskViewSet(GenericViewSet,
                   ListModelMixin,
                   DestroyModelMixin
                   ):
-
     serializers = {
         'default': TaskSerializer,
         'create': TaskSaveSerializer
