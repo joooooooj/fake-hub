@@ -13,6 +13,7 @@ import NewRepo from "./components/repositories/NewRepo";
 import AddEditPage from "./components/wiki/AddEditPage";
 import AddEditProject from "./components/projects/AddEditProject";
 import Project from "./components/projects/Project";
+import AddEditTeam from "./components/teams/AddEditTeam";
 
 export default function Routes(props) {
 
@@ -44,6 +45,8 @@ export default function Routes(props) {
                     <Route exact path="/template/newRepository" component={() => <NewRepo/>}/>
                     {/* TEAMS */}
                     <Route exact path="/template/teams" component={() => <Teams user={props.user}/>}/>
+                    <Route exact path="/template/edit-team/:id/" component={(props) => <AddEditTeam {...props} /> } />
+                    <Route exact path="/template/new-team" component={(props) => <AddEditTeam {...props} /> } />
 
                     {/* WIKI */}
                     <Route exact path="/template/repository/:id/new-wiki-page" component={(props) => <AddEditPage {...props} user={props.user}/>}/>
