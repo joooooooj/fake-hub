@@ -424,7 +424,7 @@ class FileViewSet(GenericViewSet,
     def files_by_task(self, request, pk):
         return Response(FileSerializer(File.objects.filter(task__id=pk), many=True).data)
 
-    @action(detail=True, methods=['get'], url_path='task', url_name='task')
+    @action(detail=True, methods=['get'], url_path='page', url_name='page')
     def files_by_page(self, request, pk):
         return Response(FileSerializer(File.objects.filter(page__id=pk), many=True).data)
 
