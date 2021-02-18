@@ -43,6 +43,7 @@ export default function Routes(props) {
                     <Route exact path="/template/repositories" component={(props) => <Repositories {...props} user={props.user}/>}/>
                     <Route exact path="/template/repository/:id" component={(props) => <Repository {...props} user={props.user}/>}/>
                     <Route exact path="/template/newRepository" component={() => <NewRepo/>}/>
+
                     {/* TEAMS */}
                     <Route exact path="/template/teams" component={() => <Teams user={props.user}/>}/>
                     <Route exact path="/template/edit-team/:id/" component={(props) => <AddEditTeam {...props} /> } />

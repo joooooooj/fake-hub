@@ -10,6 +10,7 @@ import Wiki from "../wiki/Wiki";
 import Settings from "../repositories/Settings"
 import 'react-tabs/style/react-tabs.css';
 import Commits from "../commits/Commits";
+import Insights from "../insights/Insights";
 
 export default function Repository(props) {
 
@@ -84,6 +85,7 @@ export default function Repository(props) {
                 </TabPanel>
                 <TabPanel>
                     <h2>Insights</h2>
+                    <Insights {...props}  repo={repository}/>
                 </TabPanel>
                 <TabPanel>
                     <h2>Settings</h2>

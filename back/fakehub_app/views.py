@@ -177,6 +177,14 @@ class CommitViewSet(GenericViewSet,
         # many == VISE OD JEDNOG IMA U REZULTATIMA FILTRIRANJA
         return Response(CommitSerializer(Commit.objects.all(), many=True).data)
 
+    @action(detail=True, methods=['get'], url_path='insights', url_name='insights')
+    def get_insights(self, request, pk):
+        '''
+            Returns insights for repo
+        '''
+
+        return Response('{"name":"insight"}')
+
 
 class TeamViewSet(GenericViewSet,  # generic view functionality
 
