@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from "react";
 import Milestone from "./Milestone";
+import {Button} from "react-bootstrap";
 
 export default function Milestones(props) {
     const [milestones, setMilestones] = useState();
@@ -66,9 +67,19 @@ export default function Milestones(props) {
         }, 500)
     }
 
+    const handleCreateNewMilestone = () => {
+        props.history.push("/template/repository/" + props.match.params.id + "/new-milestone");
+    }
+
+    const handleEditMilestone = (milestone) => {
+        props.history.push("/template/repository/" + props.match.params.id + "/edit-milestone/" + milestone.id + '/');
+    }
+
     return (
         <div className='w-100 pt-4'>
             <div style={{maxWidth: '1000px', margin: '0 auto'}}>
+                <Button variant="success" className="float-right mb-3"
+                        onClick={() => handleCreateNewMilestone()}>New</Button>
                 {
                     milestones &&
                     milestones.map((milestone, index) => {
@@ -78,6 +89,7 @@ export default function Milestones(props) {
                             milestone={milestone}
                             delete={handleDeleteMilestone}
                             close={handleCloseMilestone}
+                            edit={handleEditMilestone}
                         />
                     })
                 }
