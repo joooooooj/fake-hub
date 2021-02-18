@@ -18,7 +18,7 @@ def save_branches(branches, repo_id):
 
     f.write('[')
     for branch in branches:
-        f.write('{"model": "fakehub_app.Commit",' +
+        f.write('{"model": "fakehub_app.Branch",' +
                 '"pk": ' + str(counter) + ',' +
                 '"fields":' +
                 '{' + ' "name" : "' + branch + '",' +
