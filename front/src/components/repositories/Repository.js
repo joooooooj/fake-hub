@@ -9,6 +9,7 @@ import Projects from "../projects/Projects";
 import Wiki from "../wiki/Wiki";
 import Settings from "../repositories/Settings"
 import 'react-tabs/style/react-tabs.css';
+import Commits from "../commits/Commits";
 
 export default function Repository(props) {
 
@@ -43,6 +44,7 @@ export default function Repository(props) {
         <Container fluid className="ml-3">
             <Tabs>
                 <TabList>
+                    <Tab>Commits</Tab>
                     <Tab>Branches</Tab>
                     <Tab>Labels</Tab>
                     <Tab>Milestones</Tab>
@@ -54,8 +56,12 @@ export default function Repository(props) {
                 </TabList>
 
                 <TabPanel>
+                    <h2>Commits  </h2>
+                    <Commits {...props} repo={repository}/>
+                </TabPanel>
+                <TabPanel>
                     <h2>Branches</h2>
-                    <Branches/>
+                    <Branches  {...props} repo={repository}/>
                 </TabPanel>
                 <TabPanel>
                     <h2>Labels</h2>

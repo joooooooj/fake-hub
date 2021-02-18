@@ -1,17 +1,17 @@
 import React, {useEffect, useState} from "react";
 import {Button} from "react-bootstrap";
 import Team from "../teams/Team";
-import Branch from "./Branch";
+import Commit from "./Commit";
 
-export default function Branches(props) {
+export default function Commits(props) {
 
-    const [branches, setBranches] = useState();
+    const [commits, setCommits] = useState();
 
 
     useEffect(() => {
 
         console.log(props)
-        fetch('/api/branch/'+props.match?.params?.id+'/repo', {
+        fetch('/api/commit/'+props.match?.params?.id+'/repo', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -19,7 +19,7 @@ export default function Branches(props) {
         })
             .then(response => response.json())
             .then(data => {
-                setBranches(data);
+                setCommits(data);
                 console.log('Success:', data);
             })
             .catch((error) => {
@@ -35,12 +35,12 @@ export default function Branches(props) {
                 {/*<Button variant="success" className="float-right mb-3"*/}
                 {/*        onClick={() => handleCreateNewTeam()}>New</Button>*/}
                 {
-                    branches &&
-                    branches?.map((branch, index) => {
-                        return <Branch
-                            key={branch.id}
+                    commits &&
+                    commits?.map((commit, index) => {
+                        return <Commit
+                            key={commit.id}
                             {...props}
-                            branch={branch}
+                            commit={commit}
                             // delete={handleDeleteTeam}
                             // edit={handleEditTeam}
                             // leave={handleLeaveTeam}

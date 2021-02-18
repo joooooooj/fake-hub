@@ -24,13 +24,6 @@ class CustomObtainAuthToken(ObtainAuthToken):
         return Response({'token': token.key, 'id': token.user_id})
 
 
-class CustomObtainAuthToken(ObtainAuthToken):
-    def post(self, request, *args, **kwargs):
-        response = super(CustomObtainAuthToken, self).post(request, *args, **kwargs)
-        token = Token.objects.get(key=response.data['token'])
-        return Response({'token': token.key, 'id': token.user_id})
-
-
 class MilestoneViewSet(GenericViewSet,
                        CreateModelMixin,
                        RetrieveModelMixin,
@@ -181,7 +174,7 @@ class CommitViewSet(GenericViewSet,
             Returns branches for the specific repo
         '''
         # many == VISE OD JEDNOG IMA U REZULTATIMA FILTRIRANJA
-        return Response(CommitSerializer(Commit.objects.filter(branch__repository__id=pk), many=True).data)
+        return Response(CommitSerializer(Commit.objects.all(), many=True).data)
 
 
 class TeamViewSet(GenericViewSet,  # generic view functionality

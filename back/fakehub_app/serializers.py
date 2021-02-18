@@ -56,12 +56,14 @@ class BranchSerializer(serializers.ModelSerializer):
     class Meta:
         model = Branch
         fields = ('name', 'author', 'repository', 'status')
+        depth = 1
 
 
 class CommitSerializer(serializers.ModelSerializer):
     class Meta:
         model = Commit
         fields = ('description', 'code', 'committed_at', 'tag', 'branch', 'author')
+        depth=1
 
 
 class PageSerializer(serializers.ModelSerializer):
