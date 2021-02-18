@@ -97,6 +97,7 @@ export default function AddEditPage(props) {
         for (let i = 0; i < files.length; ++i) {
             const formData = new FormData();
             formData.append('name', files[i]);
+            formData.append('page', page.id);
             fetch('/api/file/', {
                 method: "POST",
                 headers: {
