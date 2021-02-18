@@ -28,7 +28,7 @@ export default function Wiki(props) {
     }
 
     const handleCreateNewPage = () => {
-        props.history.push("/repository/" + props.match.params.id + "/new-wiki-page");
+        props.history.push("/template/repository/" + props.match.params.id + "/new-wiki-page");
     }
 
     const handleDeletePage = (page) => {
