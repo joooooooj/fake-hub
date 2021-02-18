@@ -10,9 +10,11 @@ export default function Project(props) {
     const [columns, setColumns] = useState([])
     const [tasks, setTasks] = useState([])
 
-    const [show, setShow] = useState(false);
+
     const [selected, setSelected] = useState(null)
 
+    ////modal
+    const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = (name) => {
         setSelected(name)
@@ -39,7 +41,7 @@ export default function Project(props) {
                 console.error('Error:', error);
             });
     }
-
+    //
 
     useEffect(() => {
         console.log(props)

@@ -46,7 +46,7 @@ export default function Routes(props) {
                     {/* TEAMS */}
                     <Route exact path="/template/teams" component={() => <Teams user={props.user}/>}/>
                     <Route exact path="/template/edit-team/:id/" component={(props) => <AddEditTeam {...props} /> } />
-                    <Route exact path="/template/new-team" component={(props) => <AddEditTeam {...props} /> } />
+                    <Route exact path="/template/new-team" component={(props) => <AddEditTeam {...props} user={props.user}/> } />
 
                     {/* WIKI */}
                     <Route exact path="/template/repository/:id/new-wiki-page" component={(props) => <AddEditPage {...props} user={props.user}/>}/>

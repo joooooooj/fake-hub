@@ -1,4 +1,5 @@
 from django.http import JsonResponse
+from rest_framework import status
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.response import Response
 from rest_framework.decorators import action
@@ -14,7 +15,7 @@ from .models import Team, User, Label, Repository, Project, Milestone, Task, Bra
     Column
 from .serializers import TeamSerializer, ProjectSerializer, LabelSerializer, RepositorySerializer, UserSerializer, \
     MilestoneSerializer, BranchSerializer, CommitSerializer, PageSerializer, FileSerializer, \
-    TaskSerializer, ColumnSerializer, RepoSaveSerializer, TaskSaveSerializer
+    TaskSerializer, ColumnSerializer, RepoSaveSerializer, TaskSaveSerializer, TeamSaveSerializer
 
 
 class CustomObtainAuthToken(ObtainAuthToken):
@@ -164,7 +165,7 @@ class CommitViewSet(GenericViewSet,
         '''
             Returns branches for the specific user
         '''
-        # many == VISE OD JEDNOG IMA U REZULTATIMA FILTRIRANJA
+        # many == VISE OD JEDNpostOG IMA U REZULTATIMA FILTRIRANJA
         return Response(CommitSerializer(Commit.objects.filter(author__id=pk), many=True).data)
 
     #  http://localhost:8000/commit/1/repo/
@@ -178,7 +179,7 @@ class CommitViewSet(GenericViewSet,
 
 
 class TeamViewSet(GenericViewSet,  # generic view functionality
-                  CreateModelMixin,  # handles POSTs
+
                   RetrieveModelMixin,  # handles GETs for 1 Team
                   UpdateModelMixin,  # handles PUTs and PATCHes
                   ListModelMixin,  # handles GETs for many Teams
@@ -187,6 +188,34 @@ class TeamViewSet(GenericViewSet,  # generic view functionality
     serializer_class = TeamSerializer
     queryset = Team.objects.all()
     authentication_classes = (TokenAuthentication,)
+
+    def create(self, request, *args, **kwargs):
+        if request.method != 'PUT':
+            team = Team()
+            team.name = request.data['name']
+            team.owner = User.objects.filter(id=request.data['owner'])[0]
+
+            # serializer = TeamSaveSerializer(data=team)
+            # serializer.is_valid(raise_exception=True)
+
+            print(request.data['members'])
+            users = User.objects.filter(username__in=request.data['members'])
+            instance = Team.objects.create(name=request.data['name'], owner_id=request.data['owner'])
+
+            instance.members.set(users)
+
+        return Response({}, status=status.HTTP_201_CREATED)
+
+    def update(self, request, *args, **kwargs):
+        print('PUT')
+        print(request.data['members'])
+        users = User.objects.filter(username__in=request.data['members'])
+        team = Team.objects.filter(id=request.data['id'])[0]
+        team.members.set(users)
+        print(team.members)
+        Team.save(team)
+        print(Team.objects.filter(id=request.data['id']))
+        return Response({}, status=status.HTTP_201_CREATED)
 
     def get_permissions(self):
         print(self.request.data)
