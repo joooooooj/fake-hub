@@ -17,7 +17,7 @@ from .models import Team, User, Label, Repository, Project, Milestone, Task, Bra
     Column
 from .serializers import TeamSerializer, ProjectSerializer, LabelSerializer, RepositorySerializer, UserSerializer, \
     MilestoneSerializer, BranchSerializer, CommitSerializer, PageSerializer, FileSerializer, \
-    TaskSerializer, ColumnSerializer, RepoSaveSerializer, TaskSaveSerializer, TeamSaveSerializer, \
+    TaskSerializer, ColumnSerializer, RepoSaveSerializer, TaskSaveSerializer, TeamSaveSerializer, ColumnSaveSerializer, \
     MilestoneSaveSerializer
 
 
@@ -267,7 +267,6 @@ class TeamViewSet(GenericViewSet,  # generic view functionality
         return Response({}, status=status.HTTP_201_CREATED)
 
     def update(self, request, *args, **kwargs):
-        print('PUT')
         print(request.data['members'])
         users = User.objects.filter(username__in=request.data['members'])
         team = Team.objects.filter(id=request.data['id'])[0]
@@ -330,13 +329,20 @@ class RepositoryViewSet(GenericViewSet,
           Creates, Updates and Retrieves - Repositories
        """
 
+
+
+    authentication_classes = (TokenAuthentication,)
+    queryset = Repository.objects.all()
+
     serializers = {
         'default': RepositorySerializer,
         'create': RepoSaveSerializer
     }
 
-    authentication_classes = (TokenAuthentication,)
-    queryset = Repository.objects.all()
+    def get_serializer_class(self):
+        if self.action in ['create']:
+            return RepoSaveSerializer
+        return RepositorySerializer
 
     def get_permissions(self):
         print(self.request.data)
@@ -344,10 +350,7 @@ class RepositoryViewSet(GenericViewSet,
         self.permission_classes = [IsAuthenticatedOrReadOnly]
         return super(RepositoryViewSet, self).get_permissions()
 
-    def get_serializer_class(self):
-        if self.action in ['create']:
-            return RepoSaveSerializer
-        return RepositorySerializer
+
 
     @action(detail=True, methods=['get'], url_path='user', url_name='user')
     def repos_for_user(self, request, pk):
@@ -487,6 +490,18 @@ class ColumnViewSet(GenericViewSet,
                     ):
     serializer_class = ColumnSerializer
     queryset = Column.objects.all()
+
+    serializers = {
+        'default': ColumnSerializer,
+        'create': ColumnSaveSerializer
+    }
+
+    def get_serializer_class(self):
+        if self.action in ['create']:
+            return ColumnSaveSerializer
+        return ColumnSerializer
+
+
 
     def get_permissions(self):
         print(self.request.data)
