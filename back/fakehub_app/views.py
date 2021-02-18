@@ -56,6 +56,20 @@ class MilestoneViewSet(GenericViewSet,
             return MilestoneSaveSerializer
         return MilestoneSerializer
 
+    def update(self, request, *args, **kwargs):
+        print('PUT')
+        print(request.data['labels'])
+        labels = Label.objects.filter(id__in=request.data['labels'])
+        milestone = Milestone.objects.filter(id=request.data['id'])[0]
+        milestone.labels.set(labels)
+        milestone.title = request.data['title'];
+        milestone.description = request.data['description']
+        milestone.dueDate = request.data['dueDate']
+        milestone.status = request.data['status']
+        print(milestone.labels)
+        Milestone.save(milestone)
+        return Response({}, status=status.HTTP_204_NO_CONTENT)
+
     #  http://localhost:8000/milestone/1/repo/
     @action(detail=True, methods=['get'], url_path='repo', url_name='repo')
     def milestones_by_repository(self, request, pk):
