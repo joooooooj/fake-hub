@@ -110,3 +110,11 @@ class ColumnSerializer(serializers.ModelSerializer):
         model = Column
         fields = ('name', 'project', 'id')
         depth = 1
+
+
+class ColumnSaveSerializer(serializers.ModelSerializer):
+    project = ProjectSerializer
+
+    class Meta:
+        model = Column
+        fields = ('name', 'project', 'id')

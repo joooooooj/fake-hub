@@ -12,6 +12,38 @@ export default function Project(props) {
 
 
     const [selected, setSelected] = useState(null)
+    
+    //newColumn
+    const [show2, setShow2] = useState(false);
+    const handleCloseColumn = (name) => {
+        setShow2(false)
+    }
+    const handleSaveColumn = (name) => {
+        fetch('/api/column/' , {
+
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Token ' + JSON.parse(localStorage.getItem("user")).token,
+            },
+            body: JSON.stringify({"name": document.getElementById("newColumn").value, "project":props.match?.params?.id2})
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Success:', data);
+                setShow2(false)
+                const cols = columns
+                cols.push(data)
+                setColumns(cols)
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+    }
+    const handleShowColumn = (name) => {
+        setShow2(true);
+    }
+    //
 
     ////modal
     const [show, setShow] = useState(false);
@@ -226,6 +258,7 @@ export default function Project(props) {
 
 
     return (
+
         <div className="project">
 
             <Modal show={show} onHide={handleClose}
@@ -246,11 +279,33 @@ export default function Project(props) {
                 </Modal.Footer>
             </Modal>
 
+            <Modal show={show2} onHide={handleCloseColumn}
+
+            >
+                <Modal.Header closeButton>
+                    <Modal.Title>New column</Modal.Title>
+
+                </Modal.Header>
+                <Modal.Body><input type="text" id="newColumn" /></Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={() => handleCloseColumn()}>
+                        Close
+                    </Button>
+                    <Button variant="primary" onClick={() => handleSaveColumn()}>
+                        Save Changes
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+
 
             <h2>{project?.name}</h2>
             <h4>repository : {repository?.name}</h4>
             <span>{project?.description}</span>
+            <Button variant="success" onClick={() => handleShowColumn()}>
+                newColumn
+            </Button>
             <Container>
+
                 <Row>
                     <DragDropContext onDragEnd={onDragEnd}>
                         {columns?.map((column, index) => (
