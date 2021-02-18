@@ -119,6 +119,9 @@ class Column(models.Model):
     name = models.CharField(max_length=100)
     project = models.ForeignKey(Project, on_delete=models.CASCADE, default=None, blank=True, null=True)
 
+    def __str__(self):
+        return str(self.name)
+
 
 class Task(models.Model):
     title = models.CharField(max_length=100)
@@ -137,6 +140,9 @@ class Task(models.Model):
     members = models.ManyToManyField(User,default=None, blank=True, null=True)
     repository = models.ForeignKey(Repository, on_delete=models.CASCADE)
     column = models.ForeignKey(Column, on_delete=models.CASCADE, default=None, blank=True, null=True)
+
+    def __str__(self):
+        return str(self.title)
 
 
 class File(models.Model):

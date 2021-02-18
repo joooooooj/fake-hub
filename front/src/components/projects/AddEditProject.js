@@ -11,8 +11,9 @@ export default function AddEditProject(props) {
 
     useEffect(() => {
         console.log(props)
-        if (props?.location?.route?.contains("new-project"))
+        if (props?.location?.pathname?.includes("new-project")) {
             setProjectPresent(false)
+        }
         else {
             fetch("/api/project/" + props?.match?.params?.id2, {
                 method: "GET",
@@ -33,20 +34,27 @@ export default function AddEditProject(props) {
 
 
     const handleEditProject = (data) => {
+        project.name = data.name
+        if(data.description && data.description!=""){
+            project.description=data.description
+        }
         fetch("/api/project/" + project.id + "/", {
             method: "PUT",
             headers: {
                 'Content-Type': 'application/json',
                 "Authorization": "Token " + JSON.parse(localStorage.getItem("user")).token
             },
-            body: JSON.stringify(data)
+            body: JSON.stringify(project)
         })
-            .then(response => response.json())
+            .then(response => response.json()
+            )
             .then(data => {
                 console.log(data);
+                setProject(null)
             })
             .catch(error => {
                 console.error(error);
+                setProject(null)
             });
     }
 
@@ -80,8 +88,8 @@ export default function AddEditProject(props) {
                 projectPresent === true && project &&
 
                 <Form className="w-100 d-block" style={{"padding": "0 50px 100px"}}
-                      onSubmit={handleSubmit(handleCreateNewProject)}>
-                    <span className="w-100 text-left" style={{fontSize: "36px"}}> Create a new project</span>
+                      onSubmit={handleSubmit(handleEditProject)}>
+                    <span className="w-100 text-left" style={{fontSize: "36px"}}> Edit project</span>
                     <Form.Group className="text-left mt-3">
                         <Form.Label>Project name</Form.Label>
                         <Form.Control
@@ -127,7 +135,6 @@ export default function AddEditProject(props) {
                     </Form.Group>
                     <Form.Group className="text-left mt-5">
                         <Form.Label>Description</Form.Label>
-                        projectPresent===false &&
                         <Form.Control
                             name="description"
                             as="textarea" className="w-100 text-light bg-dark"

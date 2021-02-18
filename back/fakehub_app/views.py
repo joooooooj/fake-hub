@@ -14,8 +14,7 @@ from .models import Team, User, Label, Repository, Project, Milestone, Task, Bra
     Column
 from .serializers import TeamSerializer, ProjectSerializer, LabelSerializer, RepositorySerializer, UserSerializer, \
     MilestoneSerializer, BranchSerializer, CommitSerializer, PageSerializer, FileSerializer, \
-    TaskSerializer, ColumnSerializer, RepoSaveSerializer
-
+    TaskSerializer, ColumnSerializer, RepoSaveSerializer, TaskSaveSerializer
 
 
 class CustomObtainAuthToken(ObtainAuthToken):
@@ -334,8 +333,23 @@ class TaskViewSet(GenericViewSet,
                   ListModelMixin,
                   DestroyModelMixin
                   ):
-    serializer_class = TaskSerializer
+
+    serializers = {
+        'default': TaskSerializer,
+        'create': TaskSaveSerializer
+    }
     queryset = Task.objects.all()
+
+    def get_permissions(self):
+        print(self.request.body)
+        # allow full access to authenticated users, but allow read-only access to unauthenticated users
+        self.permission_classes = [IsAuthenticatedOrReadOnly]
+        return super(TaskViewSet, self).get_permissions()
+
+    def get_serializer_class(self):
+        if self.action in ['update']:
+            return TaskSaveSerializer
+        return TaskSerializer
 
     @action(detail=True, methods=['get'], url_path='repository', url_name='repository')
     def tasks_by_repository(self, request, pk):
@@ -371,6 +385,12 @@ class ColumnViewSet(GenericViewSet,
                     ):
     serializer_class = ColumnSerializer
     queryset = Column.objects.all()
+
+    def get_permissions(self):
+        print(self.request.data)
+        # allow full access to authenticated users, but allow read-only access to unauthenticated users
+        self.permission_classes = [IsAuthenticatedOrReadOnly]
+        return super(ColumnViewSet, self).get_permissions()
 
     @action(detail=True, methods=['get'], url_path='project', url_name='project')
     def columns_by_project(self, request, pk):

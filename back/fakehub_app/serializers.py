@@ -24,12 +24,11 @@ class RepositorySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Repository
-        fields = ['id', 'name', 'date_created', 'collaborators', 'team', 'owner','description']
+        fields = ['id', 'name', 'date_created', 'collaborators', 'team', 'owner', 'description']
         depth = 1
 
 
 class RepoSaveSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Repository
         fields = ['id', 'name', 'date_created', 'collaborators', 'team', 'owner', 'description']
@@ -86,8 +85,14 @@ class TaskSerializer(serializers.ModelSerializer):
     class Meta:
         model = Task
         fields = ('title', 'created_at', 'description', 'status', 'difficulty', 'closed_at',
-                  'due_date', 'changes', 'milestone', 'labels', 'members', 'repository', 'column','id')
+                  'due_date', 'changes', 'milestone', 'labels', 'members', 'repository', 'column', 'id')
         depth = 1
+
+
+class TaskSaveSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Task
+        fields = ('column', 'id')
 
 
 class ColumnSerializer(serializers.ModelSerializer):
@@ -95,5 +100,5 @@ class ColumnSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Column
-        fields = ('name', 'project','id')
+        fields = ('name', 'project', 'id')
         depth = 1
