@@ -47,7 +47,7 @@ export default function AddEditPage(props) {
             .catch(error => {
                 console.error(error);
             });
-        props.history.push("/repository/" + props.match.params.id);
+        props.history.push("/template/repository/" + props.match.params.id);
     }
 
     const handleEditPage = (data) => {

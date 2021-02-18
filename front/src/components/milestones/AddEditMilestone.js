@@ -43,6 +43,8 @@ export default function AddEditMilestone(props) {
     const handleCreateNewMilestone = (data) => {
         data.repository = JSON.parse(props.match.params.id);
         data.status = 'Open';
+        data.dueDate = data.dueDate + 'T00:00:00Z';
+        data.id = props.match.params.milestoneId;
 
         if (milestone) {
             handleEditMilestone(data);
@@ -138,7 +140,9 @@ export default function AddEditMilestone(props) {
                 </Form.Group>
                 <Form.Group className="text-left mt-5">
                     <Form.Label>Milestone labels</Form.Label>
+                    {milestone &&
                     <Form.Control
+                        defaultValue={milestone.labels}
                         name="labels"
                         as="select" multiple
                         className="w-100  bg-dark"
@@ -146,7 +150,7 @@ export default function AddEditMilestone(props) {
                             'minHeight': '100px', 'borderRadius': '10px',
                             'marginTop': '10px', 'maxHeight': '300px'
                         }}
-                        ref={register({required: true})}>
+                        ref={register({required: false})}>
                         {labels &&
                         labels.map((item, index) => {
                             return (<option className="text-light" key={index} value={item.id}
@@ -155,11 +159,56 @@ export default function AddEditMilestone(props) {
                         })
                         }
                     </Form.Control>
+                    }
+                    {
+                        !milestone &&
+                        <Form.Control
+                            name="labels"
+                            as="select" multiple
+                            className="w-100  bg-dark"
+                            style={{
+                                'minHeight': '100px', 'borderRadius': '10px',
+                                'marginTop': '10px', 'maxHeight': '300px'
+                            }}
+                            ref={register({required: false})}>
+                            {labels &&
+                            labels.map((item, index) => {
+                                return (<option className="text-light" key={index} value={item.id}
+                                                label={item.label}>{item.name}</option>)
+
+                            })
+                            }
+                        </Form.Control>
+                    }
                 </Form.Group>
-                {/*<Form.Group className="text-left mt-5">*/}
-                {/*    <Form.Label>Milestone due date</Form.Label>*/}
-                {/*    <Form.Control as="time" />*/}
-                {/*</Form.Group>*/}
+                <Form.Group className="text-left mt-5">
+                    <Form.Label>Milestone due date</Form.Label>
+                    {
+                        milestone &&
+                        <Form.Control
+                            defaultValue={milestone.dueDate}
+                            name="dueDate"
+                            type="date"
+                            className="w-100 text-light bg-dark"
+                            style={{
+                                'height': '50px', 'borderRadius': '10px',
+                                'marginTop': '10px',
+                            }}
+                            ref={register({required: false})}/>
+                    }
+                    {
+                        !milestone &&
+                        <Form.Control
+                            name="dueDate"
+                            type="date"
+                            className="w-100 text-light bg-dark"
+                            style={{
+                                'height': '50px', 'borderRadius': '10px',
+                                'marginTop': '10px',
+                            }}
+                            ref={register({required: false})}/>
+                    }
+                </Form.Group>
 
                 <Button variant="success"
                         type="submit"

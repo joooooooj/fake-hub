@@ -47,6 +47,10 @@ export default function Milestones(props) {
 
     const handleCloseMilestone = (milestone) => {
         milestone.status = milestone.status === 'Closed' ? 'Open' : 'Closed';
+        milestone.id = JSON.stringify(milestone.id);
+        milestone.labels = milestone.labels.map(label => {
+            return label.id;
+        });
         fetch("/api/milestone/" + milestone.id + '/', {
             method: "PUT",
             headers: {

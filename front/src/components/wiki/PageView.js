@@ -4,7 +4,7 @@ import {Button} from "react-bootstrap";
 export default function PageView(props) {
 
     const handleEditPage = () => {
-        props.history.push("/repository/" + props.match.params.id + "/edit-wiki-page/" + props.page.id);
+        props.history.push("/template/repository/" + props.match.params.id + "/edit-wiki-page/" + props.page.id);
     }
 
     const handleDeletePage = () => {
