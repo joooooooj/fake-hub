@@ -76,7 +76,6 @@ export default function Repository(props) {
                         <Milestones/>
                     </TabPanel>
                     <TabPanel>
-                        <h2>Issues</h2>
                         <Issues/>
                     </TabPanel>
                     <TabPanel>

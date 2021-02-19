@@ -36,26 +36,26 @@ export default function Routes(props) {
             {   props.user &&
                 <>
                     {/* PROFILE */}
-                    <Route exact path="/template/profile" component={(props) => <Profile {...props} user={props.user}/>}/>
+                    <Route exact path="/template/profile" component={() => <Profile {...props} user={props.user}/>}/>
                     <Route exact path="/template/profileRepos/" component={() => <ProfileRepositories {...props} user={props.user}/>}/>
                     <Route exact path="/template/settings/" component={() => <Settings {...props} user={props.user}/>}/>
                     {/* REPOSITORY */}
-                    <Route exact path="/template/repositories" component={(props) => <Repositories {...props} user={props.user}/>}/>
-                    <Route exact path="/template/repository/:id" component={(props) => <Repository {...props} user={props.user}/>}/>
+                    <Route exact path="/template/repositories" component={() => <Repositories user={props.user}/>}/>
+                    <Route exact path="/template/repository/:id" component={(params) => <Repository {...params} user={props.user}/>}/>
                     <Route exact path="/template/newRepository" component={() => <NewRepo/>}/>
 
                     {/* TEAMS */}
                     <Route exact path="/template/teams" component={() => <Teams user={props.user}/>}/>
-                    <Route exact path="/template/edit-team/:id/" component={(props) => <AddEditTeam {...props} /> } />
-                    <Route exact path="/template/new-team" component={(props) => <AddEditTeam {...props} user={props.user}/> } />
+                    <Route exact path="/template/edit-team/:id/" component={(params) => <AddEditTeam {...params} /> } />
+                    <Route exact path="/template/new-team" component={() => <AddEditTeam user={props.user}/> } />
 
                     {/* WIKI */}
-                    <Route exact path="/template/repository/:id/new-wiki-page" component={(props) => <AddEditPage {...props} user={props.user}/>}/>
-                    <Route exact path="/template/repository/:id/edit-wiki-page/:pageId" component={(props) => <AddEditPage {...props} user={props.user}/>}/>
+                    <Route exact path="/template/repository/:id/new-wiki-page" component={(params) => <AddEditPage {...params} user={props.user}/>}/>
+                    <Route exact path="/template/repository/:id/edit-wiki-page/:pageId" component={(params) => <AddEditPage {...params} user={props.user}/>}/>
                     {/* PROJECT */}
-                    <Route exact path="/template/repository/:id/new-project" component={(props) => <AddEditProject {...props} user={props.user}/>}/>
-                    <Route exact path="/template/repository/:id/project/:id2" component={(props) => <Project {...props} user={props.user}/>}/>
-                    <Route exact path="/template/repository/:id/edit-project/:id2" component={(props) => <AddEditProject {...props} user={props.user}/>}/>
+                    <Route exact path="/template/repository/:id/new-project" component={(params) => <AddEditProject {...params} user={props.user}/>}/>
+                    <Route exact path="/template/repository/:id/project/:id2" component={(params) => <Project {...params} user={props.user}/>}/>
+                    <Route exact path="/template/repository/:id/edit-project/:id2" component={(params) => <AddEditProject {...params} user={props.user}/>}/>
                 </>
             }
         </Switch>

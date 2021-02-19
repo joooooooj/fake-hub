@@ -4,7 +4,7 @@ html, body, #root {
 
     .app {
         height: inherit;
-
+        overflow: auto;
     
         button {
             font-weight: bold;

@@ -9,14 +9,13 @@ export default function Branches(props) {
 
 
     useEffect(() => {
-
-        console.log(props)
-        fetch('/api/branch/'+props.match?.params?.id+'/repo', {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            }
-        })
+        if (props?.match?.params?.id){
+            fetch('/api/branch/'+props.match?.params?.id+'/repo', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
             .then(response => response.json())
             .then(data => {
                 setBranches(data);
@@ -25,7 +24,7 @@ export default function Branches(props) {
             .catch((error) => {
                 console.error('Error:', error);
             });
-
+        }
     }, [])
 
 

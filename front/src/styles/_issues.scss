@@ -1,0 +1,56 @@
+.issues {
+  .add-new {
+    display: flex;
+    justify-content: flex-end;
+
+    .btn-success {
+      width: 150px;
+    }
+  }
+
+  table {
+    background-color: #ccc;
+    border-radius: 10px;
+
+    thead {
+      visibility: hidden;
+      display: none;
+    }
+
+    tbody{
+      font-size: 22px;
+
+      tr {
+        td {
+          border: none;
+          font-weight: 500;
+        }
+
+        .issue {
+          padding-left: 40px;
+
+          .material-icons {
+            font-weight: 500;
+            font-size: 32px;
+          }
+          .issue-title {
+            font-weight: 700;
+          }
+          .issue-info {
+            font-size: 18px;
+            margin-left: 25px;
+          }
+        }
+
+        .button-td {
+          width: 200px;
+          vertical-align: middle;
+
+          button {
+            width: 150px;
+          }
+        }
+      }
+    }
+  }
+}
