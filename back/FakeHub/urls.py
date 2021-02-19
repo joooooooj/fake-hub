@@ -16,7 +16,7 @@ from django.views.generic import TemplateView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('login/', views.obtain_auth_token),
+    path('login/', views.obtain_auth_token ),
     path('api/',  include(('fakehub_app.urls','fakehub_app'),namespace='fakehub_app')),
     re_path(r'template\/.*', TemplateView.as_view(template_name='index.html')),
 
