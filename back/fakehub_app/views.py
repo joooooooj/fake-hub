@@ -361,6 +361,14 @@ class RepositoryViewSet(GenericViewSet,
 
         return Response(RepositorySerializer(Repository.objects.filter(owner__id=pk), many=True).data)
 
+    @action(detail=True, methods=['get'], url_path='team', url_name='team')
+    def repos_for_team(self, request, pk):
+        '''
+            Returns repos for the specific user
+        '''
+
+        return Response(RepositorySerializer(Repository.objects.filter(team__id=pk), many=True).data)
+
 
 class ProjectViewSet(GenericViewSet,
                      CreateModelMixin,

@@ -95,7 +95,7 @@ export default function Project(props) {
                     setProject(data);
                     console.log('Success:', data);
 
-                    fetch('/api/column/' + props.match.params.id2 + '/project', {
+                    fetch('/api/column/' + props.match?.params?.id2 + '/project', {
 
                         method: 'GET',
                         headers: {

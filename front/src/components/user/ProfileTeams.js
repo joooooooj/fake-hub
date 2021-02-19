@@ -1,13 +1,15 @@
 import React, {useEffect, useState} from "react";
 import {Button} from "react-bootstrap";
 import Team from "../teams/Team";
+import {Link} from "react-router-dom";
 
 export default function ProfileTeams(props) {
 
     const [teams, setTeams] = useState();
 
+
     const handleGetTeams = () => {
-        fetch('/api/team/'+ JSON.parse(localStorage.getItem("user")).id+'/user', {
+        fetch('/api/team/' + JSON.parse(localStorage.getItem("user")).id + '/user', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
@@ -20,6 +22,8 @@ export default function ProfileTeams(props) {
             .catch(error => {
                 console.error(error);
             });
+
+
     }
 
     const handleDeleteTeam = (team) => {
@@ -44,20 +48,20 @@ export default function ProfileTeams(props) {
 
     const handleLeaveTeam = (team) => {
         const temp = team
-        temp.members=team.members.filter((item) => item.id !== JSON.parse(localStorage.getItem("user")).id);
+        temp.members = team.members.filter((item) => item.id !== JSON.parse(localStorage.getItem("user")).id);
         console.log(temp.members)
 
-        fetch('/api/team/'+team.id+'/leave/', {
+        fetch('/api/team/' + team.id + '/leave/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 "Authorization": "Token " + JSON.parse(localStorage.getItem("user")).token
             },
-            body:JSON.stringify(temp)
+            body: JSON.stringify(temp)
         })
             .then(response => response.json())
             .then(data => {
-                fetch('/api/team/'+ JSON.parse(localStorage.getItem("user")).id+'/user', {
+                fetch('/api/team/' + JSON.parse(localStorage.getItem("user")).id + '/user', {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json'
@@ -89,7 +93,7 @@ export default function ProfileTeams(props) {
     useEffect(() => {
 
         console.log(props)
-        fetch('/api/team/'+JSON.parse(localStorage.getItem("user")).id+'/user', {
+        fetch('/api/team/' + JSON.parse(localStorage.getItem("user")).id + '/user', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -115,14 +119,14 @@ export default function ProfileTeams(props) {
                 {
                     teams &&
                     teams?.map((team, index) => {
-                        return <Team
-                            key={team.id}
-                            {...props}
-                            team={team}
-                            delete={handleDeleteTeam}
-                            edit={handleEditTeam}
-                            leave={handleLeaveTeam}
-                        />
+                        return <Team key={team.id}
+                                {...props}
+                                team={team}
+                                delete={handleDeleteTeam}
+                                edit={handleEditTeam}
+                                leave={handleLeaveTeam}
+                            />
+
                     })
                 }
             </div>
