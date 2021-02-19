@@ -49,13 +49,22 @@ class ProjectSerializer(serializers.ModelSerializer):
 class LabelSerializer(serializers.ModelSerializer):
     class Meta:
         model = Label
-        fields = ('name', 'description', 'color', 'repository')
+        fields = ('id', 'name', 'description', 'color', 'repository')
 
 
 class MilestoneSerializer(serializers.ModelSerializer):
+    labels = LabelSerializer
+
     class Meta:
         model = Milestone
-        fields = ('title', 'dueDate', 'description', 'status', 'labels', 'repository')
+        fields = ('id', 'title', 'dueDate', 'description', 'status', 'labels')
+        depth = 1
+
+
+class MilestoneSaveSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Milestone
+        fields = ('id', 'title', 'dueDate', 'description', 'status', 'labels', 'repository')
 
 
 class BranchSerializer(serializers.ModelSerializer):
@@ -110,3 +119,11 @@ class ColumnSerializer(serializers.ModelSerializer):
         model = Column
         fields = ('name', 'project', 'id')
         depth = 1
+
+
+class ColumnSaveSerializer(serializers.ModelSerializer):
+    project = ProjectSerializer
+
+    class Meta:
+        model = Column
+        fields = ('name', 'project', 'id')

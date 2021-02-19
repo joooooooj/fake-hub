@@ -50,6 +50,8 @@ export default function Issues(props) {
                         </div>
                         <div className="row issue-info">
                             #45 opened 5 days ago by TLazarevic
+                            <span className="material-icons">outlined_flag</span>
+                            one good milestone
                         </div>
                     </td>
                     <td className="button-td">

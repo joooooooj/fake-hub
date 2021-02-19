@@ -65,15 +65,13 @@ export default function Repository(props) {
                     </TabPanel>
                     <TabPanel>
                         <h2>Branches</h2>
-                        <Branches  {...props} repo={repository}/>
+                        <Branches/>
                     </TabPanel>
                     <TabPanel>
-                        <h2>Labels</h2>
-                        <Labels/>
+                        <Labels {...props} />
                     </TabPanel>
                     <TabPanel>
-                        <h2>Milestones</h2>
-                        <Milestones/>
+                        <Milestones {...props} />
                     </TabPanel>
                     <TabPanel>
                         <Issues/>
