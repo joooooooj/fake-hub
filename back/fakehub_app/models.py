@@ -15,7 +15,7 @@ class User(AbstractUser):
 
 class Team(models.Model):
     name = models.CharField(max_length=100)
-    members = models.ManyToManyField(User,default=None, blank=True, null=True)
+    members = models.ManyToManyField(User,default=None, blank=True)
     owner = models.ForeignKey(User, on_delete=models.CASCADE,related_name='team_owner')
 
     def __str__(self):
@@ -25,9 +25,9 @@ class Team(models.Model):
 class Repository(models.Model):
     name = models.CharField(max_length=100)
     date_created = models.DateTimeField(default=timezone.now, blank=True)
-    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='repo_owner', null=True)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='repo_owner', null=True, blank=True)
     team = models.ForeignKey(Team, on_delete=models.CASCADE, default=None, blank=True, null=True)
-    collaborators = models.ManyToManyField(User)
+    collaborators = models.ManyToManyField(User,blank=True)
     description = models.TextField(default=None, blank=True, null=True)
 
     def __str__(self):
@@ -75,7 +75,7 @@ def hash_code():
 
 class Commit(models.Model):
     description = models.TextField(default=None, blank=True, null=True)
-    code = models.CharField(max_length=64, unique=True, default=hash_code(), blank=True)  # hash code of the commit
+    code = models.CharField(max_length=64, unique=True, blank=True)  # hash code of the commit
     committed_at = models.DateTimeField(default=timezone.now)
     tag = models.CharField(max_length=100, default=None, blank=True, null=True)
     # git leaves dangling commits which later get deleted by garbage collection
@@ -137,8 +137,8 @@ class Task(models.Model):
     due_date = models.DateTimeField(default=None, blank=True, null=True)
     changes = models.TextField(default=None, blank=True, null=True)  # I dont remember what this was
     milestone = models.ForeignKey(Milestone, on_delete=models.CASCADE, default=None, blank=True, null=True)
-    labels = models.ManyToManyField(Label,default=None, blank=True, null=True)
-    members = models.ManyToManyField(User,default=None, blank=True, null=True)
+    labels = models.ManyToManyField(Label,default=None, blank=True)
+    members = models.ManyToManyField(User,default=None, blank=True)
     repository = models.ForeignKey(Repository, on_delete=models.CASCADE)
     column = models.ForeignKey(Column, on_delete=models.CASCADE, default=None, blank=True, null=True)
 
