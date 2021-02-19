@@ -215,6 +215,7 @@ class CommitViewSet(GenericViewSet,
             if username not in data['colab']:
                 data['colab'].append(username)
 
+
         data['info'] = CommitSerializer(Commit.objects.all(), many=True).data
 
         return Response(data)
@@ -360,6 +361,14 @@ class RepositoryViewSet(GenericViewSet,
 
         return Response(RepositorySerializer(Repository.objects.filter(owner__id=pk), many=True).data)
 
+    @action(detail=True, methods=['get'], url_path='team', url_name='team')
+    def repos_for_team(self, request, pk):
+        '''
+            Returns repos for the specific user
+        '''
+
+        return Response(RepositorySerializer(Repository.objects.filter(team__id=pk), many=True).data)
+
 
 class ProjectViewSet(GenericViewSet,
                      CreateModelMixin,
@@ -480,6 +489,22 @@ class TaskViewSet(GenericViewSet,
     def tasks_by_column(self, request, pk):
         return Response(TaskSerializer(Task.objects.filter(column__id=pk), many=True).data)
 
+    @action(detail=True, methods=['get'], url_path='counts', url_name='counts')
+    def get_counts(self, request, pk):
+
+        '''
+            Returns task counts for repo
+        '''
+
+        counts = []
+        objs = []
+        for item in Task.objects.all():
+            objs.append(item.status)
+
+        for k, v in Counter(objs).items():
+            counts.append((k, v))
+        return Response(counts)
+
 
 class ColumnViewSet(GenericViewSet,
                     CreateModelMixin,
@@ -500,8 +525,6 @@ class ColumnViewSet(GenericViewSet,
         if self.action in ['create']:
             return ColumnSaveSerializer
         return ColumnSerializer
-
-
 
     def get_permissions(self):
         print(self.request.data)

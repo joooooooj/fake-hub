@@ -11,7 +11,7 @@ export default function Branches(props) {
     useEffect(() => {
 
         console.log(props)
-        fetch('/api/branch/'+props.match?.params?.id+'/repo', {
+        fetch('/api/branch/' + props.match?.params?.id + '/repo', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',

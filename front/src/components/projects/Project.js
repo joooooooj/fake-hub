@@ -34,7 +34,9 @@ export default function Project(props) {
                 setShow2(false)
                 const cols = columns
                 cols.push(data)
+                setColumns([])
                 setColumns(cols)
+
             })
             .catch((error) => {
                 console.error('Error:', error);
@@ -45,7 +47,7 @@ export default function Project(props) {
     }
     //
 
-    ////modal
+    //modal
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = (name) => {
@@ -93,7 +95,7 @@ export default function Project(props) {
                     setProject(data);
                     console.log('Success:', data);
 
-                    fetch('/api/column/' + props.match.params.id2 + '/project', {
+                    fetch('/api/column/' + props.match?.params?.id2 + '/project', {
 
                         method: 'GET',
                         headers: {
@@ -103,7 +105,6 @@ export default function Project(props) {
                         .then(response => response.json())
                         .then(data => {
                             setColumns(data);
-                            const temp = tasks
                             console.log('Success:', data);
                                 fetch('/api/task/' + props.match.params.id + '/repository', {
 
@@ -117,7 +118,6 @@ export default function Project(props) {
                                         console.log('Success:', data);
 
                                         setTasks(data)
-                                        console.log(tasks)
 
                                     })
                                     .catch((error) => {
@@ -170,7 +170,7 @@ export default function Project(props) {
     const getListStyle = isDraggingOver => ({
         background: isDraggingOver ? 'lightblue' : 'lightgrey',
         padding: 2,
-        width: 250,
+        width: 190,
         borderBottomLeftRadius: 5,
         borderBottomRightRadius: 5
 
@@ -183,11 +183,6 @@ export default function Project(props) {
         if (!destination) {
             return;
         }
-
-        console.log(source)
-        console.log(destination)
-
-        console.log(tasks)
 
         for (let task of tasks) {
             if (task.id === Number(result.draggableId)) {
@@ -234,7 +229,6 @@ export default function Project(props) {
 
         console.log(tasks)
 
-
     };
 
     function deleteColumn(id) {
@@ -247,9 +241,14 @@ export default function Project(props) {
             }
         })
 
-
             .then(data => {
-                window.location.reload(false);
+                var index = columns.map(x => {
+                    return x.id;
+                }).indexOf(id);
+
+                columns.splice(index, 1);
+                setColumns([])
+                setColumns(columns)
             })
             .catch((error) => {
                 console.error('Error:', error);
@@ -304,9 +303,9 @@ export default function Project(props) {
             <Button variant="success" onClick={() => handleShowColumn()}>
                 newColumn
             </Button>
-            <Container>
+            <Container fluid className="m-5">
 
-                <Row>
+                <Row md={8} lg={8}>
                     <DragDropContext onDragEnd={onDragEnd}>
                         {columns?.map((column, index) => (
                             <div key={column?.id} className="myColumn">
@@ -347,7 +346,7 @@ export default function Project(props) {
                                                             )}>
 
 
-                                                            <Col xs={3} md={5} key={index}>
+                                                            <Col md={8} lg={8} key={index}>
                                                                 <div key={task?.id + column?.id}>{task?.title}</div>
                                                             </Col>
 
