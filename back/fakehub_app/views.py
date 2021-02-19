@@ -215,6 +215,7 @@ class CommitViewSet(GenericViewSet,
             if username not in data['colab']:
                 data['colab'].append(username)
 
+
         data['info'] = CommitSerializer(Commit.objects.all(), many=True).data
 
         return Response(data)

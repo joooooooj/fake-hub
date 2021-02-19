@@ -88,13 +88,27 @@ export default function Insights(props) {
                         const commits = []
                         for (let i of data.info) {
                             if (i.author?.username === d) {
-                                commits.push({
-                                    x: new Date(i.committed_at),
-                                    y: Math.random() * Math.floor(10)
-                                })
+                                console.log(i)
+                                let found = false
+                                for (let com of commits) {
+                                    console.log(com)
+                                    if (com.x.getDay() === (new Date(i.committed_at)).getDay() && com.x.getMonth() ===(new Date(i.committed_at)).getMonth()) {
+                                        com.y = com.y + 1
+                                        found=true
+                                        break
+
+                                    }
+
+                                }
+                                if(!found){
+                                    commits.push({
+                                        x: new Date(i.committed_at),
+                                        y: 1
+                                    })
+                                }
+                                console.log(commits)
 
                             }
-
                         }
                         newIns.push({
                             label: label,
@@ -162,7 +176,7 @@ export default function Insights(props) {
                         x: d[0],
                         y: d[1]
                     })
-                    sum=d[1] + sum
+                    sum = d[1] + sum
                 }
                 setComSum(sum)
                 setCounts([{
@@ -190,7 +204,7 @@ export default function Insights(props) {
                 }}
             >
                 <h3>Commit history</h3>
-                <Chart data={data} series={series} axes={axes} tooltip/>
+                <Chart data={data} series={series} axes={axes} tooltip style={{overflow:"visible"}}/>
 
             </div>
             <div style={{
@@ -201,7 +215,7 @@ export default function Insights(props) {
             }}>
                 <h3>Commit count</h3>
                 This repo has {comSum} total commits.
-                <Chart data={counts} series={series2} axes={axes2} tooltip/>
+                <Chart data={counts} series={series2} axes={axes2} tooltip style={{overflow:"visible"}}/>
             </div>
             <div style={{
                 width: '40%',
@@ -228,9 +242,7 @@ export default function Insights(props) {
                 }
                 <span> tasks.</span>
 
-                <Chart data={taskCounts} series={series3} axes={axes3} tooltip
-
-                />
+                <Chart data={taskCounts} series={series3} axes={axes3} tooltip style={{overflow:"visible"}} />
 
             </div>
 
