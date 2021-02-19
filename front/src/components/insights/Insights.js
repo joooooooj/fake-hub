@@ -20,13 +20,47 @@ export default function Insights(props) {
         []
     )
 
+    const series2 = React.useMemo(
+        () => ({
+            type: "bar"
+        }),
+        []
+    );
+    const axes2 = React.useMemo(
+        () => [
+            {primary: true, type: "ordinal", position: "bottom"},
+            {position: "left", type: "linear", stacked: true}
+        ],
+        []
+    );
+
+    const series3 = React.useMemo(
+        () => ({
+            type: "bar"
+        }),
+        []
+    );
+    const axes3 = React.useMemo(
+        () => [
+            {primary: true, type: "ordinal", position: "left"},
+            {position: "bottom", type: "linear", stacked: true}
+        ],
+        []
+    );
+
     const [data, setData] = useState([
         {
-            label: 'ja',
+            label: ' ',
             data: []
         }])
 
     const [counts, setCounts] = useState([])
+
+    const [taskCounts, setTaskCounts] = useState([])
+
+    const [taskInfo, setTaskInfo] = useState([])
+
+    const [comSum, setComSum] = useState(0)
 
 
     useEffect(() => {
@@ -47,16 +81,6 @@ export default function Insights(props) {
                 .then(response => response.json())
                 .then(data => {
                     console.log(data.info)
-                    // newIns.push({
-                    //     label: d,
-                    //     data: [{
-                    //         x: new Date("Thu Feb 18 2021 13:00:00 GMT+0100 (Central European Standard Time)"),
-                    //         y: 15
-                    //     }, {
-                    //         x: new Date("Thu Feb 20 2021 13:00:00 GMT+0100 (Central European Standard Time)"),
-                    //         y: 18
-                    //     }]
-                    // })
 
                     const newIns = []
                     for (let d of data.colab) {
@@ -70,7 +94,6 @@ export default function Insights(props) {
                                 })
 
                             }
-
 
                         }
                         newIns.push({
@@ -87,7 +110,7 @@ export default function Insights(props) {
                 });
         }
 
-        fetch('/api/commit/' + props?.match?.params?.id + '/counts', {
+        fetch('/api/task/' + props?.match?.params?.id + '/counts', {
 
             method: 'GET',
             headers: {
@@ -98,15 +121,54 @@ export default function Insights(props) {
             .then(data => {
                 console.log(data)
 
-                let temp = []
+                let temp = [{
+                    x: 'Open',
+                    y: 0
+                },
+                    {
+                        x: 'Closed',
+                        y: 0
+                    }
+                ]
                 for (let d of data)
+                    for (let t of temp)
+                        if (d[0] === t.x)
+                            t.y = d[1]
+
+                setTaskCounts([{
+                    data: temp,
+                    label: 'task count',
+                }])
+                setTaskInfo(temp)
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+
+        fetch('/api/commit/' + props?.match?.params?.id + '/counts', {
+
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data)
+                let sum = 0
+                let temp = []
+                for (let d of data) {
                     temp.push({
                         x: d[0],
                         y: d[1]
                     })
-
+                    sum=d[1] + sum
+                }
+                setComSum(sum)
                 setCounts([{
-                    data: temp
+                    data: temp,
+                    color: '#ffff4d',
+                    label: 'commit count'
                 }])
             })
             .catch((error) => {
@@ -116,42 +178,64 @@ export default function Insights(props) {
 
     }, [props?.match?.params.id])
 
-    const series2 = React.useMemo(
-        () => ({
-            type: "bar"
-        }),
-        []
-    );
-    const axes2 = React.useMemo(
-        () => [
-            {primary: true, type: "ordinal", position: "bottom"},
-            {position: "left", type: "linear", stacked: true}
-        ],
-        []
-    );
 
     return (
-        <>
+        <div>
             <div
                 style={{
-                    width: '90%',
+                    width: '70%',
                     height: '320px',
+                    margin: '50px'
 
-                }} className="m-5"
+                }}
             >
                 <h3>Commit history</h3>
                 <Chart data={data} series={series} axes={axes} tooltip/>
 
             </div>
             <div style={{
-                width: '90%',
-                height: '320px',
+                width: '30%',
+                height: '250px',
+                margin: '50px'
 
-            }} className="m-5">
+            }}>
                 <h3>Commit count</h3>
+                This repo has {comSum} total commits.
                 <Chart data={counts} series={series2} axes={axes2} tooltip/>
             </div>
-        </>
+            <div style={{
+                width: '40%',
+                height: '250px',
+                margin: '50px'
+            }}>
+
+                <h3>Task count</h3>
+                This repo has
+                {
+                    taskInfo?.map((order, index) => (
+
+                        <span key={index}>
+                        {index !== 0 &&
+                        <span> and </span>
+                        }
+                            {index === 0 &&
+                            <span> </span>
+                            }
+                            <span>{order.y} {order.x}
+                        </span>
+                        </span>
+                    ))
+                }
+                <span> tasks.</span>
+
+                <Chart data={taskCounts} series={series3} axes={axes3} tooltip
+
+                />
+
+            </div>
+
+
+        </div>
 
     );
 

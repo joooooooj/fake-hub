@@ -480,6 +480,22 @@ class TaskViewSet(GenericViewSet,
     def tasks_by_column(self, request, pk):
         return Response(TaskSerializer(Task.objects.filter(column__id=pk), many=True).data)
 
+    @action(detail=True, methods=['get'], url_path='counts', url_name='counts')
+    def get_counts(self, request, pk):
+
+        '''
+            Returns task counts for repo
+        '''
+
+        counts = []
+        objs = []
+        for item in Task.objects.all():
+            objs.append(item.status)
+
+        for k, v in Counter(objs).items():
+            counts.append((k, v))
+        return Response(counts)
+
 
 class ColumnViewSet(GenericViewSet,
                     CreateModelMixin,
@@ -500,8 +516,6 @@ class ColumnViewSet(GenericViewSet,
         if self.action in ['create']:
             return ColumnSaveSerializer
         return ColumnSerializer
-
-
 
     def get_permissions(self):
         print(self.request.data)
