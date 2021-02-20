@@ -11,12 +11,6 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.AddField(
-            model_name='team',
-            name='owner',
-            field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, related_name='team_owner', to='fakehub_app.user'),
-            preserve_default=False,
-        ),
         migrations.AlterField(
             model_name='commit',
             name='code',

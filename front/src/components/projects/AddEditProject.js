@@ -5,6 +5,7 @@ import {useHistory} from "react-router-dom";
 
 export default function AddEditProject(props) {
 
+    const history = useHistory();
     const {register, errors, handleSubmit} = useForm();
     const [project, setProject] = useState();
     const [projectPresent, setProjectPresent] = useState(true)
@@ -51,6 +52,7 @@ export default function AddEditProject(props) {
             .then(data => {
                 console.log(data);
                 setProject(null)
+                props.history?.push("/template/repository/" + props?.match?.params?.id);
             })
             .catch(error => {
                 console.error(error);
@@ -72,11 +74,12 @@ export default function AddEditProject(props) {
             .then(response => response.json())
             .then(data => {
                 console.log(data);
+                props.history?.push("/template/repository/" + props?.match?.params?.id);
             })
             .catch(error => {
                 console.error(error);
             });
-        props.history?.push("/template/repository/" + props?.match?.params?.id);
+       // props.history?.push("/template/repository/" + props?.match?.params?.id);
 
     }
 

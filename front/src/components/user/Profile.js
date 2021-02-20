@@ -61,7 +61,7 @@ export default function Profile(props) {
         <div className="profile">
             <div className="left">
                 <img className="avatar " src={userImage ? userImage : emptyavatar} alt='' />
-                <h2 className="ml-2 mt-4">{user?.first_name} {user?.last_name}</h2>
+                <h2 className="ml-2 mt-4">{user?.name} {user?.lastname}</h2>
                 <h3 className="ml-2">{user?.username}</h3>
                 <h5 className="ml-2">{user?.email}</h5>
             </div>

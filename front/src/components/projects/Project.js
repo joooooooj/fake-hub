@@ -169,7 +169,7 @@ export default function Project(props) {
     const getListStyle = isDraggingOver => ({
         background: isDraggingOver ? 'lightblue' : 'lightgrey',
         padding: 2,
-        width: 190,
+        width: 320,
         borderBottomLeftRadius: 5,
         borderBottomRightRadius: 5
 
@@ -298,11 +298,11 @@ export default function Project(props) {
 
             <h2>{project?.name}</h2>
             <h4>repository : {repository?.name}</h4>
-            <span>{project?.description}</span>
-            <Button variant="success" onClick={() => handleShowColumn()}>
+            <div>{project?.description}</div>
+            <Button variant="success" onClick={() => handleShowColumn()} className="mb-3 mt-3">
                 newColumn
             </Button>
-            <Container fluid className="m-5">
+            <Container fluid className="m-2">
 
                 <Row md={8} lg={8}>
                     <DragDropContext onDragEnd={onDragEnd}>

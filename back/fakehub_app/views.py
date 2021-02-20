@@ -154,7 +154,8 @@ class BranchViewSet(GenericViewSet,
             Returns branches for the specific repo
         '''
         # many == VISE OD JEDNOG IMA U REZULTATIMA FILTRIRANJA
-        return Response(BranchSerializer(Branch.objects.filter(repository__id=pk), many=True).data)
+        #return Response(BranchSerializer(Branch.objects.filter(repository__id=pk), many=True).data)
+        return Response(BranchSerializer(Branch.objects.all(), many=True).data)
 
 
 class CommitViewSet(GenericViewSet,

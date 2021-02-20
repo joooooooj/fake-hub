@@ -10,6 +10,8 @@ from django.utils import timezone
 
 class User(AbstractUser):
     name = models.CharField(max_length=100)
+    lastname = models.CharField(max_length=100)
+    email = models.CharField(max_length=100)
     password = models.CharField(max_length=100)
 
 
@@ -141,7 +143,7 @@ class Task(models.Model):
     members = models.ManyToManyField(User, default=None, blank=True, related_name='task_members')
     repository = models.ForeignKey(Repository, on_delete=models.CASCADE)
     column = models.ForeignKey(Column, on_delete=models.CASCADE, default=None, blank=True, null=True)
-    owner = models.ForeignKey(User, on_delete=models.CASCADE, default=None, blank=False, null=False, related_name='task_owner')
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, default=None, blank=False, null=True, related_name='task_owner')
 
     def __str__(self):
         return str(self.title)
