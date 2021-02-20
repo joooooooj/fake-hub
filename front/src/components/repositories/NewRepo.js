@@ -83,7 +83,7 @@ export default function NewRepo(props) {
             .then(response => response.json())
             .then(data => {
                 console.log('Success:', data);
-                history.push('/home')
+                history.push('profile/')
 
             })
             .catch(error => {
@@ -144,7 +144,7 @@ export default function NewRepo(props) {
 
 
                         </Form.Group>
-                        <Button variant="submit" type="submit" className="w-50 mt-3">
+                        <Button variant="submit" type="submit" className="w-50 mt-3 btn-success">
                             Create repository
                         </Button>
                     </Form>

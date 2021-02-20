@@ -28,8 +28,8 @@ export default function Insights(props) {
     );
     const axes2 = React.useMemo(
         () => [
-            {primary: true, type: "ordinal", position: "bottom"},
-            {position: "left", type: "linear", stacked: true}
+            {primary: true, type: "ordinal", position: "left"},
+            {position: "bottom", type: "linear", stacked: true}
         ],
         []
     );
@@ -42,8 +42,8 @@ export default function Insights(props) {
     );
     const axes3 = React.useMemo(
         () => [
-            {primary: true, type: "ordinal", position: "left"},
-            {position: "bottom", type: "linear", stacked: true}
+            {primary: true, type: "ordinal", position: "bottom"},
+            {position: "left", type: "linear", stacked: true}
         ],
         []
     );
@@ -61,6 +61,8 @@ export default function Insights(props) {
     const [taskInfo, setTaskInfo] = useState([])
 
     const [comSum, setComSum] = useState(0)
+
+    const [contrib, setContrib] = useState(0)
 
 
     useEffect(() => {
@@ -83,7 +85,9 @@ export default function Insights(props) {
                     console.log(data.info)
 
                     const newIns = []
+                    let contrib = 0
                     for (let d of data.colab) {
+                        contrib = contrib + 1
                         const label = d
                         const commits = []
                         for (let i of data.info) {
@@ -92,15 +96,15 @@ export default function Insights(props) {
                                 let found = false
                                 for (let com of commits) {
                                     console.log(com)
-                                    if (com.x.getDay() === (new Date(i.committed_at)).getDay() && com.x.getMonth() ===(new Date(i.committed_at)).getMonth()) {
+                                    if (com.x.getDay() === (new Date(i.committed_at)).getDay() && com.x.getMonth() === (new Date(i.committed_at)).getMonth()) {
                                         com.y = com.y + 1
-                                        found=true
+                                        found = true
                                         break
 
                                     }
 
                                 }
-                                if(!found){
+                                if (!found) {
                                     commits.push({
                                         x: new Date(i.committed_at),
                                         y: 1
@@ -118,6 +122,7 @@ export default function Insights(props) {
                     }
                     console.log(newIns)
                     setData(newIns)
+                    setContrib(contrib)
                 })
                 .catch((error) => {
                     console.error('Error:', error);
@@ -194,35 +199,38 @@ export default function Insights(props) {
 
 
     return (
-        <div>
+        <div className="m-5">
             <div
-                style={{
-                    width: '70%',
+
+            >
+                <h3 className="text-center">Commit history</h3>
+                <div style={{
+                    width: '90%',
                     height: '320px',
                     margin: '50px'
 
-                }}
-            >
-                <h3>Commit history</h3>
-                <Chart data={data} series={series} axes={axes} tooltip style={{overflow:"visible"}}/>
+                }} className="text-center">
+
+                    < Chart data={data} series={series} axes={axes} tooltip style={{overflow: "visible"}}/>
+                </div>
 
             </div>
-            <div style={{
-                width: '30%',
-                height: '250px',
-                margin: '50px'
+            <div className="m-5">
+                <h3 className="text-center">Commit count</h3>
+                <div className="text-center"> This repo has {comSum} total commits by {contrib} authors.</div>
+                <div style={{
+                    width: '90%',
+                    height: '400px',
+                    margin: '50px'
 
-            }}>
-                <h3>Commit count</h3>
-                This repo has {comSum} total commits.
-                <Chart data={counts} series={series2} axes={axes2} tooltip style={{overflow:"visible"}}/>
+                }} className="text-center">
+
+
+                    <Chart data={counts} series={series2} axes={axes2} tooltip style={{overflow: "visible"}}/>
+                </div>
             </div>
-            <div style={{
-                width: '40%',
-                height: '250px',
-                margin: '50px'
-            }}>
-
+            <div className="m-5">
+            <div className="text-center">
                 <h3>Task count</h3>
                 This repo has
                 {
@@ -241,8 +249,18 @@ export default function Insights(props) {
                     ))
                 }
                 <span> tasks.</span>
+            </div>
 
-                <Chart data={taskCounts} series={series3} axes={axes3} tooltip style={{overflow:"visible"}} />
+                <div style={{
+                    width: '90%',
+                    height: '250px',
+                    margin: '50px'
+
+                }} className="text-center">
+
+
+                    <Chart data={taskCounts} series={series3} axes={axes3} tooltip style={{overflow: "visible"}}/>
+                </div>
 
             </div>
 

@@ -15,7 +15,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='task',
             name='owner',
-            field=models.ForeignKey(default=None, on_delete=django.db.models.deletion.CASCADE, related_name='task_owner', to=settings.AUTH_USER_MODEL),
+            field=models.ForeignKey(null=True,default=None, on_delete=django.db.models.deletion.CASCADE, related_name='task_owner', to=settings.AUTH_USER_MODEL),
         ),
         migrations.AlterField(
             model_name='commit',
