@@ -9,8 +9,8 @@ export default function Branches(props) {
 
 
     useEffect(() => {
-        if (props?.match?.params?.id){
-            fetch('/api/branch/'+props.match?.params?.id+'/repo', {
+
+            fetch('/api/branch', {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -24,7 +24,7 @@ export default function Branches(props) {
             .catch((error) => {
                 console.error('Error:', error);
             });
-        }
+
     }, [])
 
 
