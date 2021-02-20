@@ -8,6 +8,7 @@ RUN apt-get update \
 WORKDIR /app/back
 COPY requirements.txt /app/back
 RUN pip install -r requirements.txt
+CMD python manage.py test .
 
 EXPOSE 5433
 EXPOSE 8000
@@ -20,7 +21,6 @@ CMD /wait && \
 cd /app/back && python manage.py migrate \
 && python manage.py migrate sessions \
 && python manage.py create_superuser --username=admin --email=admin@admin.com --password=admin \
-&& python manage.py test . \
 && python manage.py loaddata init_data \
 && python manage.py parse_git_file \
 && python manage.py loaddata branches \
