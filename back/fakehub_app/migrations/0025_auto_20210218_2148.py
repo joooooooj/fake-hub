@@ -7,6 +7,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('fakehub_app', '0024_auto_20210218_2142'),
+        ('fakehub_app', '0009_auto_20210214_2154'),
     ]
 
     operations = [

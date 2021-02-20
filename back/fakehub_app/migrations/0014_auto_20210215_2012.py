@@ -12,6 +12,11 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
+        migrations.AlterField(
+            model_name='commit',
+            name='code',
+            field=models.CharField(blank=True, default=4063015407606743312, max_length=64, unique=True),
+        ),
         migrations.RemoveField(
             model_name='column',
             name='task',
@@ -26,11 +31,7 @@ class Migration(migrations.Migration):
             name='column',
             field=models.ForeignKey(blank=True, default=None, null=True, on_delete=django.db.models.deletion.CASCADE, to='fakehub_app.column'),
         ),
-        migrations.AlterField(
-            model_name='commit',
-            name='code',
-            field=models.CharField(blank=True, default=4063015407606743312, max_length=64, unique=True),
-        ),
+
         migrations.AlterField(
             model_name='task',
             name='difficulty',
