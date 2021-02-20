@@ -10,7 +10,7 @@ from .views import TeamViewSet, UserViewSet, RepositoryViewSet, ProjectViewSet, 
 router = routers.SimpleRouter()
 router.register(r'team', TeamViewSet)
 router.register(r'user', UserViewSet)
-router.register(r'repository', RepositoryViewSet,'repository')
+router.register(r'repository', RepositoryViewSet, 'repository')
 router.register(r'project', ProjectViewSet)
 router.register(r'label', LabelViewSet)
 router.register(r'milestone', MilestoneViewSet)
@@ -22,7 +22,7 @@ router.register(r'task', TaskViewSet)
 router.register(r'column', ColumnViewSet)
 
 urlpatterns = [
-    path('', include((router.urls,'api'),namespace='api')),
+    path('', include((router.urls, 'api'), namespace='api')),
     path('authenticate/', CustomObtainAuthToken.as_view()),
     path('accounts/', include('django.contrib.auth.urls')),
 ]

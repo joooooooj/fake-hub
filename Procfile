@@ -1,2 +1,2 @@
-release: python manage.py makemigrations && python manage.py migrate && python manage.py test . --keepdb
+release: python manage.py makemigrations && python manage.py migrate
 web: gunicorn FakeHub.wsgi --log-file -
