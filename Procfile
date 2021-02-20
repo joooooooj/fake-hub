@@ -1,2 +1,2 @@
-release: python manage.py makemigrations && python manage.py migrate && python manage.py loaddata fixture && python manage.py parse_git_file && python manage.py loaddata branches && python manage.py loaddata commits
+release: python manage.py migrate && python manage.py loaddata fixture && python manage.py parse_git_file && python manage.py loaddata branches && python manage.py loaddata commits
 web: gunicorn FakeHub.wsgi --log-file -
