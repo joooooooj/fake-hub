@@ -10,15 +10,12 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
+
         migrations.RemoveField(
             model_name='file',
             name='content',
         ),
-        migrations.AlterField(
-            model_name='commit',
-            name='code',
-            field=models.CharField(blank=True, default=4579572725213498828, max_length=64, unique=True),
-        ),
+
         migrations.AlterField(
             model_name='file',
             name='name',
