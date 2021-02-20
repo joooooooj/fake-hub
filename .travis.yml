@@ -6,6 +6,7 @@ python:
   - "3.9"
 
 install:
+  - cd back
   - pip install -r requirements.txt
 
 services:
@@ -34,6 +35,13 @@ deploy:
   api_key: $API_KEY
   app: $APP_NAME
   on: $APP_BRANCH
+#  run:
+#    - "python manage.py migrate zero"
+#    - "python manage.py test ."
+#    - "python manage.py loaddata init_data"
+#    - "python manage.py parse_git_file"
+#    - "python manage.py loaddata branches"
+#    - "python manage.py loaddata commits"
   
 #add tests
 #add push to docker hub
