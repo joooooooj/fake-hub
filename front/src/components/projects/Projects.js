@@ -47,6 +47,53 @@ export default function Projects(props) {
                 console.error('Error:', error);
             });
     }
+    function closeProject(project){
+
+        project.status = 'Closed'
+        fetch('/api/project/' + project?.id+'/', {
+
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Token ' + JSON.parse(localStorage.getItem("user")).token,
+            },
+            body:JSON.stringify(project)
+        })
+
+
+            .then(data => {
+                window.location.reload(false);
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+
+
+    }
+
+    function openProject(project){
+
+        project.status = 'Open'
+        fetch('/api/project/' + project?.id+'/', {
+
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Token ' + JSON.parse(localStorage.getItem("user")).token,
+            },
+            body:JSON.stringify(project)
+        })
+
+
+            .then(data => {
+                window.location.reload(false);
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+
+
+    }
 
 
     return (
@@ -70,10 +117,20 @@ export default function Projects(props) {
                                 <div className="text-right">
                                     <Link
                                         to={"/template/repository/" + props?.repo?.id + '/edit-project/' + project.id}  {...props}>
-                                        <button className="ml-2 btn-warning">edit</button>
+                                        <button className="ml-2 btn-info">edit</button>
                                     </Link>
                                     <button className="ml-2 btn-danger" onClick={() => deleteProject(project.id)}>delete
                                     </button>
+                                    { project?.status==='Closed'&&
+                                        <button className="ml-2 btn-warning"
+                                                onClick={() => closeProject(project)}>open
+                                        </button>
+                                    }
+                                    { project?.status==='Open'&&
+                                    <button className="ml-2 btn-warning"
+                                            onClick={() => openProject(project)}>close
+                                    </button>
+                                    }
                                 </div>
 
                             </ListGroup.Item>
