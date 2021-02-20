@@ -10,7 +10,6 @@ export default function Project(props) {
     const [columns, setColumns] = useState([])
     const [tasks, setTasks] = useState([])
 
-
     const [selected, setSelected] = useState(null)
     
     //newColumn

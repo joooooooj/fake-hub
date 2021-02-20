@@ -9,23 +9,22 @@ export default function Commits(props) {
 
 
     useEffect(() => {
-
-        console.log(props)
-        fetch('/api/commit/'+props.match?.params?.id+'/repo', {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            }
-        })
-            .then(response => response.json())
-            .then(data => {
-                setCommits(data);
-                console.log('Success:', data);
+        if (props?.match?.params?.id) {
+            fetch('/api/commit/' + props.match?.params?.id + '/repo', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
             })
-            .catch((error) => {
-                console.error('Error:', error);
-            });
-
+                .then(response => response.json())
+                .then(data => {
+                    setCommits(data);
+                    console.log('Success:', data);
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
+        }
     }, [])
 
 

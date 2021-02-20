@@ -137,10 +137,11 @@ class Task(models.Model):
     due_date = models.DateTimeField(default=None, blank=True, null=True)
     changes = models.TextField(default=None, blank=True, null=True)  # I dont remember what this was
     milestone = models.ForeignKey(Milestone, on_delete=models.CASCADE, default=None, blank=True, null=True)
-    labels = models.ManyToManyField(Label,default=None, blank=True)
-    members = models.ManyToManyField(User,default=None, blank=True)
+    labels = models.ManyToManyField(Label, default=None, blank=True)
+    members = models.ManyToManyField(User, default=None, blank=True, related_name='task_members')
     repository = models.ForeignKey(Repository, on_delete=models.CASCADE)
     column = models.ForeignKey(Column, on_delete=models.CASCADE, default=None, blank=True, null=True)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, default=None, blank=False, null=False, related_name='task_owner')
 
     def __str__(self):
         return str(self.title)
@@ -150,3 +151,4 @@ class File(models.Model):
     name = models.FileField(default=None)
     task = models.ForeignKey(Task, on_delete=models.CASCADE, default=None, blank=True, null=True)
     page = models.ForeignKey(Page, on_delete=models.CASCADE, default=None, blank=True, null=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default=None, blank=True, null=True)

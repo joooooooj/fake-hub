@@ -21,7 +21,9 @@ export default function Login(props) {
             .then(response => response.json())
             .then(data => {
                 console.log('Success:', data);
-                props.login(data);
+                if (data.token) {
+                    props.login(data);
+                }
             })
             .catch((error) => {
                 console.error('Error:', error);

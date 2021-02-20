@@ -84,11 +84,11 @@ export default function Settings(props) {
                     </div>
                     }
                 </Form.Group>
-                <Button variant="submit" type="submit" className="w-50 mt-3">
+                <Button type="submit" className="btn-success w-25 mt-3 mb-3">
                     Update name
                 </Button>
             </Form>
-            <div className="dangerZone">
+            <div className="dangerZone p-5">
                 <div className="text-left m-1"> Delete this repository</div>
                 <div className="text-left m-1">
                     {' '}When you delete a repo, it's forever. Make sure you are sure.

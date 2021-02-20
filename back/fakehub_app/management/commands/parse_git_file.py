@@ -1,3 +1,5 @@
+import sys
+
 from django.core.management.base import BaseCommand
 from pydriller import RepositoryMining, GitRepository
 import git
@@ -15,6 +17,7 @@ def get_branch(branch_name):
 def save_branches(branches, repo_id):
     counter = 1
     f = open("fakehub_app/fixtures/branches.json", "w")
+    print(repo_id)
 
     f.write('[')
     for branch in branches:
@@ -22,7 +25,7 @@ def save_branches(branches, repo_id):
                 '"pk": ' + str(counter) + ',' +
                 '"fields":' +
                 '{' + ' "name" : "' + branch + '",' +
-                ' "author" :"' '",' +
+                ' "author" : null,' +
                 ' "repository" : ' + str(repo_id) + '')
         f.write('}}')
 
@@ -44,6 +47,7 @@ def parse():
         if len(get_user(commit.author.name)) != 0 and len(commit.branches) != 0:
 
             branch = commit.branches.pop()
+            branches.append(branch)
 
             if counter != 1:
                 f.write(',\n')
@@ -59,10 +63,10 @@ def parse():
             else:
                 f.write(' "author" : "",')
             if len(get_branch(branch)) != 0:
-                f.write(' "branch" : ' + str(get_branch(branch)[0]) + '')
+                f.write(' "branch" : ' + str(1))
                 branches.append(branch)
             else:
-                f.write(' "branch" : ""')
+                f.write(' "branch" : ' + str(1))
             f.write('}}')
 
             counter += 1
@@ -76,8 +80,5 @@ class Command(BaseCommand):
     help = "Parses git file and saves commit and branch data to DB"
 
     def handle(self, *args, **options):
-        repo = Repository()
-        repo.name = "fakehub"
-        Repository.save(repo)
         branches = parse()
-        save_branches(set(branches), Repository.objects.filter(name="fakehub")[0].id)
+        save_branches(set(branches), 1)

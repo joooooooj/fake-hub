@@ -1,0 +1,50 @@
+[{
+  "model":  "fakehub_app.User",
+  "pk": 100,
+  "fields": {
+    "is_superuser": true,
+    "name": "Tamara",
+    "password":"pbkdf2_sha256$216000$R3Jk02iOxYqS$HlZFYMcToIF1lWFGxbL6SQOjxieeBny/gkzsQuQxYno=",
+    "username": "TLazarevic"}
+  },
+  {
+    "model":  "fakehub_app.User",
+    "pk": 200,
+    "fields": {
+      "is_superuser": true,
+      "name": "Ivana",
+      "password":"pbkdf2_sha256$216000$R3Jk02iOxYqS$HlZFYMcToIF1lWFGxbL6SQOjxieeBny/gkzsQuQxYno=",
+      "username": "ivanabrkic"
+    }
+  },
+  {
+    "model":  "fakehub_app.User",
+    "pk": 300,
+    "fields": {
+      "is_superuser": true,
+      "name": "Igor",
+      "password":"pbkdf2_sha256$216000$R3Jk02iOxYqS$HlZFYMcToIF1lWFGxbL6SQOjxieeBny/gkzsQuQxYno=",
+      "username": "IgorMales98"
+    }
+  },
+  {
+    "model":  "fakehub_app.Team",
+    "pk": 1,
+    "fields": {
+      "name": "joooooooj",
+      "members": ["100", "200", "300"],
+      "owner": "200"
+    }
+  },
+  {
+  "model":  "fakehub_app.Repository","pk": 1,
+  "fields":
+    {
+      "name": "fake-hub",
+      "owner":"200",
+      "team": "1",
+      "collaborators" :  ["100","200","300"],
+      "description" : "The best repo ever"
+    }
+  }
+]

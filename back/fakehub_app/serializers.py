@@ -3,9 +3,43 @@ from .models import User, Team, Repository, Project, Label, Milestone, Branch, C
 
 
 class UserSerializer(serializers.ModelSerializer):
+    def create(self, validated_data):
+        password = validated_data.pop('password')
+        user = User(**validated_data)
+        user.set_password(password)
+        user.save()
+        return user
+
     class Meta:
         model = User
         fields = ['username', 'password', 'email', 'first_name', 'last_name']
+
+
+class UserChangePasswordSerializer(serializers.ModelSerializer):
+    def update(self, instance, validated_data):
+        password = validated_data.pop('password', None)
+        if password is not None:
+            instance.set_password(password)
+        instance.save()
+
+        return instance
+
+    class Meta:
+        model = User
+        fields = ['password']
+
+
+class UserUpdateSerializer(serializers.ModelSerializer):
+    def update(self, instance, validated_data):
+        for (key, value) in validated_data.items():
+            setattr(instance, key, value)
+        instance.save()
+
+        return instance
+
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'first_name', 'last_name']
 
 
 class TeamSerializer(serializers.ModelSerializer):
@@ -90,7 +124,7 @@ class PageSerializer(serializers.ModelSerializer):
 class FileSerializer(serializers.ModelSerializer):
     class Meta:
         model = File
-        fields = ('name', 'task', 'page')
+        fields = ('name', 'task', 'page', 'user')
 
 
 class TaskSerializer(serializers.ModelSerializer):
@@ -102,7 +136,7 @@ class TaskSerializer(serializers.ModelSerializer):
     class Meta:
         model = Task
         fields = ('title', 'created_at', 'description', 'status', 'difficulty', 'closed_at',
-                  'due_date', 'changes', 'milestone', 'labels', 'members', 'repository', 'column', 'id')
+                  'due_date', 'changes', 'milestone', 'labels', 'members', 'repository', 'column', 'id', 'owner')
         depth = 1
 
 
@@ -110,6 +144,21 @@ class TaskSaveSerializer(serializers.ModelSerializer):
     class Meta:
         model = Task
         fields = ('column', 'id')
+
+
+class TaskMainSaveSerializer(serializers.ModelSerializer):
+    id = serializers.ReadOnlyField()
+
+    class Meta:
+        model = Task
+        fields = ('title', 'created_at', 'description', 'status', 'difficulty', 'closed_at',
+                  'due_date', 'changes', 'milestone', 'labels', 'members', 'repository', 'column', 'id', 'owner')
+
+
+class TaskCloseSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Task
+        fields = ('status', 'closed_at', 'changes')
 
 
 class ColumnSerializer(serializers.ModelSerializer):

@@ -7,22 +7,23 @@ export default function Repositories(props) {
     const [repositories, setRepositories] = useState([]);
 
     useEffect(() => {
+        if (props?.user?.id) {
+            fetch('/api/repository/'+props?.user?.id+'/user', {
 
-        fetch('/api/repository/'+props.user.id+'/user', {
-
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            }
-        })
-            .then(response => response.json())
-            .then(data => {
-                setRepositories(data);
-                console.log('Success:', data);
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
             })
-            .catch((error) => {
-                console.error('Error:', error);
-            });
+                .then(response => response.json())
+                .then(data => {
+                    setRepositories(data);
+                    console.log('Success:', data);
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
+        }
     }, [])
 
     return (
