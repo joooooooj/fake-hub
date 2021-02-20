@@ -1,21 +1,19 @@
 sudo: required
 
-language: python
+#language: python
 
-python:
-  - "3.9"
+#python:
+#  - "3.9"
 
-install:
-  - cd back
-  - pip install -r requirements.txt
+#install:
+#  - cd back
+#  - pip install -r requirements.txt
 
-services:
-  - docker
+#services:
+#  - docker
 
 script:
-  - cd back
-  - python manage.py test .
-  - docker-compose build
+#  - docker-compose build
   - cp -r front/. .
   - cp -r back/. .
   - rm -rf front
