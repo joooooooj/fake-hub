@@ -39,16 +39,10 @@ class RepositoryAdmin(admin.ModelAdmin):
     list_display = ('owner', 'id')
 
 
-@admin.register(Wiki)
-class WikiAdmin(admin.ModelAdmin):
-    search_fields = ('id', 'repository')
-    list_display = ('repository', 'id')
-
-
 @admin.register(Page)
 class PageAdmin(admin.ModelAdmin):
-    search_fields = ('id', 'title', 'content', 'wiki')
-    list_display = ('id', 'title', 'content', 'wiki')
+    search_fields = ('id', 'title', 'content', 'repository')
+    list_display = ('id', 'title', 'content', 'repository')
 
 
 @admin.register(File)
@@ -66,3 +60,16 @@ class TaskAdmin(admin.ModelAdmin):
 @admin.register(Column)
 class ColumnAdmin(admin.ModelAdmin):
     search_fields = ('id', 'name', 'project')
+    list_display = ('id', 'name', 'project')
+
+
+@admin.register(Team)
+class ColumnAdmin(admin.ModelAdmin):
+    search_fields = ('id', 'name')
+    list_display = ('id', 'name')
+
+
+@admin.register(Project)
+class ColumnAdmin(admin.ModelAdmin):
+    search_fields = ('id', 'name')
+    list_display = ('id', 'name', 'repository', 'status')

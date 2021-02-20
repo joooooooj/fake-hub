@@ -1,0 +1,79 @@
+.issues {
+  .hidden {
+    visibility: hidden;
+    display: none;
+  }
+
+  .visible {
+    visibility: visible;
+    display: block;
+  }
+
+  .add-edit-issue {
+    button {
+      width: 150px;
+    }
+  }
+
+  .add-new {
+    display: flex;
+    justify-content: flex-end;
+
+    .btn-success {
+      width: 150px;
+    }
+  }
+
+  table {
+    background-color: #ccc;
+    border-radius: 10px;
+
+    thead {
+      visibility: hidden;
+      display: none;
+    }
+
+    tbody{
+      font-size: 22px;
+
+      tr {
+        td {
+          border: none;
+          font-weight: 500;
+        }
+
+        .issue {
+          padding-left: 40px;
+
+          .label {
+            font-size: 12px;
+            height: fit-content;
+            border-radius: 10px;
+          }
+
+          .material-icons {
+            font-weight: 500;
+            font-size: 32px;
+          }
+          .issue-title {
+            font-weight: 700;
+          }
+          .issue-info {
+            font-size: 18px;
+            margin-left: 25px;
+            color: dimgray;
+          }
+        }
+
+        .button-td {
+          width: 200px;
+          vertical-align: middle;
+
+          button {
+            width: 150px;
+          }
+        }
+      }
+    }
+  }
+}

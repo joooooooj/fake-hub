@@ -1,1 +1,1 @@
-[{"model": "fakehub_app.Commit","pk": 1,"fields":{ "name" : "main", "author" :"", "repository" : 1}}]
+[{"model": "fakehub_app.Branch","pk": 1,"fields":{ "name" : "main", "author" : null, "repository" : 1}}]

@@ -1,12 +1,10 @@
+
 html, body, #root {
-    height: 100%;
+    height: 120%;
 
     .app {
         height: inherit;
-        
-        img {
-            width: 40px;
-        }
+        overflow: auto;
     
         button {
             font-weight: bold;

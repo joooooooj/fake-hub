@@ -1,6 +1,19 @@
 sudo: required
 
+#language: python
+
+#python:
+#  - "3.9"
+
+#install:
+#  - cd back
+#  - pip install -r requirements.txt
+
+#services:
+#  - docker
+
 script:
+#  - docker-compose build
   - cp -r front/. .
   - cp -r back/. .
   - rm -rf front
@@ -9,6 +22,7 @@ script:
   - sed -i "s,DJANGO_DB_PASSWORD=,DJANGO_DB_PASSWORD=$DJANGO_DB_PASSWORD,g" FakeHub/.env
   - sed -i "s,DJANGO_DB_USER=,DJANGO_DB_USER=$DJANGO_DB_USER,g" FakeHub/.env
   - sed -i "s,DJANGO_DB_HOST=,DJANGO_DB_HOST=$DJANGO_DB_HOST,g" FakeHub/.env
+  - sed -i "s,http://localhost:8000,https://fake-hub.herokuapp.com,g" src/Routes.js
   - sed -i "s,http://localhost:8000,https://fake-hub.herokuapp.com,g" package.json
   - sed -i "s,http://django:8000,https://fake-hub.herokuapp.com,g" package.json
   - git add .
@@ -19,6 +33,13 @@ deploy:
   api_key: $API_KEY
   app: $APP_NAME
   on: $APP_BRANCH
+#  run:
+#    - "python manage.py migrate zero"
+#    - "python manage.py test ."
+#    - "python manage.py loaddata init_data"
+#    - "python manage.py parse_git_file"
+#    - "python manage.py loaddata branches"
+#    - "python manage.py loaddata commits"
   
 #add tests
 #add push to docker hub

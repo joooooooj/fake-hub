@@ -7,20 +7,23 @@ export default function Repositories(props) {
     const [repositories, setRepositories] = useState([]);
 
     useEffect(() => {
-        fetch('/api/repository', {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            }
-        })
-            .then(response => response.json())
-            .then(data => {
-                setRepositories(data);
-                console.log('Success:', data);
+        if (props?.user?.id) {
+            fetch('/api/repository/'+props?.user?.id+'/user', {
+
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
             })
-            .catch((error) => {
-                console.error('Error:', error);
-            });
+                .then(response => response.json())
+                .then(data => {
+                    setRepositories(data);
+                    console.log('Success:', data);
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
+        }
     }, [])
 
     return (
@@ -38,7 +41,7 @@ export default function Repositories(props) {
                         repositories?.map((repo, index) => {
                             return (
                                 <li className="font-weight-bold" key={index}>
-                                    <Link to={"/template/repository/" + repo.id}>{(repo.team ? repo.team.name : repo.owner?.username)} / {repo.name}</Link>
+                                    <Link to={"/template/repository/" + repo.id} {...props}>{(repo.team ? repo.team.name : repo.owner?.username)} / {repo.name}</Link>
                                 </li>
                             );
                         })

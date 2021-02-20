@@ -1,0 +1,29 @@
+.project {
+
+  .x {
+    width: 25px;
+    height: 25px;
+    float: right;
+    margin-right: 3px;
+    color: darkred;
+  }
+
+  .edit{
+    float: right;
+    margin-right: 1px;
+
+  }
+
+  .myColumn {
+    margin: 20px;
+  }
+
+  .titleDiv {
+    background-color: lavender;
+    color: black;
+    -webkit-border-top-right-radius: 5px;
+    -webkit-border-top-left-radius: 5px;
+    text-align: center;
+  }
+
+}

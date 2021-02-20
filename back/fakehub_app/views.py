@@ -1,4 +1,7 @@
+from collections import Counter
+
 from django.http import JsonResponse
+from rest_framework import status
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.response import Response
 from rest_framework.decorators import action
@@ -9,26 +12,23 @@ from rest_framework.viewsets import GenericViewSet
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
+from django.urls import reverse
 
-from .models import Team, User, Label, Repository, Project, Milestone, Task, Branch, Commit, Wiki, Page, File, Status, \
+from .models import Team, User, Label, Repository, Project, Milestone, Task, Branch, Commit, Page, File, Status, \
     Column
 from .serializers import TeamSerializer, ProjectSerializer, LabelSerializer, RepositorySerializer, UserSerializer, \
-    MilestoneSerializer, BranchSerializer, CommitSerializer, WikiSerializer, PageSerializer, FileSerializer, \
-    TaskSerializer, ColumnSerializer
+    MilestoneSerializer, BranchSerializer, CommitSerializer, PageSerializer, FileSerializer, \
+    TaskSerializer, ColumnSerializer, RepoSaveSerializer, TaskSaveSerializer, TeamSaveSerializer, ColumnSaveSerializer, \
+    MilestoneSaveSerializer, TaskMainSaveSerializer, TaskCloseSerializer, UserChangePasswordSerializer, \
+    UserUpdateSerializer
 
-# U COMMAND PROMPTU: (nece da mi radi token u postmanu nzm sto)
-# curl --header "Content-Type: Application/json"   --request POST   -H "Authorization: Token
-# e091a4bf389ba85e3252cc7afc38e70db7bb20b7" --data "{"""title""":"""milestone1""","""labels""":[],
-# """repository""":"""1"""}"   http://localhost:8000/milestone/
-
-# curl --header "Content-Type: Application/json"   --request GET -H "Authorization: Token
-# e091a4bf389ba85e3252cc7afc38e70db7bb20b7" http://localhost:8000/milestone/1/repo/
 
 class CustomObtainAuthToken(ObtainAuthToken):
     def post(self, request, *args, **kwargs):
         response = super(CustomObtainAuthToken, self).post(request, *args, **kwargs)
         token = Token.objects.get(key=response.data['token'])
-        return Response({'token': token.key, 'id': token.user_id})
+        return Response({'token': token.key, 'id': token.user_id, 'username': token.user.username})
+
 
 class MilestoneViewSet(GenericViewSet,
                        CreateModelMixin,
@@ -40,15 +40,37 @@ class MilestoneViewSet(GenericViewSet,
     """
        Creates, Updates and Retrieves - Milestones
     """
-    serializer_class = MilestoneSerializer
+    serializers = {
+        'default': MilestoneSerializer,
+        'create': MilestoneSaveSerializer
+    }
     authentication_classes = (TokenAuthentication,)
     queryset = Milestone.objects.all()
 
     def get_permissions(self):
-        print(self.request.user)
+        print(self.request)
         # allow full access to authenticated users, but allow read-only access to unauthenticated users
         self.permission_classes = [IsAuthenticatedOrReadOnly]
         return super(MilestoneViewSet, self).get_permissions()
+
+    def get_serializer_class(self):
+        if self.action in ['create']:
+            return MilestoneSaveSerializer
+        return MilestoneSerializer
+
+    def update(self, request, *args, **kwargs):
+        print('PUT')
+        print(request.data['labels'])
+        labels = Label.objects.filter(id__in=request.data['labels'])
+        milestone = Milestone.objects.filter(id=request.data['id'])[0]
+        milestone.labels.set(labels)
+        milestone.title = request.data['title'];
+        milestone.description = request.data['description']
+        milestone.dueDate = request.data['dueDate']
+        milestone.status = request.data['status']
+        print(milestone.labels)
+        Milestone.save(milestone)
+        return Response({}, status=status.HTTP_204_NO_CONTENT)
 
     #  http://localhost:8000/milestone/1/repo/
     @action(detail=True, methods=['get'], url_path='repo', url_name='repo')
@@ -58,16 +80,6 @@ class MilestoneViewSet(GenericViewSet,
         '''
         # many == VISE OD JEDNOG IMA U REZULTATIMA FILTRIRANJA
         return Response(MilestoneSerializer(Milestone.objects.filter(repository__id=pk), many=True).data)
-
-
-# to get token post : {
-#     "username": "tamara",
-#     "password": "adminadmin"
-# } to localhost:8000/login/
-
-# curl --header "Content-Type: Application/json"   --request POST   -H "Authorization: Token
-# e091a4bf389ba85e3252cc7afc38e70db7bb20b7" --data "{"""name""":"""label1""","""color""":"""#FFFFFF""",
-# """task""":"""1"""}"   http://localhost:8000/label/ u command promptu
 
 
 class LabelViewSet(RetrieveModelMixin, UpdateModelMixin,
@@ -92,7 +104,7 @@ class LabelViewSet(RetrieveModelMixin, UpdateModelMixin,
         '''
            Returns Labels for a specific repo
         '''
-        return Response(LabelSerializer(Label.objects.filter(repository__id=pk)).data)
+        return Response(LabelSerializer(Label.objects.filter(repository__id=pk), many=True).data)
 
     @action(detail=True, methods=['get'], url_path='task', url_name='task')
     def labels_by_task(self, request, pk):
@@ -142,7 +154,8 @@ class BranchViewSet(GenericViewSet,
             Returns branches for the specific repo
         '''
         # many == VISE OD JEDNOG IMA U REZULTATIMA FILTRIRANJA
-        return Response(BranchSerializer(Branch.objects.filter(repository__id=pk), many=True).data)
+        #return Response(BranchSerializer(Branch.objects.filter(repository__id=pk), many=True).data)
+        return Response(BranchSerializer(Branch.objects.all(), many=True).data)
 
 
 class CommitViewSet(GenericViewSet,
@@ -180,7 +193,7 @@ class CommitViewSet(GenericViewSet,
         '''
             Returns branches for the specific user
         '''
-        # many == VISE OD JEDNOG IMA U REZULTATIMA FILTRIRANJA
+        # many == VISE OD JEDNpostOG IMA U REZULTATIMA FILTRIRANJA
         return Response(CommitSerializer(Commit.objects.filter(author__id=pk), many=True).data)
 
     #  http://localhost:8000/commit/1/repo/
@@ -190,11 +203,47 @@ class CommitViewSet(GenericViewSet,
             Returns branches for the specific repo
         '''
         # many == VISE OD JEDNOG IMA U REZULTATIMA FILTRIRANJA
-        return Response(CommitSerializer(Commit.objects.filter(branch__repository__id=pk), many=True).data)
+        return Response(CommitSerializer(Commit.objects.all(), many=True).data)
+
+    @action(detail=True, methods=['get'], url_path='insights', url_name='insights')
+    def get_insights(self, request, pk):
+        '''
+            Returns insights for repo
+        '''
+
+        data = {"colab": [], "info": []}
+        for item in Commit.objects.all().values('author'):
+            username = User.objects.filter(id=item['author'])[0].username
+
+            if username not in data['colab']:
+                data['colab'].append(username)
+
+
+        data['info'] = CommitSerializer(Commit.objects.all(), many=True).data
+
+        return Response(data)
+
+    @action(detail=True, methods=['get'], url_path='counts', url_name='counts')
+    def get_counts(self, request, pk):
+
+        '''
+            Returns insights for repo
+        '''
+
+        counts = []
+        objs = []
+        for item in Commit.objects.all().values('author'):
+            username = User.objects.filter(id=item['author'])[0].username
+
+            objs.append(username)
+
+        for k, v in Counter(objs).items():
+            counts.append((k, v))
+        return Response(counts)
 
 
 class TeamViewSet(GenericViewSet,  # generic view functionality
-                  CreateModelMixin,  # handles POSTs
+
                   RetrieveModelMixin,  # handles GETs for 1 Team
                   UpdateModelMixin,  # handles PUTs and PATCHes
                   ListModelMixin,  # handles GETs for many Teams
@@ -202,18 +251,76 @@ class TeamViewSet(GenericViewSet,  # generic view functionality
                   ):
     serializer_class = TeamSerializer
     queryset = Team.objects.all()
+    authentication_classes = (TokenAuthentication,)
 
-    # localhost:8000/team?user_id=2
-    def get_queryset(self):
-        if self.request.method == 'GET':
-            user_id = self.request.GET.get('user_id', None)
-            if user_id is not None:
-                return Team.objects.all().filter(members__id=user_id)
-            else:
-                return Team.objects.all()
-        else:
-            return Project.objects.all()
+    def create(self, request, *args, **kwargs):
+        if request.method != 'PUT':
+            team = Team()
+            team.name = request.data['name']
+            team.owner = User.objects.filter(id=request.data['owner'])[0]
 
+            # serializer = TeamSaveSerializer(data=team)
+            # serializer.is_valid(raise_exception=True)
+
+            print(request.data['members'])
+            users = User.objects.filter(username__in=request.data['members'])
+            instance = Team.objects.create(name=request.data['name'], owner_id=request.data['owner'])
+
+            instance.members.set(users)
+
+        return Response({}, status=status.HTTP_201_CREATED)
+
+    def update(self, request, *args, **kwargs):
+        print(request.data['members'])
+        users = User.objects.filter(username__in=request.data['members'])
+        team = Team.objects.filter(id=request.data['id'])[0]
+        team.members.set(users)
+        print(team.members)
+        Team.save(team)
+        print(Team.objects.filter(id=request.data['id']))
+        return Response({}, status=status.HTTP_201_CREATED)
+
+    def get_permissions(self):
+        print(self.request.data)
+        # allow full access to authenticated users, but allow read-only access to unauthenticated users
+        self.permission_classes = [IsAuthenticatedOrReadOnly]
+        return super(TeamViewSet, self).get_permissions()
+
+    @action(detail=True, methods=['get'], url_path='user', url_name='user')
+    def teams_by_user(self, request, pk):
+        '''
+            Returns teams for the specific user
+        '''
+
+        return Response(TeamSerializer(Team.objects.filter(members__id=pk), many=True).data)
+
+    @action(detail=True, methods=['post'], url_path='leave', url_name='leave')
+    def leave_team(self, request, pk):
+        '''
+            Leave team
+        '''
+
+        team = Team.objects.filter(id=pk)[0]
+        print(team)
+        ids = []
+        for m in request.data['members']:
+            ids.append(m['id'])
+        team.members.set(ids)
+        Team.save(team)
+        return Response(TeamSerializer(Team.objects.filter(members__id=pk), many=True).data)
+
+
+# class RepositoryCreateViewSet(CreateModelMixin):
+#     serializer_class = RepoSaveSerializer
+#     authentication_classes = (TokenAuthentication,)
+#     queryset = Repository.objects.all()
+#
+#     # def get_permissions(self):
+#     #     print(self.request.data)
+#     #     # allow full access to authenticated users, but allow read-only access to unauthenticated users
+#     #     self.permission_classes = [IsAuthenticatedOrReadOnly]
+#     #     return super(RepositoryViewSet, self).get_permissions()
+#
 
 class RepositoryViewSet(GenericViewSet,
                         CreateModelMixin,
@@ -222,23 +329,44 @@ class RepositoryViewSet(GenericViewSet,
                         ListModelMixin,
                         DestroyModelMixin
                         ):
-    serializer_class = RepositorySerializer
-    queryset = Team.objects.all()
+    """
+          Creates, Updates and Retrieves - Repositories
+       """
 
-    # localhost:8000/repository?user_id=2
-    def get_queryset(self):
-        if self.request.method == 'GET':
-            user_id = self.request.GET.get('user_id', None)
-            if user_id is not None:
-                return Repository.objects.all().filter(members__id=user_id)
+    authentication_classes = (TokenAuthentication,)
+    queryset = Repository.objects.all()
 
-            team_id = self.request.GET.get('team_id', None)
-            if team_id is not None:
-                return Repository.objects.all().filter(team__id=team_id)
-            else:
-                return Repository.objects.all()
-        else:
-            return Project.objects.all()
+    serializers = {
+        'default': RepositorySerializer,
+        'create': RepoSaveSerializer
+    }
+
+    def get_serializer_class(self):
+        if self.action in ['create']:
+            return RepoSaveSerializer
+        return RepositorySerializer
+
+    def get_permissions(self):
+        print(self.request.data)
+        # allow full access to authenticated users, but allow read-only access to unauthenticated users
+        self.permission_classes = [IsAuthenticatedOrReadOnly]
+        return super(RepositoryViewSet, self).get_permissions()
+
+    @action(detail=True, methods=['get'], url_path='user', url_name='user')
+    def repos_for_user(self, request, pk):
+        '''
+            Returns repos for the specific user
+        '''
+
+        return Response(RepositorySerializer(Repository.objects.filter(owner__id=pk), many=True).data)
+
+    @action(detail=True, methods=['get'], url_path='team', url_name='team')
+    def repos_for_team(self, request, pk):
+        '''
+            Returns repos for the specific user
+        '''
+
+        return Response(RepositorySerializer(Repository.objects.filter(team__id=pk), many=True).data)
 
 
 class ProjectViewSet(GenericViewSet,
@@ -250,16 +378,21 @@ class ProjectViewSet(GenericViewSet,
                      ):
     serializer_class = ProjectSerializer
     queryset = Project.objects.all()
+    authentication_classes = (TokenAuthentication,)
 
-    def get_queryset(self):
-        if self.request.method == 'GET':
-            repo_id = self.request.GET.get('repo_id', None)
-            if repo_id is not None:
-                return Project.objects.all().filter(repository_id=repo_id)
-            else:
-                return Project.objects.all()
-        else:
-            return Project.objects.all()
+    def get_permissions(self):
+        print(self.request.data)
+        # allow full access to authenticated users, but allow read-only access to unauthenticated users
+        self.permission_classes = [IsAuthenticatedOrReadOnly]
+        return super(ProjectViewSet, self).get_permissions()
+
+    @action(detail=True, methods=['get'], url_path='repo', url_name='repo')
+    def projects_for_repo(self, request, pk):
+        '''
+            Returns project for the specific repo
+        '''
+
+        return Response(ProjectSerializer(Project.objects.filter(repository__id=pk), many=True).data)
 
 
 class UserViewSet(GenericViewSet,
@@ -269,19 +402,21 @@ class UserViewSet(GenericViewSet,
                   ListModelMixin,
                   DestroyModelMixin
                   ):
+    serializers = {
+        'default': UserSerializer,
+        'update': UserUpdateSerializer,
+        'updatePassword': UserChangePasswordSerializer,
+    }
     serializer_class = UserSerializer
     queryset = User.objects.all()
 
-
-class WikiViewSet(GenericViewSet,
-                  CreateModelMixin,
-                  RetrieveModelMixin,
-                  UpdateModelMixin,
-                  ListModelMixin,
-                  DestroyModelMixin
-                  ):
-    serializer_class = WikiSerializer
-    queryset = Wiki.objects.all()
+    def get_serializer_class(self):
+        if self.action in ['update']:
+            if "password" in self.request.data.keys():
+                return UserChangePasswordSerializer
+            else:
+                return UserUpdateSerializer
+        return UserSerializer
 
 
 class PageViewSet(GenericViewSet,
@@ -293,6 +428,10 @@ class PageViewSet(GenericViewSet,
                   ):
     serializer_class = PageSerializer
     queryset = Page.objects.all()
+
+    @action(detail=True, methods=['get'], url_path='repository', url_name='repository')
+    def page_by_repository(self, request, pk):
+        return Response(PageSerializer(Page.objects.filter(repository__id=pk), many=True).data)
 
 
 class FileViewSet(GenericViewSet,
@@ -309,9 +448,13 @@ class FileViewSet(GenericViewSet,
     def files_by_task(self, request, pk):
         return Response(FileSerializer(File.objects.filter(task__id=pk), many=True).data)
 
-    @action(detail=True, methods=['get'], url_path='task', url_name='task')
+    @action(detail=True, methods=['get'], url_path='page', url_name='page')
     def files_by_page(self, request, pk):
         return Response(FileSerializer(File.objects.filter(page__id=pk), many=True).data)
+
+    @action(detail=True, methods=['get'], url_path='user', url_name='user')
+    def files_by_user(self, request, pk):
+        return Response(FileSerializer(File.objects.filter(user__id=pk), many=True).data)
 
 
 class TaskViewSet(GenericViewSet,
@@ -321,8 +464,31 @@ class TaskViewSet(GenericViewSet,
                   ListModelMixin,
                   DestroyModelMixin
                   ):
-    serializer_class = TaskSerializer
+    serializers = {
+        'default': TaskSerializer,
+        'create': TaskSaveSerializer,
+        'new': TaskMainSaveSerializer,
+        'close': TaskCloseSerializer
+    }
     queryset = Task.objects.all()
+
+    def get_permissions(self):
+        print(self.request.body)
+        # allow full access to authenticated users, but allow read-only access to unauthenticated users
+        self.permission_classes = [IsAuthenticatedOrReadOnly]
+        return super(TaskViewSet, self).get_permissions()
+
+    def get_serializer_class(self):
+        if self.action in ['update']:
+            if "owner" in self.request.data.keys():
+                return TaskMainSaveSerializer
+            elif "status" in self.request.data.keys():
+                return TaskCloseSerializer
+            else:
+                return TaskSaveSerializer
+        if self.action in ['create']:
+            return TaskMainSaveSerializer
+        return TaskSerializer
 
     @action(detail=True, methods=['get'], url_path='repository', url_name='repository')
     def tasks_by_repository(self, request, pk):
@@ -348,6 +514,22 @@ class TaskViewSet(GenericViewSet,
     def tasks_by_column(self, request, pk):
         return Response(TaskSerializer(Task.objects.filter(column__id=pk), many=True).data)
 
+    @action(detail=True, methods=['get'], url_path='counts', url_name='counts')
+    def get_counts(self, request, pk):
+
+        '''
+            Returns task counts for repo
+        '''
+
+        counts = []
+        objs = []
+        for item in Task.objects.all():
+            objs.append(item.status)
+
+        for k, v in Counter(objs).items():
+            counts.append((k, v))
+        return Response(counts)
+
 
 class ColumnViewSet(GenericViewSet,
                     CreateModelMixin,
@@ -359,6 +541,28 @@ class ColumnViewSet(GenericViewSet,
     serializer_class = ColumnSerializer
     queryset = Column.objects.all()
 
+    serializers = {
+        'default': ColumnSerializer,
+        'create': ColumnSaveSerializer
+    }
+
+    def get_serializer_class(self):
+        if self.action in ['create']:
+            return ColumnSaveSerializer
+        return ColumnSerializer
+
+    def get_permissions(self):
+        print(self.request.data)
+        # allow full access to authenticated users, but allow read-only access to unauthenticated users
+        self.permission_classes = [IsAuthenticatedOrReadOnly]
+        return super(ColumnViewSet, self).get_permissions()
+
     @action(detail=True, methods=['get'], url_path='project', url_name='project')
     def columns_by_project(self, request, pk):
         return Response(ColumnSerializer(Column.objects.filter(project__id=pk), many=True).data)
+
+    @action(detail=True, methods=['get'], url_path='repo', url_name='repo')
+    def columns_by_repo(self, request, pk):
+        project_ids = Project.objects.filter(repository__id=pk).values_list('id', flat=True)
+        print(project_ids)
+        return Response(ColumnSerializer(Column.objects.filter(project__id__in=project_ids), many=True).data)
