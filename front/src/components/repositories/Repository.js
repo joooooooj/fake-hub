@@ -74,7 +74,7 @@ export default function Repository(props) {
                         <Milestones {...props} />
                     </TabPanel>
                     <TabPanel>
-                        <Issues/>
+                        <Issues {...props} backendUrl={props.backendUrl} collaborators={repository?.collaborators} user={props.user} repoId={props?.match?.params?.id}/>
                     </TabPanel>
                     <TabPanel>
                         <h2>Projects </h2>

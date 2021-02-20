@@ -1,4 +1,20 @@
 .issues {
+  .hidden {
+    visibility: hidden;
+    display: none;
+  }
+
+  .visible {
+    visibility: visible;
+    display: block;
+  }
+
+  .add-edit-issue {
+    button {
+      width: 150px;
+    }
+  }
+
   .add-new {
     display: flex;
     justify-content: flex-end;
@@ -28,6 +44,12 @@
 
         .issue {
           padding-left: 40px;
+
+          .label {
+            font-size: 12px;
+            height: fit-content;
+            border-radius: 10px;
+          }
 
           .material-icons {
             font-weight: 500;

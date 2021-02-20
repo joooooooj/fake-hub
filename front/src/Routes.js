@@ -16,8 +16,11 @@ import Project from "./components/projects/Project";
 import AddEditTeam from "./components/teams/AddEditTeam";
 import AddEditLabel from "./components/labels/AddEditLabel";
 import AddEditMilestone from "./components/milestones/AddEditMilestone";
+import AddEditIssue from "./components/issues/AddEditIssue";
 
 export default function Routes(props) {
+
+    const backendUrl = "http://localhost:8000";
 
     return (
         <Switch>
@@ -32,18 +35,18 @@ export default function Routes(props) {
             {   !props.user &&
                 <>
                     <Route exact path="/template/login" component={() => <Login login={props.login} />}/>
-                    <Route exact path="/template/register" component={Register}/>
+                    <Route exact path="/template/register" component={(props) => <Register {...props}/>}/>
                 </>
             }
             {   props.user &&
                 <>
                     {/* PROFILE */}
-                    <Route exact path="/template/profile" component={() => <Profile {...props} user={props.user}/>}/>
+                    <Route exact path="/template/profile" component={() => <Profile {...props} backendUrl={backendUrl} user={props.user}/>}/>
                     <Route exact path="/template/profileRepos/" component={() => <ProfileRepositories {...props} user={props.user}/>}/>
                     <Route exact path="/template/settings/" component={() => <Settings {...props} user={props.user}/>}/>
                     {/* REPOSITORY */}
                     <Route exact path="/template/repositories" component={() => <Repositories user={props.user}/>}/>
-                    <Route exact path="/template/repository/:id" component={(params) => <Repository {...params} user={props.user}/>}/>
+                    <Route exact path="/template/repository/:id" component={(params) => <Repository {...params} backendUrl={backendUrl} user={props.user}/>}/>
                     <Route exact path="/template/newRepository" component={() => <NewRepo/>}/>
 
                     {/* TEAMS */}
