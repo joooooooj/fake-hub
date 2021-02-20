@@ -16,7 +16,7 @@ import Project from "./components/projects/Project";
 import AddEditTeam from "./components/teams/AddEditTeam";
 import AddEditLabel from "./components/labels/AddEditLabel";
 import AddEditMilestone from "./components/milestones/AddEditMilestone";
-import AddEditIssue from "./components/issues/AddEditIssue";
+import TeamPage from "./components/teams/TeamPage";
 
 export default function Routes(props) {
 
@@ -51,8 +51,9 @@ export default function Routes(props) {
 
                     {/* TEAMS */}
                     <Route exact path="/template/teams" component={() => <Teams user={props.user}/>}/>
-                    <Route exact path="/template/edit-team/:id/" component={(params) => <AddEditTeam {...params} /> } />
-                    <Route exact path="/template/new-team" component={() => <AddEditTeam user={props.user}/> } />
+                    <Route exact path="/template/edit-team/:id/" component={(props) => <AddEditTeam {...props} /> } />
+                    <Route exact path="/template/new-team" component={(params) => <AddEditTeam {...params} user={props.user}/> } />
+                    <Route exact path="/template/team/:id" component={(params) => <TeamPage {...params} user={props.user} team={props.team}/> } />
 
                     {/* WIKI */}
                     <Route exact path="/template/repository/:id/new-wiki-page" component={(params) => <AddEditPage {...params} user={props.user}/>}/>

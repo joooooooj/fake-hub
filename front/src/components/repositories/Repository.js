@@ -15,7 +15,6 @@ import Insights from "../insights/Insights";
 export default function Repository(props) {
 
     const [repository, setRepository] = useState(null);
-    const [insights, setInsights] = useState(null);
 
     useEffect(() => {
         if (props?.match?.params?.id) {
@@ -85,7 +84,7 @@ export default function Repository(props) {
                     </TabPanel>
                     <TabPanel>
                         <h2>Insights</h2>
-                        <Insights {...props} repo={repository} insights={insights}/>
+                        <Insights {...props} repo={repository} />
                     </TabPanel>
                     <TabPanel>
                         <h2>Settings</h2>

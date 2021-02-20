@@ -1,5 +1,6 @@
 import React from "react";
 import {Button} from "react-bootstrap";
+import {Link} from "react-router-dom";
 
 export default function Team(props) {
 
@@ -20,7 +21,7 @@ export default function Team(props) {
              className="d-flex w-100 mt-3">
             <div className="d-block w-50 text-left p-3">
                 <p style={{fontSize: '26px', fontWeight: '500'}}>
-                    {props.team.name}
+                    <Link to={"/template/team/" + props.team.id} {...props} >{props.team.name}</Link>
                 </p>
             </div>
             <div className="d-block w-50 p-3 position-relative">
