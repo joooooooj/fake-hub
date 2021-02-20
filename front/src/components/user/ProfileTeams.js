@@ -27,7 +27,7 @@ export default function ProfileTeams(props) {
     }
 
     const handleDeleteTeam = (team) => {
-        fetch("/api/team/" + team.id, {
+        fetch("/api/team/" + team?.id, {
             method: "DELETE",
             headers: {
                 'Content-Type': 'application/json',

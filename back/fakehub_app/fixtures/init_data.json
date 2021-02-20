@@ -4,8 +4,11 @@
   "fields": {
     "is_superuser": true,
     "name": "Tamara",
+    "lastname": "Lazarevic",
     "password":"pbkdf2_sha256$216000$R3Jk02iOxYqS$HlZFYMcToIF1lWFGxbL6SQOjxieeBny/gkzsQuQxYno=",
-    "username": "TLazarevic"}
+    "username": "TLazarevic",
+    "email" : "tamara@email.com"
+  }
   },
   {
     "model":  "fakehub_app.User",
@@ -13,8 +16,10 @@
     "fields": {
       "is_superuser": true,
       "name": "Ivana",
+      "lastname": "Brkic",
       "password":"pbkdf2_sha256$216000$R3Jk02iOxYqS$HlZFYMcToIF1lWFGxbL6SQOjxieeBny/gkzsQuQxYno=",
-      "username": "ivanabrkic"
+      "username": "ivanabrkic",
+       "email" : "ivana@email.com"
     }
   },
   {
@@ -23,8 +28,10 @@
     "fields": {
       "is_superuser": true,
       "name": "Igor",
+      "lastname": "Malesevic",
       "password":"pbkdf2_sha256$216000$R3Jk02iOxYqS$HlZFYMcToIF1lWFGxbL6SQOjxieeBny/gkzsQuQxYno=",
-      "username": "IgorMales98"
+      "username": "IgorMales98",
+       "email" : "ifor@email.com"
     }
   },
   {
